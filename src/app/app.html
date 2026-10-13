@@ -12,11 +12,11 @@
 <body>
     <div class="app-container">
         <!-- Cabeçalho Principal -->
-        <header class="app-header">
+        <header class="app-header active">
             <div class="header-top">
                 <div class="header-title">
-                    <h1>📋 Quadro Kanban</h1>
-                    <p class="subtitle">Gerenciamento ágil de tarefas e projetos</p>
+                    <h1><span id="icon-Equipe"></span>Quadro Kanban</h1>
+                    <p class="subtitle">Gerenciamento Tarefas e Projetos</p>
                 </div>
                 <button class="btn btn-primary">
                     <span>+</span> Nova Tarefa
@@ -29,8 +29,8 @@
                 <div class="filter-group search-group">
                     <label class="filter-label" for="searchInput">Título:</label>
                     <div class="search-input-box">
-                        <input type="text" id="searchInput" placeholder="Buscar por título..." onkeydown="handleSearchKeyDown(event)">
-                        <button type="button" class="btn btn-search">🔍 Pesquisar</button>
+                        <input type="text" id="pesquisa" placeholder="Buscar por título...">
+                        <button type="button" class="btn btn-search">Pesquisar</button>
                     </div>
                 </div>
 
@@ -39,23 +39,23 @@
                     <span class="filter-label">Estado:</span>
                     <div class="radio-group" id="statusFilterGroup">
                         <label class="radio-pill">
-                            <input type="radio" name="statusFilter" value="all" checked onchange="applyFilters()">
+                            <input type="radio" name="statusFilter" value="all" checked>
                             <span>Todos</span>
                         </label>
                         <label class="radio-pill">
-                            <input type="radio" name="statusFilter" value="todo" onchange="applyFilters()">
+                            <input type="radio" name="statusFilter" value="todo">
                             <span>A Fazer</span>
                         </label>
                         <label class="radio-pill">
-                            <input type="radio" name="statusFilter" value="in-progress" onchange="applyFilters()">
+                            <input type="radio" name="statusFilter" value="in-progress">
                             <span>Em Andamento</span>
                         </label>
                         <label class="radio-pill">
-                            <input type="radio" name="statusFilter" value="review" onchange="applyFilters()">
+                            <input type="radio" name="statusFilter" value="review">
                             <span>Em Revisão</span>
                         </label>
                         <label class="radio-pill">
-                            <input type="radio" name="statusFilter" value="done" onchange="applyFilters()">
+                            <input type="radio" name="statusFilter" value="done">
                             <span>Concluído</span>
                         </label>
                     </div>
@@ -66,19 +66,19 @@
                     <span class="filter-label">Prioridade:</span>
                     <div class="radio-group" id="priorityFilterGroup">
                         <label class="radio-pill">
-                            <input type="radio" name="priorityFilter" value="all" checked onchange="applyFilters()">
+                            <input type="radio" name="priorityFilter" value="all" checked>
                             <span>Todos</span>
                         </label>
                         <label class="radio-pill">
-                            <input type="radio" name="priorityFilter" value="baixa" onchange="applyFilters()">
+                            <input type="radio" name="priorityFilter" value="baixa">
                             <span>Baixa</span>
                         </label>
                         <label class="radio-pill">
-                            <input type="radio" name="priorityFilter" value="media" onchange="applyFilters()">
+                            <input type="radio" name="priorityFilter" value="media">
                             <span>Média</span>
                         </label>
                         <label class="radio-pill">
-                            <input type="radio" name="priorityFilter" value="alta" onchange="applyFilters()">
+                            <input type="radio" name="priorityFilter" value="alta">
                             <span>Alta</span>
                         </label>
                     </div>
@@ -86,9 +86,11 @@
 
                 <!-- Botão Limpar Filtros -->
                 <div class="filter-group action-group">
-                    <button type="button" class="btn btn-clear">🧹 Limpar Filtros</button>
+                    <button type="button" class="btn btn-clear">Limpar Filtros</button>
                 </div>
             </div>
+
+
 
 
         </header>
@@ -101,11 +103,18 @@
                     <div class="column-title">
                         <span class="status-indicator status-todo"></span>
                         <h2>A Fazer</h2>
-                        <span class="task-count" id="count-todo">0</span>
+                        <!--<span class="task-count" id="contador-a-fazer">0</span> -->  <!--Contador-->
                     </div>
-                    <button class="btn-icon" title="Adicionar nesta coluna">+</button>
-                </div>
-                <div class="task-list" id="list-todo" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'todo')">
+
+
+                  <!--  <button class="btn-icon" title="Adicionar nesta coluna">+</button>  botao de adicionar-->
+
+
+                  </div>
+
+                <!-- Cards a fazer -->
+                <div class="task-list" id="list-todo">
+
                 </div>
             </div>
 
@@ -115,11 +124,15 @@
                     <div class="column-title">
                         <span class="status-indicator status-in-progress"></span>
                         <h2>Em Andamento</h2>
-                        <span class="task-count" id="count-in-progress">0</span>
+                        <!--<span class="task-count" id="contador-progresso">0</span> -->  <!--Contador-->
                     </div>
-                    <button class="btn-icon" title="Adicionar nesta coluna">+</button>
+                        <!--  <button class="btn-icon" title="Adicionar nesta coluna">+</button>  botao de adicionar-->
+
                 </div>
-                <div class="task-list" id="list-in-progress" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'in-progress')">
+
+                <!-- Cards em progresso -->
+                <div class="task-list" id="list-todo">
+
                 </div>
             </div>
 
@@ -129,11 +142,15 @@
                     <div class="column-title">
                         <span class="status-indicator status-review"></span>
                         <h2>Em Revisão</h2>
-                        <span class="task-count" id="count-review">0</span>
+                        <!--<span class="task-count" id="contador-em-revisao">0</span> -->  <!--Contador-->
                     </div>
-                    <button class="btn-icon" title="Adicionar nesta coluna">+</button>
+                        <!--  <button class="btn-icon" title="Adicionar nesta coluna">+</button>  botao de adicionar-->
+
                 </div>
-                <div class="task-list" id="list-review" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'review')">
+
+                <!-- Cards em revisao -->
+                <div class="task-list" id="list-todo">
+
                 </div>
             </div>
 
@@ -143,24 +160,28 @@
                     <div class="column-title">
                         <span class="status-indicator status-done"></span>
                         <h2>Concluído</h2>
-                        <span class="task-count" id="count-done">0</span>
+                        <!--<span class="task-count" id="contador-concluido">0</span> -->  <!--Contador-->
                     </div>
-                    <button class="btn-icon" title="Adicionar nesta coluna">+</button>
+                        <!--  <button class="btn-icon" title="Adicionar nesta coluna">+</button>  botao de adicionar-->
+
                 </div>
-                <div class="task-list" id="list-done" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'done')">
+
+                <!-- Cards concluido -->
+                <div class="task-list" id="list-todo">
+
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Modal para Criar/Editar Tarefa -->
+    <!-- Modal para Criar/Editar Tarefa
     <div class="modal-overlay" id="taskModal">
         <div class="modal">
             <div class="modal-header">
                 <h3 id="modalTitle">Nova Tarefa</h3>
                 <button class="btn-close">&times;</button>
             </div>
-            <form id="taskForm" onsubmit="saveTask(event)">
+            <form id="taskForm">                              Esse pedaco e para ser a tela para adicao de novos cards caso tenha
                 <input type="hidden" id="taskId">
 
                 <div class="form-group">
@@ -213,6 +234,6 @@
             </form>
         </div>
     </div>
-
+    -->
 </body>
 </html>
