@@ -1,4 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
 /* ==========================================================================
    Quadro Kanban Web - Estilos Principais (style.css)
    ========================================================================== */
@@ -23,7 +22,7 @@
     /* Cores de Status das Colunas */
     --color-todo: #fbbf24;
     --color-in-progress: #38bdf8;
-    --color-review: #a855f7;
+    --color-review: #c57f46;
     --color-done: #22c55e;
 
     /* Cores de Prioridade */
@@ -93,6 +92,7 @@ body {
 .subtitle {
     font-size: 0.875rem;
     color: var(--text-secondary);
+    margin-bottom: 0.7rem;
 }
 
 .header-actions {
@@ -115,20 +115,25 @@ body {
     color: var(--text-muted);
 }
 
-.search-box input {
+.search-input-box {
     background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
     color: var(--text-primary);
     padding: 0.5rem 0.75rem 0.5rem 2.25rem;
     border-radius: var(--radius-md);
-    font-size: 0.875rem;
+    font-size: 1rem;
     outline: none;
     transition: var(--transition-fast);
 }
 
-.search-box input:focus {
+.search-input-box input{
+    height: 2rem;
+
+}
+
+.search-input-box input:focus {
     border-color: var(--border-focus);
-    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.2);
 }
 
 #filter-navbar {
