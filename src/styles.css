@@ -286,10 +286,10 @@ body {
     padding: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: var(--shadow-sm);
-    cursor: grab;
     transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
     user-select: none;
 }
+
 
 .task-card:hover {
     transform: translateY(-2px);
@@ -297,9 +297,11 @@ body {
     background-color: var(--bg-card-hover);
 }
 
-.task-card.dragging {
-    opacity: 0.4;
-    cursor: grabbing;
+.footer-task-card{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .card-tags {
