@@ -19,6 +19,10 @@ export class ProjetosService {
     listarTarefas(): Observable<Tarefa[]> {
         return this.http.get<Tarefa[]>(`${this.api}/tarefas`);
     }
+
+    buscarTarefa(id: string): Observable<Tarefa> {
+        return this.http.get<Tarefa>(`${this.api}/tarefas/${id}`);
+    }
 }
 
 
