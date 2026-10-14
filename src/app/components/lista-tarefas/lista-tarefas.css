@@ -1,0 +1,90 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: var(--bg-primary, #0f172a);
+  color: var(--text-primary, #f8fafc);
+}
+
+.container-lista {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color, #334155);
+}
+
+.titulos h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.subtitulo {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #94a3b8);
+  margin-top: 0.25rem;
+}
+
+.acoes {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius-md, 10px);
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition-fast, 0.2s ease);
+  border: none;
+}
+
+.btn-secondary {
+  background-color: var(--bg-secondary, #1e293b);
+  color: var(--text-primary, #f8fafc);
+  border: 1px solid var(--border-color, #334155);
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-card-hover, #475569);
+}
+
+.grid-tarefas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.status-msg {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary, #94a3b8);
+  background-color: var(--bg-secondary, #1e293b);
+  border: 1px dashed var(--border-color, #334155);
+  border-radius: var(--radius-lg, 16px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.status-msg.erro {
+  color: var(--priority-high-text, #f87171);
+}

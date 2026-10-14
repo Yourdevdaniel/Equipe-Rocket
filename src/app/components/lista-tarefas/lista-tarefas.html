@@ -1,0 +1,41 @@
+<div class="container-lista">
+  <header class="cabecalho">
+    <div class="titulos">
+      <h1>Lista de Tarefas</h1>
+      <p class="subtitulo">
+        @if (idParam()) {
+          Exibindo tarefa(s) para o ID #{{ idParam() }}
+        } @else {
+          Todas as tarefas cadastradas na aplicação
+        }
+      </p>
+    </div>
+    <nav class="acoes">
+      @if (idParam()) {
+        <a routerLink="/tarefas" class="btn btn-secondary">Todas as Tarefas</a>
+      }
+      <a routerLink="/projetos" class="btn btn-secondary">Ver Projetos</a>
+    </nav>
+  </header>
+
+  @if (carregando()) {
+    <div class="status-msg">
+      <p>Carregando tarefas...</p>
+    </div>
+  } @else if (erro()) {
+    <div class="status-msg erro">
+      <p>{{ erro() }}</p>
+      <button type="button" (click)="carregarTarefas(idParam())" class="btn btn-secondary">Tentar novamente</button>
+    </div>
+  } @else {
+    <main class="grid-tarefas">
+      @for (tarefa of tarefas(); track tarefa.id) {
+        <app-tarefa-card [tarefa]="tarefa" />
+      } @empty {
+        <div class="status-msg">
+          <p>Nenhuma tarefa encontrada.</p>
+        </div>
+      }
+    </main>
+  }
+</div>
