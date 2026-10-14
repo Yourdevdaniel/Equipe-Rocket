@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   imports: [],
   standalone: true,
@@ -9,5 +9,6 @@ import { Component } from '@angular/core';
 })
 
 export class QuadroKambam {
-
+  private route = inject(ActivatedRoute);
+  id = this.route.snapshot.paramMap.get('id');
 }

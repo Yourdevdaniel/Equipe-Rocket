@@ -1,1 +1,22 @@
-<p>tarefa-card works!</p>
+<article class="card" [class]="'status-' + tarefa().status">
+  <header class="card-topo">
+    <span class="badge prioridade" [class]="'prioridade-' + tarefa().prioridade">
+      {{ rotuloPrioridade[tarefa().prioridade] }}
+    </span>
+    <span class="status">{{ rotuloStatus[tarefa().status] }}</span>
+  </header>
+
+  <h3 class="titulo">{{ tarefa().titulo }}</h3>
+
+  @if (tarefa().descricao) {
+    <p class="descricao">{{ tarefa().descricao }}</p>
+  }
+
+  <footer class="card-rodape">
+    <span class="responsavel">
+      <span class="avatar">{{ tarefa().responsavel.charAt(0) }}</span>
+      {{ tarefa().responsavel }}
+    </span>
+    <span class="prazo">📅 {{ tarefa().prazo | date: 'dd/MM' : 'UTC' }}</span>
+  </footer>
+</article>

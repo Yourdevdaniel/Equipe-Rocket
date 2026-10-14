@@ -12,8 +12,8 @@ export class ProjetosService {
         return this.http.get<Projeto[]>(`${this.api}/projetos`);
     }
 
-    buscarProjetos(id: string): Observable<Projeto>{
-        return this.http.get<Projeto>(`${this.api}/projetos/${id}?_embed=tarefas`)
+    buscarProjeto(id: string): Observable<ProjetoComTarefas>{
+        return this.http.get<ProjetoComTarefas>(`${this.api}/projetos/${id}?_embed=tarefas`);
     }
 
     listarTarefas(): Observable<Tarefa[]> {
