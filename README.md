@@ -21,7 +21,27 @@ Gerenciador de tarefas feito em equipe para a disciplina de Desenvolvimento Fron
 
 ## Sobre o projeto
 
-O app organiza tarefas por projeto e mostra em que pé cada uma está: a fazer, em andamento, em revisão ou concluída. O frontend é em Angular com TypeScript, e os dados ficam numa API local servida pelo `json-server` a partir do `db.json`.
+O app organiza tarefas por projeto e mostra o fluxo de trabalho da equipe: **a fazer**, **em andamento**, **em revisão** e **concluída**. 
+
+A aplicação foi desenvolvida em **Angular (versão 22)** com **TypeScript** em modo estrito, utilizando componentes standalone, signals para gerenciamento de estado reativo, formulários reativos e roteamento dinâmico. 
+
+Toda a identidade visual foi inspirada no universo da **Equipe Rocket**, com uma paleta harmoniosa em tons escuros (preto e grafite) combinados com o clássico vermelho escarlate, tipografia temática e logotipo oficial.
+
+Os dados são consumidos em tempo real de uma API REST local servida pelo `json-server` a partir do arquivo `db.json`.
+
+---
+
+## Funcionalidades Implementadas
+
+- **Centro de Comando & Painel de Projetos (`/projetos`)**: Listagem dinâmica de projetos cadastrados com badges de disciplina, ações rápidas e navegação integrada.
+- **Página de Detalhes do Projeto (`/projetos/:id`)**: Exibição detalhada das informações do projeto e filtragem dinâmica de todas as tarefas pertencentes a ele.
+- **Quadro Kanban com Slugs Dinâmicos (`/projetos/:id/:nome`)**: Visão de quadro tático para acompanhamento das tarefas por coluna com URLs amigáveis e formatadas em hífen (ex: `/projetos/1/gerenciador-de-tarefas`).
+- **Lista Geral de Tarefas (`/tarefas` e `/tarefas/:id`)**: Visualização de todas as tarefas cadastradas na aplicação com filtragem por ID.
+- **Cartão de Tarefa Reutilizável (`app-tarefa-card`)**: Componente padronizado com indicativo de status por cor, badge de prioridade, responsável com avatar temático, data formatada e botão de edição direta.
+- **Edição de Tarefas (`/tarefas/:id/editar`)**: Tela com formulário reativo (`ReactiveFormsModule`) para alteração de título, descrição, responsável, prazo, status e prioridade, atualizando os dados via requisição `PATCH` na API.
+- **Página Não Encontrada 404 (`/**`)**: Tratamento de rotas inexistentes com tela temática e botão de retorno seguro à base de operações.
+
+---
 
 ## Como rodar
 
@@ -47,51 +67,87 @@ npx json-server db.json
 
 O app abre em `http://localhost:4200` e a API em `http://localhost:3000`.
 
+---
+
+## Estrutura de Rotas do Frontend
+
+| Rota | Componente | Descrição |
+| --- | --- | --- |
+| `/` | Redirecionamento | Redireciona para `/projetos` |
+| `/projetos` | `ListaProjetos` | Painel principal com a lista de projetos da equipe |
+| `/projetos/:id` | `DetalheProjeto` | Detalhes de um projeto específico e suas tarefas |
+| `/projetos/:id/:nome` | `QuadroKambam` | Quadro Kanban do projeto com URL amigável (slug) |
+| `/tarefas` | `ListaTarefas` | Listagem geral de tarefas cadastradas |
+| `/tarefas/:id` | `ListaTarefas` | Visualização de tarefa(s) filtrada(s) por ID |
+| `/tarefas/:id/editar` | `EditarTarefa` | Formulário para edição e atualização de uma tarefa |
+| `/**` | `PaginaNaoEncontrada`| Página 404 personalizada temática |
+
+---
+
 ## Contrato de dados
 
-Todo mundo da equipe lê e grava os mesmos dados, então o formato de um projeto e de uma tarefa está fixado em dois arquivos que precisam concordar entre si:
+Todo mundo da equipe lê e grava os mesmos dados, então o formato de um projeto e de uma tarefa está fixado em arquivos que concordam entre si:
 
 | Arquivo | Onde fica | Para que serve |
 | --- | --- | --- |
-| `db.json` | raiz do projeto | Os dados. Cada chave (`projetos`, `tarefas`) vira uma rota da API. |
-| `src/tipos.ts` | pasta `src/` | Os tipos. O editor acusa erro em qualquer dado fora do formato. |
+| `db.json` | raiz do projeto | Banco de dados local. Cada chave (`projetos`, `tarefas`) vira uma rota da API. |
+| `src/app/models.ts` | pasta `src/app/` | Tipagens TypeScript utilizadas nos componentes e serviços. |
+| `src/tipos.ts` | pasta `src/` | Tipos do contrato base da disciplina. |
 
-O contrato é o mesmo para a turma inteira. Não renomeie campos nem acrescente valores de status; mudanças passam pela professora.
-
-Alguns detalhes que parecem estranhos são de propósito:
-
+Alguns detalhes essenciais do contrato:
 - O `id` é texto (`"1"`), porque o `json-server` gera ids como texto.
-- `prazo` e `criadoEm` são texto no formato `AAAA-MM-DD`, já que JSON não tem tipo data.
-- `status` aceita `a-fazer`, `em-andamento`, `em-revisao` e `concluida`. `prioridade` aceita `baixa`, `media` e `alta`. Nenhum dos dois leva acento ou espaço.
+- `prazo` e `criadoEm` são strings no formato `AAAA-MM-DD`, já que JSON não possui tipo nativo de data.
+- `status` aceita: `a-fazer`, `em-andamento`, `em-revisao` e `concluida`.
+- `prioridade` aceita: `baixa`, `media` e `alta`.
 
-Para usar os tipos num componente, importe sem a extensão `.ts`:
-
-```ts
-// src/app/app.ts
-import type { Tarefa } from '../tipos'
-```
+---
 
 ## Endpoints da API
 
-| Endereço | Retorna |
-| --- | --- |
-| `http://localhost:3000/tarefas` | as 5 tarefas |
-| `http://localhost:3000/projetos` | os 2 projetos |
-| `http://localhost:3000/projetos/1?_embed=tarefas` | o projeto 1 com as 4 tarefas dele |
-| `http://localhost:3000/tarefas?status=a-fazer` | as 2 tarefas a fazer |
+| Método | Endereço | Descrição |
+| --- | --- | --- |
+| `GET` | `http://localhost:3000/projetos` | Retorna todos os projetos cadastrados |
+| `GET` | `http://localhost:3000/projetos/:id` | Retorna um projeto por ID |
+| `GET` | `http://localhost:3000/projetos/:id?_embed=tarefas` | Retorna o projeto com suas tarefas embutidas |
+| `GET` | `http://localhost:3000/tarefas` | Retorna todas as tarefas |
+| `GET` | `http://localhost:3000/tarefas/:id` | Retorna uma tarefa por ID |
+| `PATCH`| `http://localhost:3000/tarefas/:id` | Atualiza campos de uma tarefa existente |
 
-O `json-server` grava no `db.json`: cada `POST`, `PATCH` ou `DELETE` altera o arquivo. O `db.seed.json` guarda a cópia original. Para voltar ao começo:
+O `json-server` grava diretamente no `db.json`. O arquivo `db.seed.json` guarda uma cópia segura dos dados originais. Para restaurar o estado inicial:
 
 ```bash
 cp db.seed.json db.json
 ```
 
-Se a porta 3000 já estiver ocupada, suba a API em outra porta com `npx json-server db.json --port 3001`.
+---
 
-## Andamento do Marco 1
+## Andamento do Projeto
 
-- [x] `db.json` na raiz e `db.seed.json` com a cópia intacta
-- [x] `src/tipos.ts` com os tipos do contrato
-- [x] `json-server` instalado como dependência de desenvolvimento
-- [ ] Teste do contrato (erro `TS2322` no editor)
-- [ ] Envio ao GitHub
+### Marco 1 - Projeto no ar
+- [x] 01. Criar o repositório da equipe
+- [x] 02. Criar o projeto no framework da equipe
+- [x] 03. Escrever o README
+- [x] 04. Adicionar o contrato de dados
+- [x] 05. Subir a API local
+- [x] 06. Configurar o quadro no GitHub Projects
+
+### Marco 2 - Listagem e rotas
+- [x] 07. Criar o módulo de acesso à API (leitura)
+- [x] 08. Criar o componente de cartão de tarefa
+- [x] 09. Criar a tela de lista de tarefas
+- [x] 10. Configurar o roteador
+- [x] 11. Criar a tela de detalhe da tarefa
+- [x] 12. Criar o layout base e a navegação
+- [x] 13. Criar a tela de lista de projetos
+- [x] 14. Criar a página do projeto
+- [x] 15. Criar o slide de apresentação do Marco 2
+
+### Marco 3 - Cadastro e edição
+- [ ] 16. Ampliar o módulo da API (escrita)
+- [x] 17. Criar o componente de formulário de tarefa
+- [ ] 18. Criar a tela de nova tarefa
+- [x] 19. Criar a tela de edição de tarefa
+- [ ] 20. Validar o formulário
+- [ ] 21. Tornar o formulário acessível
+- [ ] 22. Criar cadastro e edição de projeto
+- [ ] 23. Criar o slide de apresentação do Marco 3
