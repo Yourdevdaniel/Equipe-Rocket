@@ -315,6 +315,16 @@
   transform: translateX(4px);
 }
 
+.status-msg {
+  width: 100%;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--text-secondary);
+  background-color: var(--bg-card);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+}
+
 @media (max-width: 640px) {
   .rocket-title {
     font-size: 2rem;

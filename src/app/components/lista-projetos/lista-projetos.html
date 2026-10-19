@@ -42,7 +42,7 @@
               <a [routerLink]="['/projetos', projeto.id]" class="btn btn-secondary">
                 <span>Detalhes</span>
               </a>
-              <a [routerLink]="['/projetos', projeto.id, 'kanban']" class="btn btn-primary">
+              <a [routerLink]="['/projetos', projeto.id, gerarSlug(projeto.nome)]" class="btn btn-primary">
                 <span>Visualizar projeto</span>
                 <span class="btn-arrow">→</span>
               </a>
@@ -50,32 +50,9 @@
           </div>
         </article>
       } @empty {
-        <article class="project-card">
-          <div class="card-banner">
-            <div class="banner-badge">KANBAN</div>
-            <span class="banner-r">R</span>
-          </div>
-
-          <div class="card-body">
-            <div class="card-header">
-              <h3 class="card-title">Quadro Kanban</h3>
-              <span class="status-badge">Em Produção</span>
-            </div>
-            <p class="card-description">
-              Painel tático para gerenciamento e organização de missões e tarefas em tempo real.
-            </p>
-
-            <div class="card-actions">
-              <a routerLink="/projetos/1" class="btn btn-secondary">
-                <span>Detalhes</span>
-              </a>
-              <a routerLink="/projetos/1/kanban" class="btn btn-primary">
-                <span>Visualizar projeto</span>
-                <span class="btn-arrow">→</span>
-              </a>
-            </div>
-          </div>
-        </article>
+        <div class="status-msg">
+          <p>Nenhum projeto cadastrado.</p>
+        </div>
       }
     </div>
   </main>

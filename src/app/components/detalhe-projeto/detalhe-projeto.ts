@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { ProjetoComTarefas, Tarefa } from '../../models';
 import { TarefaCard } from '../tarefa-card/tarefa-card';
+import { gerarSlug } from '../../utils/slug';
 
 @Component({
   selector: 'app-detalhe-projeto',
@@ -16,6 +17,7 @@ export class DetalheProjeto implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly projetosService = inject(ProjetosService);
 
+  readonly gerarSlug = gerarSlug;
   readonly projeto = signal<ProjetoComTarefas | null>(null);
   readonly tarefas = signal<Tarefa[]>([]);
   readonly carregando = signal(true);

@@ -11,4 +11,5 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 export class QuadroKambam {
   private route = inject(ActivatedRoute);
   id = this.route.snapshot.paramMap.get('id');
+  nome = this.route.snapshot.paramMap.get('nome');
 }

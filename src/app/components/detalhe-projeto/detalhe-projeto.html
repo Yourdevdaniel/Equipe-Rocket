@@ -21,8 +21,8 @@
 
       <div class="projeto-acoes">
         <a routerLink="/projetos" class="btn btn-secondary">← Voltar</a>
-        <a [routerLink]="['/projetos', projeto()!.id, 'kanban']" class="btn btn-primary">
-          Abrir Quadro Kanban
+        <a [routerLink]="['/projetos', projeto()!.id, gerarSlug(projeto()!.nome)]" class="btn btn-primary">
+          Abrir projeto
         </a>
       </div>
     </header>

@@ -12,7 +12,7 @@ export const routes: Routes = [
   { path: 'tarefas', component: ListaTarefas },
   { path: 'projetos', component: ListaProjetos },
   { path: 'projetos/:id', component: DetalheProjeto },
-  { path: 'projetos/:id/kanban', component: QuadroKambam },
+  { path: 'projetos/:id/:nome', component: QuadroKambam },
   { path: 'tarefas/:id/editar', component: EditarTarefa },
   { path: '**', component: PaginaNaoEncontrada },
 ];
