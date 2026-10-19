@@ -64,4 +64,27 @@
   font-size: 11px; font-weight: 700;
   display: grid; place-items: center;
 }
+
+.btn-editar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #cbd5e1;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid #334155;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-editar:hover {
+  background-color: var(--accent-primary, #3b82f6);
+  color: #ffffff;
+  border-color: var(--accent-primary, #3b82f6);
+}
+
 .prazo { color: #94a3b8; }

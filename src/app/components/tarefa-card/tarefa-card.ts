@@ -1,10 +1,11 @@
 import { Component, input } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Tarefa } from '../../models';
 
 @Component({
   selector: 'app-tarefa-card',
-  imports: [DatePipe],
+  imports: [DatePipe, RouterLink],
   templateUrl: './tarefa-card.html',
   styleUrl: './tarefa-card.css',
 })

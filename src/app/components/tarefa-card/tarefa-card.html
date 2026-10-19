@@ -17,6 +17,9 @@
       <span class="avatar">{{ tarefa().responsavel.charAt(0) }}</span>
       {{ tarefa().responsavel }}
     </span>
+    <a [routerLink]="['/tarefas', tarefa().id, 'editar']" class="btn-editar" title="Editar tarefa">
+      Editar
+    </a>
     <span class="prazo">📅 {{ tarefa().prazo | date: 'dd/MM' : 'UTC' }}</span>
   </footer>
 </article>
