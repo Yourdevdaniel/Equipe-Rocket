@@ -1,1 +1,58 @@
-<p>editar-tarefa works!</p>
+<div class="container">
+  <header class="cabecalho">
+    <div>
+      <h1>Editar Tarefa</h1>
+      <p class="subtitulo">Altere os dados e clique em salvar</p>
+    </div>
+    <a routerLink="/tarefas" class="btn btn-secundario">Voltar</a>
+  </header>
+
+  @if (estaSalvo()) {
+    <p class="mensagem-sucesso">Tarefa alterada com sucesso!</p>
+  }
+
+  <form class="formulario" [formGroup]="form" (ngSubmit)="salvar()">
+    <div class="campo campo-largo">
+      <label for="titulo">Título</label>
+      <input id="titulo" type="text" formControlName="titulo" />
+    </div>
+
+    <div class="campo campo-largo">
+      <label for="descricao">Descrição</label>
+      <textarea id="descricao" rows="4" formControlName="descricao"></textarea>
+    </div>
+
+    <div class="campo">
+      <label for="responsavel">Responsável</label>
+      <input id="responsavel" type="text" formControlName="responsavel" />
+    </div>
+
+    <div class="campo">
+      <label for="prazo">Prazo</label>
+      <input id="prazo" type="date" formControlName="prazo" />
+    </div>
+
+    <div class="campo">
+      <label for="status">Status</label>
+      <select id="status" formControlName="status">
+        <option value="a-fazer">A Fazer</option>
+        <option value="em-andamento">Em Andamento</option>
+        <option value="em-revisao">Em Revisão</option>
+        <option value="concluida">Concluída</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label for="prioridade">Prioridade</label>
+      <select id="prioridade" formControlName="prioridade">
+        <option value="alta">Alta</option>
+        <option value="media">Média</option>
+        <option value="baixa">Baixa</option>
+      </select>
+    </div>
+
+    <div class="botoes campo-largo">
+      <button type="submit" class="btn btn-primario">Salvar alterações</button>
+    </div>
+  </form>
+</div>

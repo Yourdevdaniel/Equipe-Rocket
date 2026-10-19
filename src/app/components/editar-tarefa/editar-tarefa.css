@@ -1,0 +1,86 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: var(--bg-primary, #0f172a);
+  color: var(--text-primary, #f8fafc);
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color, #334155);
+}
+
+.cabecalho h1 { font-size: 1.75rem; font-weight: 700; }
+.subtitulo { font-size: 0.9rem; color: var(--text-secondary, #94a3b8); margin-top: 0.25rem; }
+
+.formulario {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  padding: 1.75rem;
+  background-color: var(--bg-secondary, #1e293b);
+  border: 1px solid var(--border-color, #334155);
+  border-radius: var(--radius-lg, 16px);
+}
+
+.campo { display: flex; flex-direction: column; gap: 0.4rem; }
+.campo-largo { grid-column: 1 / -1; }
+
+label { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary, #94a3b8); }
+
+input, select, textarea {
+  font: inherit;
+  color: var(--text-primary, #f8fafc);
+  background-color: var(--bg-primary, #0f172a);
+  border: 1px solid var(--border-color, #334155);
+  border-radius: var(--radius-md, 10px);
+  padding: 0.65rem 0.8rem;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--border-focus, #38bdf8); }
+input[type='date'] { color-scheme: dark; }
+textarea { resize: vertical; }
+
+.botoes { display: flex; justify-content: flex-end; }
+
+.btn {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius-md, 10px);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn-primario { background-color: var(--accent-primary, #3b82f6); color: #fff; }
+.btn-primario:hover { background-color: var(--accent-primary-hover, #2563eb); }
+.btn-secundario {
+  background-color: var(--bg-secondary, #1e293b);
+  color: var(--text-primary, #f8fafc);
+  border: 1px solid var(--border-color, #334155);
+}
+
+.mensagem-sucesso {
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md, 10px);
+  background-color: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+@media (max-width: 600px) {
+  .formulario { grid-template-columns: 1fr; }
+}
