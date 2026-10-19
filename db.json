@@ -6,13 +6,6 @@
       "descricao": "Projeto em equipe da disciplina",
       "disciplina": "Desenvolvimento Frontend",
       "criadoEm": "2026-10-01"
-    },
-    {
-      "id": "2",
-      "nome": "Modelagem da Biblioteca",
-      "descricao": "Trabalho de modelagem de dados",
-      "disciplina": "Banco de Dados",
-      "criadoEm": "2026-10-02"
     }
   ],
   "tarefas": [
@@ -29,8 +22,8 @@
     {
       "id": "2",
       "projetoId": "1",
-      "titulo": "Testar alteração de save",
-      "descricao": "editar ",
+      "titulo": "AAAAAAA",
+      "descricao": "aaaaaaaaaa",
       "status": "em-andamento",
       "prioridade": "alta",
       "responsavel": "Jubileu",
@@ -55,16 +48,6 @@
       "prioridade": "media",
       "responsavel": "Diego",
       "prazo": "2026-10-14"
-    },
-    {
-      "id": "5",
-      "projetoId": "2",
-      "titulo": "Desenhar o diagrama ER",
-      "descricao": "Entidades livro, leitor e empréstimo",
-      "status": "a-fazer",
-      "prioridade": "baixa",
-      "responsavel": "Ana",
-      "prazo": "2026-10-20"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

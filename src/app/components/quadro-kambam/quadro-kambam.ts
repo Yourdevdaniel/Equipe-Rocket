@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 @Component({
-  imports: [],
+  imports: [RouterLink],
   standalone: true,
   selector: 'app-quadro-kambam',
   styleUrl:'./quadro-kambam.css',

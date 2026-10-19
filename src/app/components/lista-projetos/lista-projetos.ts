@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ProjetosService } from '../../services/projetos';
+import { Projeto } from '../../models';
 
 @Component({
   imports: [RouterLink],
@@ -8,4 +10,15 @@ import { RouterLink } from '@angular/router';
   styleUrl: './lista-projetos.css',
   templateUrl: './lista-projetos.html',
 })
-export class ListaProjetos {}
+export class ListaProjetos implements OnInit {
+  private readonly projetosService = inject(ProjetosService);
+
+  readonly projetos = signal<Projeto[]>([]);
+
+  ngOnInit(): void {
+    this.projetosService.listarProjetos().subscribe({
+      next: (dados) => this.projetos.set(dados),
+      error: (err) => console.error('Erro ao carregar projetos:', err),
+    });
+  }
+}

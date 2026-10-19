@@ -1,0 +1,47 @@
+<div class="container-projeto">
+  @if (carregando()) {
+    <div class="status-msg">
+      <p>Carregando dados do projeto...</p>
+    </div>
+  } @else if (erro() || !projeto()) {
+    <div class="status-msg erro">
+      <p>{{ erro() || 'Projeto não encontrado.' }}</p>
+      <a routerLink="/projetos" class="btn btn-secondary">Voltar para Projetos</a>
+    </div>
+  } @else {
+    <header class="projeto-cabecalho">
+      <div class="projeto-info">
+        <div class="projeto-badges">
+          <span class="badge-disciplina">{{ projeto()!.disciplina }}</span>
+          <span class="badge-data">📅 Criado em {{ projeto()!.criadoEm | date: 'dd/MM/yyyy' : 'UTC' }}</span>
+        </div>
+        <h1 class="projeto-titulo">{{ projeto()!.nome }}</h1>
+        <p class="projeto-descricao">{{ projeto()!.descricao }}</p>
+      </div>
+
+      <div class="projeto-acoes">
+        <a routerLink="/projetos" class="btn btn-secondary">← Voltar</a>
+        <a [routerLink]="['/projetos', projeto()!.id, 'kanban']" class="btn btn-primary">
+          Abrir Quadro Kanban
+        </a>
+      </div>
+    </header>
+
+    <section class="secao-tarefas">
+      <div class="secao-topo">
+        <h2>Tarefas do Projeto</h2>
+        <span class="contador-tarefas">{{ tarefas().length }} tarefa(s)</span>
+      </div>
+
+      <div class="grid-tarefas">
+        @for (tarefa of tarefas(); track tarefa.id) {
+          <app-tarefa-card [tarefa]="tarefa" />
+        } @empty {
+          <div class="status-msg">
+            <p>Nenhuma tarefa cadastrada para este projeto.</p>
+          </div>
+        }
+      </div>
+    </section>
+  }
+</div>

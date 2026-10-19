@@ -24,7 +24,14 @@
     border: 1px solid var(--border-color);
 }
 
-.header-left h1 {
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.header-left h1, .header-title h1 {
     font-size: 1.5rem;
     font-weight: 700;
     letter-spacing: -0.02em;
@@ -101,6 +108,7 @@
     border-radius: var(--radius-md);
     border: none;
     cursor: pointer;
+    text-decoration: none;
     transition: var(--transition-fast);
 }
 

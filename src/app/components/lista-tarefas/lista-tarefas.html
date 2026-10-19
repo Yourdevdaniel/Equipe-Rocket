@@ -10,12 +10,11 @@
         }
       </p>
     </div>
-    <nav class="acoes">
-      @if (idParam()) {
+    @if (idParam()) {
+      <nav class="acoes">
         <a routerLink="/tarefas" class="btn btn-secondary">Todas as Tarefas</a>
-      }
-      <a routerLink="/projetos" class="btn btn-secondary">Ver Projetos</a>
-    </nav>
+      </nav>
+    }
   </header>
 
   @if (carregando()) {
