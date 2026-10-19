@@ -1,53 +1,51 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Projetos da Equipe</title>
+<div class="app-container">
 
-</head>
-<body>
+  <!-- Cabeçalho Centralizado com Identidade Equipe Rocket -->
+  <header class="rocket-header">
+    <div class="logo-wrapper">
+      <img src="equipe-rocket-logo.jpg" alt="Logo Equipe Rocket" class="rocket-logo" />
+      <div class="logo-glow"></div>
+    </div>
+    <div class="brand-titles">
+      <span class="team-tag">Prepare for trouble • Make it double</span>
+      <h1 class="rocket-title"><span class="r-letter">EQUIPE</span> ROCKET</h1>
+      <p class="rocket-subtitle">Centro de Comando & Portfólio de Projetos</p>
+    </div>
+  </header>
 
-  <div class="app-container">
+  <!-- Quadro / Painel Central -->
+  <main class="main-panel">
+    <div class="panel-header">
+      <span class="panel-badge">Operações Ativas</span>
+      <h2>Aplicações da Equipe</h2>
+    </div>
 
-    <!-- Cabeçalho Centralizado -->
-    <header>
-      <h1>Portfólio de Projetos</h1>
-      <p>Projetos e aplicações desenvolvidas pela equipe</p>
-    </header>
+    <!-- Container do Card Único -->
+    <div class="cards-wrapper">
+      <article class="project-card">
+        <div class="card-banner">
+          <div class="banner-badge">KANBAN</div>
+          <span class="banner-r">R</span>
+        </div>
 
-    <!-- Quadro / Painel Central -->
-    <main class="main-panel">
-
-      <!-- Busca Centralizada (Sem botões de filtro)
-      <div class="search-wrapper">
-        <input type="text" class="search-input" placeholder="Buscar projeto por nome...">   Barra de pesquisa
-        <button>Buscar</button>
-      </div>
-      -->
-
-      <!-- Container do Card Único -->
-      <div class="cards-wrapper">
-        <article class="project-card">
-
-          <div class="card-body">
-            <div class="card-header">
-              <h2 class="card-title">Quadro Kanban</h2>
-            </div>
-            <p class="card-description">
-              Aplicação web para gerenciamento e organização de tarefas em formato Kanban.
-            </p>
-
-            <div class="card-actions">
-              <a routerLink="/projetos/1" class="btn btn-primary">Acessar</a>
-            </div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">Quadro Kanban</h3>
+            <span class="status-badge">Em Produção</span>
           </div>
-        </article>
-      </div>
+          <p class="card-description">
+            Painel tático para gerenciamento e organização de missões e tarefas em tempo real.
+          </p>
 
-    </main>
+          <div class="card-actions">
+            <a routerLink="/projetos/1" class="btn btn-primary">
+              <span>Acessar Quadro</span>
+              <span class="btn-arrow">→</span>
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
 
-  </div>
-
-</body>
-</html>
+</div>

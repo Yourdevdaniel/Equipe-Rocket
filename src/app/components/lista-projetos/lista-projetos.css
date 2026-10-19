@@ -1,251 +1,300 @@
-body {
-      background-color: var(--bg-page);
-      color: var(--text-primary);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1rem;
-    }
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: calc(100vh - 64px);
+  padding: 2.5rem 1rem;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+}
 
+.app-container {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
 
-/* Quadro/Painel Central com cor de fundo distinta */
+/* --- Cabeçalho Equipe Rocket --- */
+.rocket-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.25rem;
+}
+
+.logo-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.rocket-logo {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--rocket-red);
+  box-shadow: 0 0 25px var(--rocket-red-glow), 0 8px 24px rgba(0, 0, 0, 0.6);
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rocket-logo:hover {
+  transform: scale(1.05) rotate(-3deg);
+  box-shadow: 0 0 35px rgba(225, 29, 72, 0.5), 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.logo-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 130px;
+  height: 130px;
+  background: radial-gradient(circle, rgba(225, 29, 72, 0.35) 0%, transparent 70%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.brand-titles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.team-tag {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rocket-red);
+  background-color: rgba(225, 29, 72, 0.1);
+  border: 1px solid rgba(225, 29, 72, 0.25);
+  padding: 0.25rem 0.85rem;
+  border-radius: 999px;
+}
+
+.rocket-title {
+  font-family: 'Cinzel', 'Impact', sans-serif;
+  font-size: 2.75rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  margin-top: 0.2rem;
+}
+
+.rocket-title .r-letter {
+  color: var(--rocket-red);
+  text-shadow: 0 0 16px var(--rocket-red-glow);
+}
+
+.rocket-subtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 500;
+  max-width: 460px;
+}
+
+/* --- Painel Central --- */
 .main-panel {
   width: 100%;
   background-color: var(--bg-panel);
   border: 1px solid var(--border-color);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   padding: 2.5rem 2rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1.5rem;
 }
 
- /* Campo de Busca Centralizado
-.search-wrapper {
-  width: 100%;
-  max-width: 420px;
-  margin-bottom: 2rem;
+.panel-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
 }
 
-search-input {
-  width: 100%;
-  padding: 0.85rem 1.25rem;
-  border-radius: 10px;
-  border: 1px solid var(--border-color);    Caso tenha campo de busca por titulo
-  background-color: var(--bg-page);
+.panel-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #10b981;
+  background-color: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+}
+
+.panel-header h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
   color: var(--text-primary);
-  font-size: 0.95rem;
-  text-align: center;
-  outline: none;
 }
 
-.search-input::placeholder {
-  color: var(--text-muted);
-}
-*/
-
-
-/* Area dos Cards (Centralizada) */
+/* --- Cards Wrapper --- */
 .cards-wrapper {
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
-
- /* Container Principal Centralizado */
-.app-container {
-  width: 100%;
-  max-width: 900px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-
-/* Cabeçalho Centralizado */
-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-header h1 {
-  font-size: 2.25rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.5px;
-}
-
-header p {
-  color: var(--text-muted);
-  font-size: 1rem;
-}
-
-
-
-/* Card estilo */
 .project-card {
   width: 100%;
-  max-width: 380px;
+  max-width: 420px;
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: var(--shadow-md);
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(225, 29, 72, 0.5);
+  box-shadow: 0 12px 28px -5px rgba(0, 0, 0, 0.6), 0 0 16px var(--rocket-red-glow);
 }
 
 .card-banner {
-  height: 150px;
-  background: linear-gradient(135deg, #312e81 0%, #4338ca 100%);
+  height: 120px;
+  background: linear-gradient(135deg, #181c24 0%, #2b1219 50%, #161a22 100%);
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3.5rem;
+  overflow: hidden;
+}
+
+.banner-badge {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  padding: 0.2rem 0.55rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  border-radius: 4px;
+}
+
+.banner-r {
+  font-family: 'Cinzel', 'Impact', sans-serif;
+  font-size: 4.5rem;
+  font-weight: 900;
+  color: var(--rocket-red);
+  text-shadow: 0 0 20px var(--rocket-red-glow);
+  opacity: 0.85;
+  user-select: none;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover .banner-r {
+  transform: scale(1.1);
 }
 
 .card-body {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  text-align: left;
+  gap: 0.75rem;
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
-  gap: 0.5rem;
 }
 
 .card-title {
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1.25rem;
+  font-weight: 700;
   color: var(--text-primary);
-  margin: auto;
 }
 
 .status-badge {
-  font-size: 0.75rem;
-  padding: 0.25rem 0.6rem;
-  border-radius: 20px;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
   font-weight: 600;
-  background-color: var(--status-bg);
-  color: var(--status-text);
-  white-space: nowrap;
+  background-color: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .card-description {
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: 0.9rem;
-  line-height: 1.5;
-  margin-bottom: 1.25rem;
-}
-
-.card-tags {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin-bottom: 1.5rem;
-}
-
-.tag {
-  background-color: var(--tag-bg);
-  color: var(--tag-text);
-  font-size: 0.8rem;
-  padding: 0.25rem 0.65rem;
-  border-radius: 6px;
-  font-weight: 600;
+  line-height: 1.55;
 }
 
 .card-actions {
+  margin-top: 0.5rem;
   display: flex;
-  gap: 0.75rem;
 }
 
 .btn {
-  flex: 1;
-  text-align: center;
-  padding: 0.65rem 1rem;
-  border-radius: 8px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md);
   text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.btn-secondary {
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
-  background-color: transparent;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
 }
 
 .btn-primary {
-  background-color: var(--accent);
+  background-color: var(--rocket-red);
   color: #ffffff;
+  box-shadow: 0 4px 12px var(--rocket-red-glow);
 }
 
+.btn-primary:hover {
+  background-color: var(--rocket-red-dark);
+  box-shadow: 0 6px 18px rgba(225, 29, 72, 0.45);
+  transform: translateY(-1px);
+}
 
-@media (max-width: 768px) {
-  /* reduz o padding das bordas do body*/
-  body {
-    padding: 1.25rem 0.75rem;
+.btn-arrow {
+  transition: transform 0.2s ease;
+}
+
+.btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+@media (max-width: 640px) {
+  .rocket-title {
+    font-size: 2rem;
   }
-
-  /* Diminui o tamanho do texto do cabecario*/
-  header {
-    margin-bottom: 1.5rem;
+  .rocket-logo {
+    width: 90px;
+    height: 90px;
   }
-
-  header h1 {
-    font-size: 1.75rem;
-  }
-
-  header p {
-    font-size: 0.95rem;
-  }
-
-  /* Campo de busca ajustado para o toque
-  .search-box {
-    margin-bottom: 1.25rem;
-  }
-
-  .search-input {         Caso tenha pesquisa por titulo
-    padding: 0.75rem 1rem;
-    font-size: 0.95rem;
-  }
-*/
-
-  /* Reduz o espaçamento interno do quadro escuro central */
   .main-panel {
-    padding: 1rem;
-    border-radius: 12px;
+    padding: 1.5rem 1rem;
   }
-
-  /* Reduz o quadro de projetos para apenas uma coluna*/
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-
-
-  /* reduz o tamanho do texto do card*/
-  .card-body {
-    padding: 1rem;
-  }
-
-  .card-title {
-    font-size: 1.15rem;
-  }
-
-  .card-description {
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-  }
-
 }

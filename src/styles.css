@@ -1,46 +1,52 @@
-/* --- Variáveis de Design & Cores --- */
+/* --- Variáveis de Design & Cores - Tema Equipe Rocket --- */
 :root {
-      --bg-page: #090d16;
-      --bg-panel: #151c2c;
-      --accent: #6366f1;
+    /* Fundo da Página e Painéis (Pretos e Grafites Harmoniosos) */
+    --bg-page: #0f1115;
+    --bg-panel: #161a22;
+    --bg-primary: #0d0f14;
+    --bg-secondary: #171b24;
+    --bg-card: #202634;
+    --bg-card-hover: #293040;
 
-    /*Configuracoes do quadro kambam*/
-    --bg-primary: #0f172a;
-    --bg-secondary: #1e293b;
-    --bg-card: #334155;
-    --bg-card-hover: #475569;
+    /* Acentos - Vermelho Equipe Rocket */
+    --accent: #e11d48;
+    --accent-hover: #be123c;
+    --accent-primary: #e11d48;
+    --accent-primary-hover: #be123c;
+    --rocket-red: #e11d48;
+    --rocket-red-dark: #be123c;
+    --rocket-red-glow: rgba(225, 29, 72, 0.25);
 
+    /* Textos (Brancos e Cinzas Neutros) */
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --text-muted: #64748b;
 
-    --border-color: #334155;
-    --border-focus: #38bdf8;
-
-    --accent-primary: #3b82f6;
-    --accent-primary-hover: #2563eb;
+    /* Bordas */
+    --border-color: #272f3d;
+    --border-focus: #e11d48;
 
     /* Cores de Status das Colunas */
-    --color-todo: #fbbf24;
-    --color-in-progress: #38bdf8;
-    --color-review: #c57f46;
-    --color-done: #22c55e;
+    --color-todo: #f59e0b;
+    --color-in-progress: #e11d48;
+    --color-review: #a855f7;
+    --color-done: #10b981;
 
     /* Cores de Prioridade */
     --priority-high-bg: rgba(239, 68, 68, 0.2);
     --priority-high-text: #f87171;
     --priority-med-bg: rgba(245, 158, 11, 0.2);
     --priority-med-text: #fbbf24;
-    --priority-low-bg: rgba(59, 130, 246, 0.2);
-    --priority-low-text: #60a5fa;
+    --priority-low-bg: rgba(148, 163, 184, 0.2);
+    --priority-low-text: #cbd5e1;
 
     --radius-sm: 6px;
     --radius-md: 10px;
     --radius-lg: 16px;
 
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 
     --transition-fast: 0.2s ease;
 }
@@ -62,42 +68,68 @@ body {
     line-height: 1.5;
 }
 
-nav{
-  /* Display */
+nav {
   display: flex;
   justify-content: space-between;
-
-  /*Decoracao*/
-  padding: 10px;
-  background-color: var(--bg-primary);
-
-  height: 10vh;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  min-height: 64px;
 }
 
-#menu{
+#logo-Navbar-main {
   display: flex;
-  gap: 20px;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nav-brand-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--rocket-red);
+  box-shadow: 0 0 10px var(--rocket-red-glow);
+}
+
+.nav-brand-text {
+  font-family: 'Cinzel', 'Impact', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.nav-brand-text .rocket-r {
+  color: var(--rocket-red);
+  text-shadow: 0 0 8px var(--rocket-red-glow);
+}
+
+#menu {
+  display: flex;
+  gap: 0.75rem;
   align-items: center;
 }
 
-nav a{
-  background-color: var(--accent);
-  padding: 10px;
-  border-radius: 10px;
-  color: white;
+nav a {
+  background-color: transparent;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
   text-decoration: none;
-
-  box-sizing: border-box;
-  text-decoration: none;
-  padding: 8px 16px;
-
-  border: 1px solid transparent;
-  transition: all 0.2s ease;
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-fast);
 }
 
-nav a:hover{
-  border:1px solid black;
-  background-color: var(--accent-primary-hover);
+nav a:hover, nav a.active {
+  color: #ffffff;
+  background-color: var(--rocket-red);
+  border-color: var(--rocket-red);
+  box-shadow: 0 0 12px var(--rocket-red-glow);
 }
 
 
