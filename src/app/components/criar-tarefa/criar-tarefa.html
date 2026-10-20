@@ -1,0 +1,146 @@
+<div class="container-pagina">
+  <form [formGroup]="formTarefa" (ngSubmit)="salvarTarefa()" class="form-card">
+
+    <div class="form-header">
+      <h2>Criar Nova Tarefa</h2>
+      <p>Preencha os campos abaixo para vincular a tarefa a um projeto existente.</p>
+    </div>
+
+    @if (erro()) {
+      <div class="error-banner">
+        {{ erro() }}
+      </div>
+    }
+
+    <div class="form-grid">
+      <!-- Projeto -->
+      <div class="form-group full-width">
+        <label for="projetoId">Projeto <span class="required">*</span></label>
+        <select
+          id="projetoId"
+          formControlName="projetoId"
+          class="form-control"
+          [class.input-error]="campoInvalido('projetoId')"
+        >
+          <option value="" disabled selected>Selecione um projeto...</option>
+          @for (projeto of projetos(); track projeto.id) {
+            <option [value]="projeto.id">{{ projeto.nome }}</option>
+          }
+        </select>
+        @if (campoInvalido('projetoId')) {
+          <small class="error-msg">A seleção de um projeto é obrigatória.</small>
+        }
+      </div>
+
+      <!-- Título -->
+      <div class="form-group full-width">
+        <label for="titulo">Título da Tarefa <span class="required">*</span></label>
+        <input
+          id="titulo"
+          formControlName="titulo"
+          type="text"
+          placeholder="Ex: Refatorar módulo de autenticação"
+          class="form-control"
+          [class.input-error]="campoInvalido('titulo')"
+        >
+        @if (campoInvalido('titulo')) {
+          @if (formTarefa.get('titulo')?.hasError('required')) {
+            <small class="error-msg">O título é obrigatório.</small>
+          } @else if (formTarefa.get('titulo')?.hasError('minlength')) {
+            <small class="error-msg">O título deve ter no mínimo 3 caracteres.</small>
+          }
+        }
+      </div>
+
+      <!-- Descrição -->
+      <div class="form-group full-width">
+        <label for="descricao">Descrição</label>
+        <textarea
+          id="descricao"
+          formControlName="descricao"
+          rows="3"
+          placeholder="Descreva detalhes sobre a tarefa..."
+          class="form-control textarea"
+        ></textarea>
+      </div>
+
+      <!-- Status -->
+      <div class="form-group">
+        <label for="status">Status <span class="required">*</span></label>
+        <select
+          id="status"
+          formControlName="status"
+          class="form-control"
+          [class.input-error]="campoInvalido('status')"
+        >
+          @for (item of listaStatus; track item.value) {
+            <option [value]="item.value">{{ item.label }}</option>
+          }
+        </select>
+        @if (campoInvalido('status')) {
+          <small class="error-msg">Selecione um status.</small>
+        }
+      </div>
+
+      <!-- Prioridade -->
+      <div class="form-group">
+        <label for="prioridade">Prioridade <span class="required">*</span></label>
+        <select
+          id="prioridade"
+          formControlName="prioridade"
+          class="form-control"
+          [class.input-error]="campoInvalido('prioridade')"
+        >
+          @for (item of listaPrioridades; track item.value) {
+            <option [value]="item.value">{{ item.label }}</option>
+          }
+        </select>
+        @if (campoInvalido('prioridade')) {
+          <small class="error-msg">Selecione uma prioridade.</small>
+        }
+      </div>
+
+      <!-- Responsável -->
+      <div class="form-group">
+        <label for="responsavel">Responsável <span class="required">*</span></label>
+        <input
+          id="responsavel"
+          formControlName="responsavel"
+          type="text"
+          placeholder="Nome do responsável"
+          class="form-control"
+          [class.input-error]="campoInvalido('responsavel')"
+        >
+        @if (campoInvalido('responsavel')) {
+          <small class="error-msg">Informe o responsável pela tarefa.</small>
+        }
+      </div>
+
+      <!-- Prazo -->
+      <div class="form-group">
+        <label for="prazo">Prazo de Entrega <span class="required">*</span></label>
+        <input
+          id="prazo"
+          formControlName="prazo"
+          type="date"
+          class="form-control"
+          [class.input-error]="campoInvalido('prazo')"
+        >
+        @if (campoInvalido('prazo')) {
+          <small class="error-msg">Selecione a data limite.</small>
+        }
+      </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="cancelar()" [disabled]="enviando() || carregando()">
+        Cancelar
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="enviando() || carregando()">
+        {{ enviando() ? 'Criando...' : 'Criar Tarefa' }}
+      </button>
+    </div>
+
+  </form>
+</div>
