@@ -21,6 +21,7 @@
 
       <div class="projeto-acoes">
         <a routerLink="/projetos" class="btn btn-secondary">← Voltar</a>
+        <a [routerLink]="['/projetos', projeto()!.id, 'editar']" class="btn btn-secondary">Editar</a>
         <a [routerLink]="['/projetos', projeto()!.id, gerarSlug(projeto()!.nome)]" class="btn btn-primary">
           Abrir projeto
         </a>

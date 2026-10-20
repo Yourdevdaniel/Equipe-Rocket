@@ -1,0 +1,68 @@
+<div class="container">
+  <header class="cabecalho">
+    <div>
+      <h1>Editar Projeto</h1>
+      <p class="subtitulo">Altere os dados e clique em salvar</p>
+      <p class="subtitulo">Campos marcados com <span class="obrigatorio" aria-hidden="true">*</span> são obrigatórios.</p>
+    </div>
+    <a [routerLink]="['/projetos', idParam()]" class="btn btn-secundario">Voltar</a>
+  </header>
+
+  @if (estaSalvo()) {
+    <p class="mensagem-sucesso" role="status"><span aria-hidden="true">✓</span> Projeto alterado com sucesso!</p>
+  }
+
+  @if (erro()) {
+    <p class="mensagem-erro" role="alert"><span aria-hidden="true">⚠</span> {{ erro() }}</p>
+  }
+
+  <form class="formulario" [formGroup]="form" (ngSubmit)="salvar()" novalidate>
+    <div class="campo campo-largo">
+      <label for="nome">Nome <span class="obrigatorio" aria-hidden="true">*</span></label>
+      <input
+        id="nome"
+        type="text"
+        formControlName="nome"
+        required
+        [class.campo-erro]="campoInvalido('nome')"
+        [attr.aria-invalid]="campoInvalido('nome')"
+        [attr.aria-describedby]="campoInvalido('nome') ? 'nome-erro' : null"
+      />
+      @if (campoInvalido('nome')) {
+        <small id="nome-erro" class="texto-erro">
+          <span aria-hidden="true">⚠</span>
+          @if (form.controls.nome.hasError('required')) {
+            O nome é obrigatório.
+          } @else {
+            O nome deve ter no mínimo 3 caracteres.
+          }
+        </small>
+      }
+    </div>
+
+    <div class="campo campo-largo">
+      <label for="disciplina">Disciplina <span class="obrigatorio" aria-hidden="true">*</span></label>
+      <input
+        id="disciplina"
+        type="text"
+        formControlName="disciplina"
+        required
+        [class.campo-erro]="campoInvalido('disciplina')"
+        [attr.aria-invalid]="campoInvalido('disciplina')"
+        [attr.aria-describedby]="campoInvalido('disciplina') ? 'disciplina-erro' : null"
+      />
+      @if (campoInvalido('disciplina')) {
+        <small id="disciplina-erro" class="texto-erro"><span aria-hidden="true">⚠</span> Informe a disciplina.</small>
+      }
+    </div>
+
+    <div class="campo campo-largo">
+      <label for="descricao">Descrição</label>
+      <textarea id="descricao" rows="4" formControlName="descricao"></textarea>
+    </div>
+
+    <div class="botoes campo-largo">
+      <button type="submit" class="btn btn-primario">Salvar alterações</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,86 @@
+<div class="container-pagina">
+  <form [formGroup]="formProjeto" (ngSubmit)="salvarProjeto()" class="form-card" novalidate>
+
+    <div class="form-header">
+      <h2>Criar Novo Projeto</h2>
+      <p>Preencha os campos abaixo para cadastrar um projeto.</p>
+      <p>Campos marcados com <span class="required" aria-hidden="true">*</span> são obrigatórios.</p>
+    </div>
+
+    @if (erro()) {
+      <div class="error-banner" role="alert">
+        <span aria-hidden="true">⚠</span> {{ erro() }}
+      </div>
+    }
+
+    <div class="form-grid">
+      <!-- Nome -->
+      <div class="form-group full-width">
+        <label for="nome">Nome do Projeto <span class="required" aria-hidden="true">*</span></label>
+        <input
+          id="nome"
+          formControlName="nome"
+          type="text"
+          placeholder="Ex: Gerenciador de Tarefas"
+          class="form-control"
+          required
+          [class.input-error]="campoInvalido('nome')"
+          [attr.aria-invalid]="campoInvalido('nome')"
+          [attr.aria-describedby]="campoInvalido('nome') ? 'nome-erro' : null"
+        >
+        @if (campoInvalido('nome')) {
+          <small id="nome-erro" class="error-msg">
+            <span aria-hidden="true">⚠</span>
+            @if (formProjeto.controls.nome.hasError('required')) {
+              O nome é obrigatório.
+            } @else {
+              O nome deve ter no mínimo 3 caracteres.
+            }
+          </small>
+        }
+      </div>
+
+      <!-- Disciplina -->
+      <div class="form-group full-width">
+        <label for="disciplina">Disciplina <span class="required" aria-hidden="true">*</span></label>
+        <input
+          id="disciplina"
+          formControlName="disciplina"
+          type="text"
+          placeholder="Ex: Desenvolvimento Frontend"
+          class="form-control"
+          required
+          [class.input-error]="campoInvalido('disciplina')"
+          [attr.aria-invalid]="campoInvalido('disciplina')"
+          [attr.aria-describedby]="campoInvalido('disciplina') ? 'disciplina-erro' : null"
+        >
+        @if (campoInvalido('disciplina')) {
+          <small id="disciplina-erro" class="error-msg"><span aria-hidden="true">⚠</span> Informe a disciplina.</small>
+        }
+      </div>
+
+      <!-- Descrição -->
+      <div class="form-group full-width">
+        <label for="descricao">Descrição</label>
+        <textarea
+          id="descricao"
+          formControlName="descricao"
+          rows="3"
+          placeholder="Descreva o objetivo do projeto..."
+          class="form-control textarea"
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="cancelar()" [disabled]="enviando()">
+        Cancelar
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="enviando()">
+        {{ enviando() ? 'Criando...' : 'Criar Projeto' }}
+      </button>
+    </div>
+
+  </form>
+</div>

@@ -29,24 +29,31 @@ export class ProjetosService {
     }
 
     criarTarefaComIdSequencial(dadosFormulario: Omit<Tarefa, 'id' >): Observable<Tarefa> {
-  return this.listarTarefas().pipe(
-    switchMap((tarefasExistentes: Tarefa[]) => {
-      const maiorId = tarefasExistentes.reduce((max: number, t: Tarefa) => {
-        const num = Number(t.id);
-        return !isNaN(num) && num > max ? num : max;
-      }, 0);
+        return this.listarTarefas().pipe(
+            switchMap((tarefasExistentes) =>
+                this.http.post<Tarefa>(`${this.api}/tarefas`, { id: proximoId(tarefasExistentes), ...dadosFormulario })
+            )
+        );
+    }
 
-      const novaTarefa: Tarefa = {
-        id: String(maiorId + 1),
-        ...dadosFormulario
-      };
+    criarProjetoComIdSequencial(dadosFormulario: Omit<Projeto, 'id'>): Observable<Projeto> {
+        return this.listarProjetos().pipe(
+            switchMap((projetosExistentes) =>
+                this.http.post<Projeto>(`${this.api}/projetos`, { id: proximoId(projetosExistentes), ...dadosFormulario })
+            )
+        );
+    }
 
-      console.log(novaTarefa)
-
-      return this.http.post<Tarefa>(`${this.api}/tarefas`, novaTarefa);
-    })
-  );
-  }
+    editarProjeto(id: string, alteracoes: Partial<Projeto>): Observable<Projeto> {
+        return this.http.patch<Projeto>(`${this.api}/projetos/${id}`, alteracoes);
+    }
 }
 
-
+// Próximo id numérico em texto ("1", "2"...), igual ao que já existe no db.json.
+function proximoId(lista: { id: string }[]): string {
+    const maiorId = lista.reduce((max, item) => {
+        const num = Number(item.id);
+        return !isNaN(num) && num > max ? num : max;
+    }, 0);
+    return String(maiorId + 1);
+}
