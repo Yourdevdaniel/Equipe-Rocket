@@ -64,13 +64,30 @@ textarea { resize: vertical; }
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
+  transition: all var(--transition-fast, 0.2s ease);
 }
-.btn-primario { background-color: var(--accent-primary, #3b82f6); color: #fff; }
-.btn-primario:hover { background-color: var(--accent-primary-hover, #2563eb); }
+
+.btn-primario {
+  background-color: var(--rocket-red, #e11d48);
+  color: #fff;
+  box-shadow: 0 4px 12px var(--rocket-red-glow, rgba(225, 29, 72, 0.25));
+}
+.btn-primario:hover {
+  background-color: var(--rocket-red-dark, #be123c);
+  transform: translateY(-1px);
+}
+
 .btn-secundario {
-  background-color: var(--bg-secondary, #1e293b);
+  background-color: var(--bg-card, #202634);
   color: var(--text-primary, #f8fafc);
   border: 1px solid var(--border-color, #334155);
+}
+.btn-secundario:hover {
+  background-color: var(--rocket-red, #e11d48);
+  border-color: var(--rocket-red, #e11d48);
+  color: #ffffff;
+  box-shadow: 0 0 12px var(--rocket-red-glow, rgba(225, 29, 72, 0.35));
+  transform: translateY(-1px);
 }
 
 .mensagem-sucesso {

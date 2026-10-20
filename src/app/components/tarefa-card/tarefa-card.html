@@ -1,4 +1,4 @@
-<article class="card" [class]="'status-' + tarefa().status">
+<article class="card" [class]="'status-' + tarefa().status" (click)="abrirDetalhes()">
   <header class="card-topo">
     <span class="badge prioridade" [class]="'prioridade-' + tarefa().prioridade">
       {{ rotuloPrioridade[tarefa().prioridade] }}
@@ -6,7 +6,21 @@
     <span class="status">{{ rotuloStatus[tarefa().status] }}</span>
   </header>
 
-  <h3 class="titulo">{{ tarefa().titulo }}</h3>
+  <div class="titulo-linha">
+    <h3 class="titulo">{{ tarefa().titulo }}</h3>
+    <a
+      [routerLink]="['/tarefas', tarefa().id, 'editar']"
+      class="btn-editar"
+      title="Editar tarefa"
+      aria-label="Editar tarefa"
+      (click)="$event.stopPropagation()"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+        <path d="m15 5 4 4"/>
+      </svg>
+    </a>
+  </div>
 
   @if (tarefa().descricao) {
     <p class="descricao">{{ tarefa().descricao }}</p>
@@ -17,9 +31,80 @@
       <span class="avatar">{{ tarefa().responsavel.charAt(0) }}</span>
       {{ tarefa().responsavel }}
     </span>
-    <a [routerLink]="['/tarefas', tarefa().id, 'editar']" class="btn-editar" title="Editar tarefa">
-      Editar
-    </a>
     <span class="prazo">📅 {{ tarefa().prazo | date: 'dd/MM' : 'UTC' }}</span>
   </footer>
 </article>
+
+@if (expandido()) {
+  <div class="modal-backdrop" (click)="fecharDetalhes($event)">
+    <article
+      class="card-expandido"
+      [class]="'status-' + tarefa().status"
+      (click)="$event.stopPropagation()"
+    >
+      <header class="expandido-topo">
+        <div class="expandido-badges">
+          <span class="badge-id">Tarefa #{{ tarefa().id }}</span>
+          <span class="badge prioridade" [class]="'prioridade-' + tarefa().prioridade">
+            Prioridade {{ rotuloPrioridade[tarefa().prioridade] }}
+          </span>
+          <span class="badge-status">
+            <span class="ponto-status"></span>
+            {{ rotuloStatus[tarefa().status] }}
+          </span>
+        </div>
+
+        <button type="button" class="btn-fechar" (click)="fecharDetalhes($event)" title="Fechar" aria-label="Fechar">
+          ✕
+        </button>
+      </header>
+
+      <h2 class="expandido-titulo">{{ tarefa().titulo }}</h2>
+
+      <div class="expandido-secao">
+        <span class="secao-label">Descrição da Tarefa</span>
+        <p class="expandido-descricao">
+          {{ tarefa().descricao || 'Nenhuma descrição informada para esta tarefa.' }}
+        </p>
+      </div>
+
+      <div class="expandido-meta-grid">
+        <div class="meta-item">
+          <span class="meta-label">Responsável</span>
+          <div class="meta-valor responsavel-destaque">
+            <span class="avatar avatar-lg">{{ tarefa().responsavel.charAt(0) }}</span>
+            <span>{{ tarefa().responsavel }}</span>
+          </div>
+        </div>
+
+        <div class="meta-item">
+          <span class="meta-label">Data Limite</span>
+          <div class="meta-valor">
+            📅 {{ tarefa().prazo | date: 'dd/MM/yyyy' : 'UTC' }}
+          </div>
+        </div>
+
+        <div class="meta-item">
+          <span class="meta-label">Projeto Vinculado</span>
+          <div class="meta-valor">
+            📁 {{ nomeProjeto() || ('Projeto #' + tarefa().projetoId) }}
+          </div>
+        </div>
+      </div>
+
+      <footer class="expandido-rodape">
+        <a
+          [routerLink]="['/tarefas', tarefa().id, 'editar']"
+          class="btn-modal btn-primario"
+          (click)="fecharDetalhes()"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+            <path d="m15 5 4 4"/>
+          </svg>
+          Editar Tarefa
+        </a>
+      </footer>
+    </article>
+  </div>
+}

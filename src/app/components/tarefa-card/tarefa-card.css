@@ -1,8 +1,8 @@
 :host { display: block; }
 
 .card {
-  background: #273449;
-  border: 1px solid #334155;
+  background: var(--bg-card, #202634);
+  border: 1px solid var(--border-color, #272f3d);
   border-left: 3px solid var(--cor-status, #64748b);
   border-radius: 10px;
   padding: 12px 14px;
@@ -10,9 +10,14 @@
   flex-direction: column;
   gap: 8px;
   position: relative;
-  transition: transform 0.15s, border-color 0.15s;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
-.card:hover { transform: translateY(-2px); border-color: #475569; }
+.card:hover {
+  transform: translateY(-2px);
+  border-color: #475569;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
 
 /* cor da borda esquerda = cor da coluna */
 .status-a-fazer      { --cor-status: #f5b72b; }
@@ -33,6 +38,13 @@
 .prioridade-baixa { background: rgba(34, 197, 94, 0.15);  color: #4ade80; }
 
 .status { font-size: 11px; color: #94a3b8; }
+
+.titulo-linha {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
 
 .titulo { margin: 0; font-size: 14px; font-weight: 600; color: #f1f5f9; position: relative; z-index: 2; }
 
@@ -70,11 +82,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 3px 8px;
-  font-size: 11px;
-  font-weight: 600;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
   color: #cbd5e1;
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.06);
   border: 1px solid #334155;
   border-radius: 6px;
   text-decoration: none;
@@ -83,9 +95,239 @@
 }
 
 .btn-editar:hover {
-  background-color: var(--accent-primary, #3b82f6);
+  background-color: var(--accent-primary, #e11d48);
   color: #ffffff;
-  border-color: var(--accent-primary, #3b82f6);
+  border-color: var(--accent-primary, #e11d48);
 }
 
 .prazo { color: #94a3b8; }
+
+/* --- Modal / Card Expandido Centralizado --- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background-color: rgba(7, 9, 14, 0.78);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fadeIn 0.18s ease-out;
+}
+
+.card-expandido {
+  width: 100%;
+  max-width: 580px;
+  background: linear-gradient(160deg, #1b202c 0%, #141821 100%);
+  border: 1px solid #334155;
+  border-left: 5px solid var(--cor-status, #e11d48);
+  border-radius: 16px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.75), 0 0 24px rgba(225, 29, 72, 0.15);
+  animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #f8fafc;
+}
+
+.expandido-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.expandido-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.badge-id {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ponto-status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--cor-status, #64748b);
+}
+
+.btn-fechar {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+  font-size: 14px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.15s ease;
+}
+
+.btn-fechar:hover {
+  background: rgba(225, 29, 72, 0.2);
+  color: #ffffff;
+  border-color: var(--rocket-red, #e11d48);
+}
+
+.expandido-titulo {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+.expandido-secao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.secao-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+}
+
+.expandido-descricao {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #e2e8f0;
+  line-height: 1.6;
+  background: rgba(15, 17, 21, 0.55);
+  border: 1px solid #272f3d;
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+}
+
+.expandido-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  background: rgba(15, 17, 21, 0.45);
+  border: 1px solid #272f3d;
+  border-radius: 10px;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.meta-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+}
+
+.meta-valor {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.avatar-lg {
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+}
+
+.expandido-rodape {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #272f3d;
+}
+
+.btn-modal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.btn-secundario {
+  background: #202634;
+  color: #cbd5e1;
+  border-color: #334155;
+}
+
+.btn-secundario:hover {
+  background: #293040;
+  color: #ffffff;
+}
+
+.btn-primario {
+  background: var(--rocket-red, #e11d48);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
+}
+
+.btn-primario:hover {
+  background: var(--rocket-red-dark, #be123c);
+  transform: translateY(-1px);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@media (max-width: 560px) {
+  .expandido-meta-grid {
+    grid-template-columns: 1fr;
+  }
+}
