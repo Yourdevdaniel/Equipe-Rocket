@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable  } from 'rxjs';
+import { Observable, switchMap  } from 'rxjs';
 import { Projeto, ProjetoComTarefas, Tarefa } from '../models'
 
 @Injectable({ providedIn: 'root' })
@@ -28,6 +28,25 @@ export class ProjetosService {
         return this.http.patch<Tarefa>(`${this.api}/tarefas/${id}`, alteracoes);
     }
 
+    criarTarefaComIdSequencial(dadosFormulario: Omit<Tarefa, 'id' >): Observable<Tarefa> {
+  return this.listarTarefas().pipe(
+    switchMap((tarefasExistentes: Tarefa[]) => {
+      const maiorId = tarefasExistentes.reduce((max: number, t: Tarefa) => {
+        const num = Number(t.id);
+        return !isNaN(num) && num > max ? num : max;
+      }, 0);
+
+      const novaTarefa: Tarefa = {
+        id: String(maiorId + 1),
+        ...dadosFormulario
+      };
+
+      console.log(novaTarefa)
+
+      return this.http.post<Tarefa>(`${this.api}/tarefas`, novaTarefa);
+    })
+  );
+  }
 }
 
 
