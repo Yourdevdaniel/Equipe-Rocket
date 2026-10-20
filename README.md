@@ -150,4 +150,8 @@ cp db.seed.json db.json
 - [ ] 20. Validar o formulário
 - [ ] 21. Tornar o formulário acessível
 - [ ] 22. Criar cadastro e edição de projeto
+<<<<<<< HEAD
 - [ ] 23. Criar o slide de apresentação do Marco 3
+=======
+- [ ] 23. Criar o slide de apresentação do Marco 3
+>>>>>>> 8ca4f7d1cc5f4f0c03813fee1f19ea7901d341df
