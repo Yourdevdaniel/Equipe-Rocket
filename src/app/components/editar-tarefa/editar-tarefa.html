@@ -22,6 +22,15 @@
       <textarea id="descricao" rows="4" formControlName="descricao"></textarea>
     </div>
 
+    <div class="campo campo-largo">
+      <label for="projetoId">Projeto vinculado</label>
+      <select id="projetoId" formControlName="projetoId">
+        @for (projeto of projetos(); track projeto.id) {
+          <option [value]="projeto.id">{{ projeto.nome }}</option>
+        }
+      </select>
+    </div>
+
     <div class="campo">
       <label for="responsavel">Responsável</label>
       <input id="responsavel" type="text" formControlName="responsavel" />

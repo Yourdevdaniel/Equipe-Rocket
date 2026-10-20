@@ -108,7 +108,11 @@
 }
 
 .btn-secondary:hover {
-  background-color: var(--bg-card-hover, #293040);
+  background-color: var(--rocket-red, #e11d48);
+  border-color: var(--rocket-red, #e11d48);
+  color: #ffffff;
+  box-shadow: 0 0 12px var(--rocket-red-glow, rgba(225, 29, 72, 0.35));
+  transform: translateY(-1px);
 }
 
 .secao-tarefas {
