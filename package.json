@@ -2,8 +2,11 @@
   "name": "equipe-rocket",
   "version": "0.0.0",
   "scripts": {
+    "prestart": "node fix-json-server.mjs",
+    "postinstall": "node fix-json-server.mjs",
     "ng": "ng",
     "start": "ng serve",
+    "api": "node fix-json-server.mjs && json-server db.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
