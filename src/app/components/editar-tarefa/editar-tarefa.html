@@ -3,18 +3,41 @@
     <div>
       <h1>Editar Tarefa</h1>
       <p class="subtitulo">Altere os dados e clique em salvar</p>
+      <p class="subtitulo">Campos marcados com <span class="obrigatorio" aria-hidden="true">*</span> são obrigatórios.</p>
     </div>
     <a routerLink="/tarefas" class="btn btn-secundario">Voltar</a>
   </header>
 
   @if (estaSalvo()) {
-    <p class="mensagem-sucesso">Tarefa alterada com sucesso!</p>
+    <p class="mensagem-sucesso" role="status"><span aria-hidden="true">✓</span> Tarefa alterada com sucesso!</p>
   }
 
-  <form class="formulario" [formGroup]="form" (ngSubmit)="salvar()">
+  @if (erro()) {
+    <p class="mensagem-erro" role="alert"><span aria-hidden="true">⚠</span> {{ erro() }}</p>
+  }
+
+  <form class="formulario" [formGroup]="form" (ngSubmit)="salvar()" novalidate>
     <div class="campo campo-largo">
-      <label for="titulo">Título</label>
-      <input id="titulo" type="text" formControlName="titulo" />
+      <label for="titulo">Título <span class="obrigatorio" aria-hidden="true">*</span></label>
+      <input
+        id="titulo"
+        type="text"
+        formControlName="titulo"
+        required
+        [class.campo-erro]="campoInvalido('titulo')"
+        [attr.aria-invalid]="campoInvalido('titulo')"
+        [attr.aria-describedby]="campoInvalido('titulo') ? 'titulo-erro' : null"
+      />
+      @if (campoInvalido('titulo')) {
+        <small id="titulo-erro" class="texto-erro">
+          <span aria-hidden="true">⚠</span>
+          @if (form.controls.titulo.hasError('required')) {
+            O título é obrigatório.
+          } @else {
+            O título deve ter no mínimo 3 caracteres.
+          }
+        </small>
+      }
     </div>
 
     <div class="campo campo-largo">
@@ -23,22 +46,54 @@
     </div>
 
     <div class="campo campo-largo">
-      <label for="projetoId">Projeto vinculado</label>
-      <select id="projetoId" formControlName="projetoId">
+      <label for="projetoId">Projeto vinculado <span class="obrigatorio" aria-hidden="true">*</span></label>
+      <select
+        id="projetoId"
+        formControlName="projetoId"
+        required
+        [class.campo-erro]="campoInvalido('projetoId')"
+        [attr.aria-invalid]="campoInvalido('projetoId')"
+        [attr.aria-describedby]="campoInvalido('projetoId') ? 'projetoId-erro' : null"
+      >
         @for (projeto of projetos(); track projeto.id) {
           <option [value]="projeto.id">{{ projeto.nome }}</option>
         }
       </select>
+      @if (campoInvalido('projetoId')) {
+        <small id="projetoId-erro" class="texto-erro"><span aria-hidden="true">⚠</span> Selecione um projeto.</small>
+      }
     </div>
 
     <div class="campo">
-      <label for="responsavel">Responsável</label>
-      <input id="responsavel" type="text" formControlName="responsavel" />
+      <label for="responsavel">Responsável <span class="obrigatorio" aria-hidden="true">*</span></label>
+      <input
+        id="responsavel"
+        type="text"
+        formControlName="responsavel"
+        required
+        [class.campo-erro]="campoInvalido('responsavel')"
+        [attr.aria-invalid]="campoInvalido('responsavel')"
+        [attr.aria-describedby]="campoInvalido('responsavel') ? 'responsavel-erro' : null"
+      />
+      @if (campoInvalido('responsavel')) {
+        <small id="responsavel-erro" class="texto-erro"><span aria-hidden="true">⚠</span> Informe o responsável pela tarefa.</small>
+      }
     </div>
 
     <div class="campo">
-      <label for="prazo">Prazo</label>
-      <input id="prazo" type="date" formControlName="prazo" />
+      <label for="prazo">Prazo <span class="obrigatorio" aria-hidden="true">*</span></label>
+      <input
+        id="prazo"
+        type="date"
+        formControlName="prazo"
+        required
+        [class.campo-erro]="campoInvalido('prazo')"
+        [attr.aria-invalid]="campoInvalido('prazo')"
+        [attr.aria-describedby]="campoInvalido('prazo') ? 'prazo-erro' : null"
+      />
+      @if (campoInvalido('prazo')) {
+        <small id="prazo-erro" class="texto-erro"><span aria-hidden="true">⚠</span> Selecione a data limite.</small>
+      }
     </div>
 
     <div class="campo">

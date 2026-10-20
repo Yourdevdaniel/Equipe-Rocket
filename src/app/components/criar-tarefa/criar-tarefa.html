@@ -1,26 +1,30 @@
 <div class="container-pagina">
-  <form [formGroup]="formTarefa" (ngSubmit)="salvarTarefa()" class="form-card">
+  <form [formGroup]="formTarefa" (ngSubmit)="salvarTarefa()" class="form-card" novalidate>
 
     <div class="form-header">
       <h2>Criar Nova Tarefa</h2>
       <p>Preencha os campos abaixo para vincular a tarefa a um projeto existente.</p>
+      <p>Campos marcados com <span class="required" aria-hidden="true">*</span> são obrigatórios.</p>
     </div>
 
     @if (erro()) {
-      <div class="error-banner">
-        {{ erro() }}
+      <div class="error-banner" role="alert">
+        <span aria-hidden="true">⚠</span> {{ erro() }}
       </div>
     }
 
     <div class="form-grid">
       <!-- Projeto -->
       <div class="form-group full-width">
-        <label for="projetoId">Projeto <span class="required">*</span></label>
+        <label for="projetoId">Projeto <span class="required" aria-hidden="true">*</span></label>
         <select
           id="projetoId"
           formControlName="projetoId"
           class="form-control"
+          required
           [class.input-error]="campoInvalido('projetoId')"
+          [attr.aria-invalid]="campoInvalido('projetoId')"
+          [attr.aria-describedby]="campoInvalido('projetoId') ? 'projetoId-erro' : null"
         >
           <option value="" disabled selected>Selecione um projeto...</option>
           @for (projeto of projetos(); track projeto.id) {
@@ -28,27 +32,33 @@
           }
         </select>
         @if (campoInvalido('projetoId')) {
-          <small class="error-msg">A seleção de um projeto é obrigatória.</small>
+          <small id="projetoId-erro" class="error-msg"><span aria-hidden="true">⚠</span> A seleção de um projeto é obrigatória.</small>
         }
       </div>
 
       <!-- Título -->
       <div class="form-group full-width">
-        <label for="titulo">Título da Tarefa <span class="required">*</span></label>
+        <label for="titulo">Título da Tarefa <span class="required" aria-hidden="true">*</span></label>
         <input
           id="titulo"
           formControlName="titulo"
           type="text"
           placeholder="Ex: Refatorar módulo de autenticação"
           class="form-control"
+          required
           [class.input-error]="campoInvalido('titulo')"
+          [attr.aria-invalid]="campoInvalido('titulo')"
+          [attr.aria-describedby]="campoInvalido('titulo') ? 'titulo-erro' : null"
         >
         @if (campoInvalido('titulo')) {
-          @if (formTarefa.get('titulo')?.hasError('required')) {
-            <small class="error-msg">O título é obrigatório.</small>
-          } @else if (formTarefa.get('titulo')?.hasError('minlength')) {
-            <small class="error-msg">O título deve ter no mínimo 3 caracteres.</small>
-          }
+          <small id="titulo-erro" class="error-msg">
+            <span aria-hidden="true">⚠</span>
+            @if (formTarefa.get('titulo')?.hasError('required')) {
+              O título é obrigatório.
+            } @else {
+              O título deve ter no mínimo 3 caracteres.
+            }
+          </small>
         }
       </div>
 
@@ -66,68 +76,80 @@
 
       <!-- Status -->
       <div class="form-group">
-        <label for="status">Status <span class="required">*</span></label>
+        <label for="status">Status <span class="required" aria-hidden="true">*</span></label>
         <select
           id="status"
           formControlName="status"
           class="form-control"
+          required
           [class.input-error]="campoInvalido('status')"
+          [attr.aria-invalid]="campoInvalido('status')"
+          [attr.aria-describedby]="campoInvalido('status') ? 'status-erro' : null"
         >
           @for (item of listaStatus; track item.value) {
             <option [value]="item.value">{{ item.label }}</option>
           }
         </select>
         @if (campoInvalido('status')) {
-          <small class="error-msg">Selecione um status.</small>
+          <small id="status-erro" class="error-msg"><span aria-hidden="true">⚠</span> Selecione um status.</small>
         }
       </div>
 
       <!-- Prioridade -->
       <div class="form-group">
-        <label for="prioridade">Prioridade <span class="required">*</span></label>
+        <label for="prioridade">Prioridade <span class="required" aria-hidden="true">*</span></label>
         <select
           id="prioridade"
           formControlName="prioridade"
           class="form-control"
+          required
           [class.input-error]="campoInvalido('prioridade')"
+          [attr.aria-invalid]="campoInvalido('prioridade')"
+          [attr.aria-describedby]="campoInvalido('prioridade') ? 'prioridade-erro' : null"
         >
           @for (item of listaPrioridades; track item.value) {
             <option [value]="item.value">{{ item.label }}</option>
           }
         </select>
         @if (campoInvalido('prioridade')) {
-          <small class="error-msg">Selecione uma prioridade.</small>
+          <small id="prioridade-erro" class="error-msg"><span aria-hidden="true">⚠</span> Selecione uma prioridade.</small>
         }
       </div>
 
       <!-- Responsável -->
       <div class="form-group">
-        <label for="responsavel">Responsável <span class="required">*</span></label>
+        <label for="responsavel">Responsável <span class="required" aria-hidden="true">*</span></label>
         <input
           id="responsavel"
           formControlName="responsavel"
           type="text"
           placeholder="Nome do responsável"
           class="form-control"
+          required
           [class.input-error]="campoInvalido('responsavel')"
+          [attr.aria-invalid]="campoInvalido('responsavel')"
+          [attr.aria-describedby]="campoInvalido('responsavel') ? 'responsavel-erro' : null"
         >
         @if (campoInvalido('responsavel')) {
-          <small class="error-msg">Informe o responsável pela tarefa.</small>
+          <small id="responsavel-erro" class="error-msg"><span aria-hidden="true">⚠</span> Informe o responsável pela tarefa.</small>
         }
       </div>
 
       <!-- Prazo -->
       <div class="form-group">
-        <label for="prazo">Prazo de Entrega <span class="required">*</span></label>
+        <label for="prazo">Prazo de Entrega <span class="required" aria-hidden="true">*</span></label>
         <input
           id="prazo"
           formControlName="prazo"
           type="date"
           class="form-control"
+          required
           [class.input-error]="campoInvalido('prazo')"
+          [attr.aria-invalid]="campoInvalido('prazo')"
+          [attr.aria-describedby]="campoInvalido('prazo') ? 'prazo-erro' : null"
         >
         @if (campoInvalido('prazo')) {
-          <small class="error-msg">Selecione a data limite.</small>
+          <small id="prazo-erro" class="error-msg"><span aria-hidden="true">⚠</span> Selecione a data limite.</small>
         }
       </div>
     </div>

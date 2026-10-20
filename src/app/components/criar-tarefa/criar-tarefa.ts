@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { Projeto, Tarefa } from '../../models'; // Importação ajustada para ../../models
+import { focarPrimeiroInvalido } from '../../utils/form';
 
 @Component({
   selector: 'app-criar-tarefa',
@@ -77,6 +78,8 @@ export class CriarTarefa implements OnInit {
   salvarTarefa(): void {
     if (this.formTarefa.invalid) {
       this.formTarefa.markAllAsTouched();
+      this.erro.set('Há campos com erro. Corrija-os e tente novamente.');
+      focarPrimeiroInvalido(this.formTarefa);
       return;
     }
 

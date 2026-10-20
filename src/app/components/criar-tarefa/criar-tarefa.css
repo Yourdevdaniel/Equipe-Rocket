@@ -77,7 +77,6 @@
 }
 
 .form-control:focus {
-  outline: none;
   border-color: var(--border-focus);
   box-shadow: 0 0 8px var(--rocket-red-glow);
 }
@@ -144,7 +143,26 @@
   }
 }
 
+.input-error {
+  border: 2px solid #fb7185;
+}
+
 .error-msg {
-  border-color: var(--rocket-red);
-  box-shadow: 0 0 6px var(--rocket-red-glow);
+  color: #fda4af;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.error-banner {
+  padding: 0.75rem 1rem;
+  border: 2px solid #fb7185;
+  border-radius: var(--radius-md);
+  background-color: rgba(225, 29, 72, 0.12);
+  color: #fecdd3;
+  font-weight: 600;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

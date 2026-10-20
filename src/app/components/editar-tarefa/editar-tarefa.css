@@ -49,7 +49,7 @@ input, select, textarea {
   border-radius: var(--radius-md, 10px);
   padding: 0.65rem 0.8rem;
 }
-input:focus, select:focus, textarea:focus { outline: none; border-color: var(--border-focus, #38bdf8); }
+input:focus, select:focus, textarea:focus { border-color: var(--border-focus, #38bdf8); }
 input[type='date'] { color-scheme: dark; }
 textarea { resize: vertical; }
 
@@ -100,4 +100,19 @@ textarea { resize: vertical; }
 
 @media (max-width: 600px) {
   .formulario { grid-template-columns: 1fr; }
+}
+
+.obrigatorio { color: var(--rocket-red, #e11d48); }
+
+.campo-erro { border: 2px solid #fb7185; }
+
+.texto-erro { color: #fda4af; font-size: 0.8rem; font-weight: 600; }
+
+.mensagem-erro {
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md, 10px);
+  background-color: rgba(225, 29, 72, 0.12);
+  color: #fecdd3;
+  border: 2px solid #fb7185;
+  font-weight: 600;
 }

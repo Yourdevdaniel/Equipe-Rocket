@@ -52,6 +52,12 @@
 }
 
 /* --- Resets e Estilos Globais --- */
+/* Foco visível para quem navega pelo teclado */
+:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;

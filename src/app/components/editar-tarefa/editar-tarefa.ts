@@ -2,7 +2,8 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { Projeto, Tarefa } from '../../models';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { focarPrimeiroInvalido } from '../../utils/form';
 
 @Component({
   imports: [RouterLink, ReactiveFormsModule],
@@ -18,13 +19,14 @@ export class EditarTarefa implements OnInit {
   readonly projetos = signal<Projeto[]>([]);
   readonly idParam = signal<string | null>(null);
   readonly estaSalvo = signal(false);
+  readonly erro = signal<string | null>(null);
 
   readonly form = new FormGroup({
-    titulo: new FormControl('', { nonNullable: true }),
+    titulo: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] }),
     descricao: new FormControl('', { nonNullable: true }),
-    projetoId: new FormControl('', { nonNullable: true }),
-    responsavel: new FormControl('', { nonNullable: true }),
-    prazo: new FormControl('', { nonNullable: true }),
+    projetoId: new FormControl('', { nonNullable: true, validators: Validators.required }),
+    responsavel: new FormControl('', { nonNullable: true, validators: Validators.required }),
+    prazo: new FormControl('', { nonNullable: true, validators: Validators.required }),
     status: new FormControl<Tarefa['status']>('a-fazer', { nonNullable: true }),
     prioridade: new FormControl<Tarefa['prioridade']>('media', { nonNullable: true }),
   });
@@ -50,11 +52,25 @@ export class EditarTarefa implements OnInit {
     });
   }
 
+  campoInvalido(nomeCampo: keyof typeof this.form.controls): boolean {
+    const control = this.form.controls[nomeCampo];
+    return control.invalid && (control.touched || control.dirty);
+  }
+
   salvar(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
       return;
     }
+
+    this.estaSalvo.set(false);
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.erro.set('Há campos com erro. Corrija-os e tente novamente.');
+      focarPrimeiroInvalido(this.form);
+      return;
+    }
+    this.erro.set(null);
 
     const alteracoes = this.form.getRawValue();
 
@@ -62,6 +78,9 @@ export class EditarTarefa implements OnInit {
       next: (tarefaAlterada) => {
         this.tarefa.set(tarefaAlterada);
         this.estaSalvo.set(true);
+      },
+      error: () => {
+        this.erro.set('Erro ao salvar no servidor. Tente novamente.');
       },
     });
   }
