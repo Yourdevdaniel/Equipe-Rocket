@@ -48,6 +48,16 @@
       "prioridade": "media",
       "responsavel": "AAAA",
       "prazo": "2026-10-14"
+    },
+    {
+      "id": "5",
+      "projetoId": "1",
+      "titulo": "Oi eu sou",
+      "descricao": "o goku",
+      "status": "em-andamento",
+      "prioridade": "baixa",
+      "responsavel": "goku",
+      "prazo": "2026-10-28"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

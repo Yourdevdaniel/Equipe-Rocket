@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { Tarefa } from '../../models';
@@ -19,11 +19,39 @@ export class ListaTarefas implements OnInit {
   readonly carregando = signal(true);
   readonly erro = signal<string | null>(null);
   readonly idParam = signal<string | null>(null);
+  readonly termoBusca = signal('');
+
+  readonly tarefasFiltradas = computed(() => {
+    const termo = this.normalizarTexto(this.termoBusca());
+    if (!termo) {
+      return this.tarefas();
+    }
+    return this.tarefas().filter((tarefa) =>
+      this.normalizarTexto(tarefa.titulo).includes(termo)
+    );
+  });
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     this.idParam.set(id);
     this.carregarTarefas(id);
+  }
+
+  atualizarBusca(evento: Event): void {
+    const input = evento.target as HTMLInputElement;
+    this.termoBusca.set(input.value);
+  }
+
+  limparBusca(): void {
+    this.termoBusca.set('');
+  }
+
+  private normalizarTexto(texto: string): string {
+    return texto
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
   }
 
   carregarTarefas(id?: string | null): void {
