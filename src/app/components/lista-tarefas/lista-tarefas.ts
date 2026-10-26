@@ -20,15 +20,37 @@ export class ListaTarefas implements OnInit {
   readonly erro = signal<string | null>(null);
   readonly idParam = signal<string | null>(null);
   readonly termoBusca = signal('');
+  readonly filtroStatus = signal<Tarefa['status'] | ''>('');
+  readonly filtroPrioridade = signal<Tarefa['prioridade'] | ''>('');
+
+  readonly opcoesStatus: { value: Tarefa['status']; label: string }[] = [
+    { value: 'a-fazer', label: 'A Fazer' },
+    { value: 'em-andamento', label: 'Em Andamento' },
+    { value: 'em-revisao', label: 'Em Revisão' },
+    { value: 'concluida', label: 'Concluída' },
+  ];
+
+  readonly opcoesPrioridade: { value: Tarefa['prioridade']; label: string }[] = [
+    { value: 'alta', label: 'Alta' },
+    { value: 'media', label: 'Média' },
+    { value: 'baixa', label: 'Baixa' },
+  ];
+
+  readonly temFiltrosAtivos = computed(() =>
+    Boolean(this.termoBusca().trim() || this.filtroStatus() || this.filtroPrioridade())
+  );
 
   readonly tarefasFiltradas = computed(() => {
     const termo = this.normalizarTexto(this.termoBusca());
-    if (!termo) {
-      return this.tarefas();
-    }
-    return this.tarefas().filter((tarefa) =>
-      this.normalizarTexto(tarefa.titulo).includes(termo)
-    );
+    const status = this.filtroStatus();
+    const prioridade = this.filtroPrioridade();
+
+    return this.tarefas().filter((tarefa) => {
+      const correspondeTitulo = !termo || this.normalizarTexto(tarefa.titulo).includes(termo);
+      const correspondeStatus = !status || tarefa.status === status;
+      const correspondePrioridade = !prioridade || tarefa.prioridade === prioridade;
+      return correspondeTitulo && correspondeStatus && correspondePrioridade;
+    });
   });
 
   ngOnInit(): void {
@@ -42,8 +64,24 @@ export class ListaTarefas implements OnInit {
     this.termoBusca.set(input.value);
   }
 
+  atualizarFiltroStatus(evento: Event): void {
+    const select = evento.target as HTMLSelectElement;
+    this.filtroStatus.set(select.value as Tarefa['status'] | '');
+  }
+
+  atualizarFiltroPrioridade(evento: Event): void {
+    const select = evento.target as HTMLSelectElement;
+    this.filtroPrioridade.set(select.value as Tarefa['prioridade'] | '');
+  }
+
   limparBusca(): void {
     this.termoBusca.set('');
+  }
+
+  limparFiltros(): void {
+    this.termoBusca.set('');
+    this.filtroStatus.set('');
+    this.filtroPrioridade.set('');
   }
 
   private normalizarTexto(texto: string): string {
