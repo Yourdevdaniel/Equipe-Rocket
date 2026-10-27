@@ -64,7 +64,6 @@
 }
 
 .search-input-box {
-    background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
     color: var(--text-primary);
     padding: 0.5rem 0.75rem 0.5rem 2.25rem;
@@ -80,8 +79,7 @@
 }
 
 .search-input-box input:focus {
-    border-color: var(--border-focus);
-    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.2);
+    box-shadow: 0 0 0 0.5px rgba(44, 58, 64, 0.2);
 }
 
 #filter-navbar {
