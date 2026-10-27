@@ -1,250 +1,117 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quadro Kanban com Filtros</title>
-    <!-- Fonte Inter via Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <div class="app-container">
-        <!-- Cabeçalho Principal -->
-        <header class="app-header active">
-            <div class="header-top">
-                <div class="header-title">
-                    <h1><span id="icon-Equipe"></span>Quadro Kanban</h1>
-                    <p class="subtitle">Gerenciamento Tarefas e Projetos</p>
-                </div>
-                <div class="header-actions">
-                    <a routerLink="/projetos" class="btn btn-secondary">← Voltar</a>
-                    <button class="btn btn-primary">
-                        <span>+</span> Nova Tarefa
-                    </button>
-                </div>
-            </div>
-
-            <!-- Navbar / Barra de Filtros -->
-            <div id="filter-navbar">
-                <!-- Filtro por Título -->
-                <div class="filter-group search-group">
-                    <label class="filter-label" for="searchInput">Título:</label>
-                    <div class="search-input-box">
-                        <input type="text" id="pesquisa" placeholder="Buscar por título...">
-                        <button type="button" class="btn btn-search">Pesquisar</button>
-                    </div>
-                </div>
-
-                <!-- Filtro por Estado (Radio Buttons) -->
-                <div class="filter-group">
-                    <span class="filter-label">Estado:</span>
-                    <div class="radio-group" id="statusFilterGroup">
-                        <label class="radio-pill">
-                            <input type="radio" name="statusFilter" value="all" checked>
-                            <span>Todos</span>
-                        </label>
-                        <label class="radio-pill">
-                            <input type="radio" name="statusFilter" value="todo">
-                            <span>A Fazer</span>
-                        </label>
-                        <label class="radio-pill">
-                            <input type="radio" name="statusFilter" value="in-progress">
-                            <span>Em Andamento</span>
-                        </label>
-                        <label class="radio-pill">
-                            <input type="radio" name="statusFilter" value="review">
-                            <span>Em Revisão</span>
-                        </label>
-                        <label class="radio-pill">
-                            <input type="radio" name="statusFilter" value="done">
-                            <span>Concluído</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Filtro por Prioridade (Radio Buttons) -->
-                <div class="filter-group">
-                    <span class="filter-label">Prioridade:</span>
-                    <div class="radio-group" id="priorityFilterGroup">
-                        <label class="radio-pill">
-                            <input type="radio" name="priorityFilter" value="all" checked>
-                            <span>Todos</span>
-                        </label>
-                        <label class="radio-pill">
-                            <input type="radio" name="priorityFilter" value="baixa">
-                            <span>Baixa</span>
-                        </label>
-                        <label class="radio-pill">
-                            <input type="radio" name="priorityFilter" value="media">
-                            <span>Média</span>
-                        </label>
-                        <label class="radio-pill">
-                            <input type="radio" name="priorityFilter" value="alta">
-                            <span>Alta</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Botão Limpar Filtros -->
-                <div class="filter-group action-group">
-                    <button type="button" class="btn btn-clear">Limpar Filtros</button>
-                </div>
-            </div>
-
-
-
-
-        </header>
-
-        <!-- Quadro Kanban -->
-        <main class="kanban-board">
-            <!-- Coluna: A Fazer -->
-            <div class="kanban-column" id="col-todo" data-status="todo">
-                <div class="column-header">
-                    <div class="column-title">
-                        <span class="status-indicator status-todo"></span>
-                        <h2>A Fazer</h2>
-                        <!--<span class="task-count" id="contador-a-fazer">0</span> -->  <!--Contador-->
-                    </div>
-
-
-                  <!--  <button class="btn-icon" title="Adicionar nesta coluna">+</button>  botao de adicionar-->
-
-
-                  </div>
-
-                <!-- Cards a fazer -->
-                <div class="task-list">
-                  <ul id="list-a-fazer">
-
-                  </ul>
-                </div>
-            </div>
-
-            <!-- Coluna: Em Progresso -->
-            <div class="kanban-column" id="col-in-progress" data-status="in-progress">
-                <div class="column-header">
-                    <div class="column-title">
-                        <span class="status-indicator status-in-progress"></span>
-                        <h2>Em Andamento</h2>
-                        <!--<span class="task-count" id="contador-progresso">0</span> -->  <!--Contador-->
-                    </div>
-                        <!--  <button class="btn-icon" title="Adicionar nesta coluna">+</button>  botao de adicionar-->
-
-                </div>
-
-                <!-- Cards em progresso -->
-                <div class="task-list">
-                  <ul id="list-em-progresso">
-
-                  </ul>
-                </div>
-            </div>
-
-            <!-- Coluna: Em Revisão -->
-            <div class="kanban-column" id="col-review" data-status="review">
-                <div class="column-header">
-                    <div class="column-title">
-                        <span class="status-indicator status-review"></span>
-                        <h2>Em Revisão</h2>
-                        <!--<span class="task-count" id="contador-em-revisao">0</span> -->  <!--Contador-->
-                    </div>
-                        <!--  <button class="btn-icon" title="Adicionar nesta coluna">+</button>  botao de adicionar-->
-
-                </div>
-
-                <!-- Cards em revisao -->
-                <div class="task-list">
-                  <ul id="list-em-revisao">
-
-                  </ul>
-                </div>
-            </div>
-
-            <!-- Coluna: Concluído -->
-            <div class="kanban-column" id="col-done" data-status="done">
-                <div class="column-header">
-                    <div class="column-title">
-                        <span class="status-indicator status-done"></span>
-                        <h2>Concluído</h2>
-                        <!--<span class="task-count" id="contador-concluido">0</span> -->  <!--Contador-->
-                    </div>
-                        <!--  <button class="btn-icon" title="Adicionar nesta coluna">+</button>  botao de adicionar-->
-
-                </div>
-
-                <!-- Cards concluido -->
-                <div class="task-list">
-                  <ul id="list-concluido">
-
-                  </ul>
-                </div>
-            </div>
-        </main>
+<div class="app-container">
+  <!-- Cabeçalho Principal -->
+  <header class="app-header active">
+    <div class="header-top">
+      <div class="header-title">
+        <h1><span id="icon-Equipe"></span>Quadro Kanban</h1>
+        <p class="subtitle">Gerenciamento de Tarefas e Projetos</p>
+      </div>
+      <div class="header-actions">
+        <a routerLink="/projetos" class="btn btn-secondary">← Voltar</a>
+        <a routerLink="/tarefas/nova" class="btn btn-primary">
+          <span>+</span> Nova Tarefa
+        </a>
+      </div>
     </div>
 
-    <!-- Modal para Criar/Editar Tarefa
-    <div class="modal-overlay" id="taskModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 id="modalTitle">Nova Tarefa</h3>
-                <button class="btn-close">&times;</button>
-            </div>
-            <form id="taskForm">                              Esse pedaco e para ser a tela para adicao de novos cards caso tenha
-                <input type="hidden" id="taskId">
-
-                <div class="form-group">
-                    <label for="taskTitle">Título da Tarefa *</label>
-                    <input type="text" id="taskTitle" required placeholder="Ex: Criar página de login">
-                </div>
-
-                <div class="form-group">
-                    <label for="taskDescription">Descrição</label>
-                    <textarea id="taskDescription" rows="3" placeholder="Detalhes da tarefa..."></textarea>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="taskStatus">Coluna / Estado</label>
-                        <select id="taskStatus">
-                            <option value="todo">A Fazer</option>
-                            <option value="in-progress">Em Andamento</option>
-                            <option value="review">Em Revisão</option>
-                            <option value="done">Concluído</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="taskPriority">Prioridade</label>
-                        <select id="taskPriority">
-                            <option value="baixa">Baixa</option>
-                            <option value="media" selected>Média</option>
-                            <option value="alta">Alta</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="taskCategory">Categoria / Tag</label>
-                        <input type="text" id="taskCategory" placeholder="Ex: Frontend, Design, Backend">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="taskDueDate">Data de Entrega</label>
-                        <input type="date" id="taskDueDate">
-                    </div>
-                </div>
-
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Salvar Tarefa</button>
-                </div>
-            </form>
+    <!-- Barra de Filtros -->
+    <div id="filter-navbar">
+      <div class="filter-group search-group">
+        <div class="search-input-box">
+          <label class="filter-label" for="pesquisa">Título: ff</label>
+          <input
+            type="text"
+            id="pesquisa"
+            [value]="termoBusca()"
+            (input)="atualizarBusca($event)"
+            placeholder="Buscar por título..."
+          />
         </div>
+      </div>
     </div>
-    -->
-</body>
-</html>
+  </header>
+
+  <!-- Estado de Carregamento ou Erro -->
+  @if (carregando()) {
+    <div class="feedback-msg">Carregando tarefas do servidor...</div>
+  } @else if (erro()) {
+    <div class="feedback-msg error">{{ erro() }}</div>
+  } @else {
+    <!-- Quadro Kanban -->
+    <main class="kanban-board">
+
+      <!-- Coluna: A Fazer -->
+      <div class="kanban-column" id="col-todo" data-status="a-fazer">
+        <div class="column-header">
+          <div class="column-title">
+            <span class="status-indicator status-todo"></span>
+            <h2>A Fazer</h2>
+            <span class="task-count">{{ tarefasAFazer().length }}</span>
+          </div>
+        </div>
+        <div class="task-list">
+          @for (tarefa of tarefasAFazer(); track tarefa.id) {
+            <app-tarefa-card [tarefa]="tarefa" />
+          } @empty {
+            <p class="empty-col">Nenhuma tarefa</p>
+          }
+        </div>
+      </div>
+
+      <!-- Coluna: Em Andamento -->
+      <div class="kanban-column" id="col-in-progress" data-status="em-andamento">
+        <div class="column-header">
+          <div class="column-title">
+            <span class="status-indicator status-in-progress"></span>
+            <h2>Em Andamento</h2>
+            <span class="task-count">{{ tarefasEmAndamento().length }}</span>
+          </div>
+        </div>
+        <div class="task-list">
+          @for (tarefa of tarefasEmAndamento(); track tarefa.id) {
+            <app-tarefa-card [tarefa]="tarefa" />
+          } @empty {
+            <p class="empty-col">Nenhuma tarefa</p>
+          }
+        </div>
+      </div>
+
+      <!-- Coluna: Em Revisão -->
+      <div class="kanban-column" id="col-review" data-status="em-revisao">
+        <div class="column-header">
+          <div class="column-title">
+            <span class="status-indicator status-review"></span>
+            <h2>Em Revisão</h2>
+            <span class="task-count">{{ tarefasEmRevisao().length }}</span>
+          </div>
+        </div>
+        <div class="task-list">
+          @for (tarefa of tarefasEmRevisao(); track tarefa.id) {
+            <app-tarefa-card [tarefa]="tarefa" />
+          } @empty {
+            <p class="empty-col">Nenhuma tarefa</p>
+          }
+        </div>
+      </div>
+
+      <!-- Coluna: Concluído -->
+      <div class="kanban-column" id="col-done" data-status="concluida">
+        <div class="column-header">
+          <div class="column-title">
+            <span class="status-indicator status-done"></span>
+            <h2>Concluído</h2>
+            <span class="task-count">{{ tarefasConcluidas().length }}</span>
+          </div>
+        </div>
+        <div class="task-list">
+          @for (tarefa of tarefasConcluidas(); track tarefa.id) {
+            <app-tarefa-card [tarefa]="tarefa" />
+          } @empty {
+            <p class="empty-col">Nenhuma tarefa</p>
+          }
+        </div>
+      </div>
+
+    </main>
+  }
+</div>
