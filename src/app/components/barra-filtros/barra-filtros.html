@@ -1,4 +1,9 @@
 <div class="barra">
+  <nav class="alternar-visao" aria-label="Visão das tarefas">
+    <a routerLink="/tarefas" routerLinkActive="ativo" ariaCurrentWhenActive="page">Lista</a>
+    <a routerLink="/quadro" routerLinkActive="ativo" ariaCurrentWhenActive="page">Quadro</a>
+  </nav>
+
   <div class="campo">
     <label for="filtro-busca">Título</label>
     <input

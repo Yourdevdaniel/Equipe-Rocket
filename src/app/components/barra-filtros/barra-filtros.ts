@@ -1,9 +1,11 @@
 import { Component, inject } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FiltrosService } from '../../services/filtros';
 import { Tarefa } from '../../models';
 
 @Component({
   selector: 'app-barra-filtros',
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './barra-filtros.html',
   styleUrl: './barra-filtros.css',
 })

@@ -14,6 +14,7 @@ export const routes: Routes = [
   { path: 'tarefas/nova', component: CriarTarefa },
   { path: 'tarefas/:id', component: ListaTarefas },
   { path: 'tarefas', component: ListaTarefas },
+  { path: 'quadro', component: QuadroKambam },
   { path: 'projetos', component: ListaProjetos },
   // As rotas fixas ("novo", "editar") vêm antes das que têm parâmetro: o roteador usa a primeira que casar.
   { path: 'projetos/novo', component: CriarProjeto },
