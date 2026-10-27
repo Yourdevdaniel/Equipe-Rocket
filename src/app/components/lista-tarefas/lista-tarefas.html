@@ -20,6 +20,8 @@
     <a routerLink="/tarefas/nova" class="btn btn-secondary">+ Adicionar Tarefas</a>
   </header>
 
+  <app-barra-filtros />
+
   @if (carregando()) {
     <div class="status-msg">
       <p>Carregando tarefas...</p>
@@ -31,7 +33,7 @@
     </div>
   } @else {
     <main class="grid-tarefas">
-      @for (tarefa of tarefas(); track tarefa.id) {
+      @for (tarefa of tarefasVisiveis(); track tarefa.id) {
         <app-tarefa-card [tarefa]="tarefa" />
       } @empty {
         <div class="status-msg">
