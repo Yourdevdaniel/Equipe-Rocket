@@ -34,7 +34,7 @@
   } @else {
     <main class="grid-tarefas">
       @for (tarefa of tarefasVisiveis(); track tarefa.id) {
-        <app-tarefa-card [tarefa]="tarefa" />
+        <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" />
       } @empty {
         <div class="status-msg">
           <p>Nenhuma tarefa encontrada.</p>

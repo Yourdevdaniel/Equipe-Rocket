@@ -41,7 +41,7 @@
 
           <div class="task-list">
             @for (tarefa of tarefasPorStatus()[coluna.status]; track tarefa.id) {
-              <app-tarefa-card [tarefa]="tarefa" />
+              <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" />
             } @empty {
               <p class="coluna-vazia">Nenhuma tarefa.</p>
             }

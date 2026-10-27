@@ -3,8 +3,23 @@
     <span class="badge prioridade" [class]="'prioridade-' + tarefa().prioridade">
       {{ rotuloPrioridade[tarefa().prioridade] }}
     </span>
-    <span class="status">{{ rotuloStatus[tarefa().status] }}</span>
+    <select
+      class="seletor-status"
+      [attr.aria-label]="'Status da tarefa ' + tarefa().titulo"
+      [disabled]="salvandoStatus()"
+      (click)="$event.stopPropagation()"
+      (keydown)="$event.stopPropagation()"
+      (change)="mudarStatus($any($event.target))"
+    >
+      @for (opcao of opcoesStatus; track opcao) {
+        <option [value]="opcao" [selected]="opcao === tarefa().status">{{ rotuloStatus[opcao] }}</option>
+      }
+    </select>
   </header>
+
+  @if (erroStatus()) {
+    <p class="erro-status" role="alert">Não foi possível salvar o status. Tente de novo.</p>
+  }
 
   <div class="titulo-linha">
     <h3 class="titulo">{{ tarefa().titulo }}</h3>

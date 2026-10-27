@@ -65,4 +65,8 @@ export class DetalheProjeto implements OnInit {
       },
     });
   }
+
+  substituirTarefa(tarefaSalva: Tarefa): void {
+    this.tarefas.update((lista) => lista.map((t) => (t.id === tarefaSalva.id ? tarefaSalva : t)));
+  }
 }

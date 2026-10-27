@@ -14,6 +14,10 @@ describe('TarefaCard', () => {
 
     fixture = TestBed.createComponent(TarefaCard);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('tarefa', {
+      id: '1', projetoId: '1', titulo: 'Teste', descricao: '', status: 'a-fazer',
+      prioridade: 'media', responsavel: 'Ana', prazo: '2026-10-27',
+    });
     await fixture.whenStable();
   });
 

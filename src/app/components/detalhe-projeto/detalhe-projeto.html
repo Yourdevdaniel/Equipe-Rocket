@@ -36,7 +36,7 @@
 
       <div class="grid-tarefas">
         @for (tarefa of tarefas(); track tarefa.id) {
-          <app-tarefa-card [tarefa]="tarefa" />
+          <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" />
         } @empty {
           <div class="status-msg">
             <p>Nenhuma tarefa cadastrada para este projeto.</p>
