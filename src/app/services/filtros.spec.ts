@@ -9,8 +9,8 @@ const tarefa = (id: string, titulo: string, status: Tarefa['status'], prioridade
 describe('FiltrosService', () => {
   let service: FiltrosService;
   const tarefas = [
-    tarefa('1', 'Criar login', 'a-fazer', 'alta'),
-    tarefa('2', 'Revisar LOGIN', 'em-revisao', 'baixa'),
+    tarefa('1', 'Criar validação', 'a-fazer', 'alta'),
+    tarefa('2', 'Revisar VALIDACAO', 'em-revisao', 'baixa'),
     tarefa('3', 'Deploy', 'concluida', 'alta'),
   ];
 
@@ -19,17 +19,19 @@ describe('FiltrosService', () => {
   });
 
   it('sem filtros devolve tudo', () => {
+    expect(service.temFiltrosAtivos()).toBe(false);
     expect(service.filtrar(tarefas).length).toBe(3);
   });
 
-  it('combina busca, status e prioridade', () => {
-    service.busca.set('  login ');
+  it('combina busca (sem acento), status e prioridade', () => {
+    service.busca.set('  validacao ');
     expect(service.filtrar(tarefas).map((t) => t.id)).toEqual(['1', '2']);
     service.prioridade.set('alta');
     expect(service.filtrar(tarefas).map((t) => t.id)).toEqual(['1']);
     service.status.set('em-revisao');
     expect(service.filtrar(tarefas)).toEqual([]);
     service.limpar();
+    expect(service.temFiltrosAtivos()).toBe(false);
     expect(service.filtrar(tarefas).length).toBe(3);
   });
 });

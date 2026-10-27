@@ -4,12 +4,11 @@ import { ProjetosService } from '../../services/projetos';
 import { FiltrosService } from '../../services/filtros';
 import { Tarefa } from '../../models';
 import { TarefaCard } from '../tarefa-card/tarefa-card';
-import { BarraFiltros } from '../barra-filtros/barra-filtros';
 
 @Component({
   selector: 'app-lista-tarefas',
   standalone: true,
-  imports: [TarefaCard, RouterLink, BarraFiltros],
+  imports: [TarefaCard, RouterLink],
   templateUrl: './lista-tarefas.html',
   styleUrl: './lista-tarefas.css',
 })
@@ -19,15 +18,62 @@ export class ListaTarefas implements OnInit {
   private readonly filtros = inject(FiltrosService);
 
   readonly tarefas = signal<Tarefa[]>([]);
-  readonly tarefasVisiveis = computed(() => this.filtros.filtrar(this.tarefas()));
   readonly carregando = signal(true);
   readonly erro = signal<string | null>(null);
   readonly idParam = signal<string | null>(null);
+  // Busca e filtros vêm do FiltrosService, compartilhado com o quadro.
+  readonly termoBusca = this.filtros.busca;
+  readonly filtroStatus = this.filtros.status;
+  readonly filtroPrioridade = this.filtros.prioridade;
+
+  readonly opcoesStatus: { value: Tarefa['status']; label: string }[] = [
+    { value: 'a-fazer', label: 'A Fazer' },
+    { value: 'em-andamento', label: 'Em Andamento' },
+    { value: 'em-revisao', label: 'Em Revisão' },
+    { value: 'concluida', label: 'Concluída' },
+  ];
+
+  readonly opcoesPrioridade: { value: Tarefa['prioridade']; label: string }[] = [
+    { value: 'alta', label: 'Alta' },
+    { value: 'media', label: 'Média' },
+    { value: 'baixa', label: 'Baixa' },
+  ];
+
+  readonly temFiltrosAtivos = this.filtros.temFiltrosAtivos;
+
+  readonly tarefasFiltradas = computed(() => this.filtros.filtrar(this.tarefas()));
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     this.idParam.set(id);
     this.carregarTarefas(id);
+  }
+
+  atualizarBusca(evento: Event): void {
+    const input = evento.target as HTMLInputElement;
+    this.termoBusca.set(input.value);
+  }
+
+  atualizarFiltroStatus(evento: Event): void {
+    const select = evento.target as HTMLSelectElement;
+    this.filtroStatus.set(select.value as Tarefa['status'] | '');
+  }
+
+  atualizarFiltroPrioridade(evento: Event): void {
+    const select = evento.target as HTMLSelectElement;
+    this.filtroPrioridade.set(select.value as Tarefa['prioridade'] | '');
+  }
+
+  limparBusca(): void {
+    this.termoBusca.set('');
+  }
+
+  limparFiltros(): void {
+    this.filtros.limpar();
+  }
+
+  substituirTarefa(tarefaSalva: Tarefa): void {
+    this.tarefas.update((lista) => lista.map((t) => (t.id === tarefaSalva.id ? tarefaSalva : t)));
   }
 
   carregarTarefas(id?: string | null): void {
@@ -69,9 +115,5 @@ export class ListaTarefas implements OnInit {
         },
       });
     }
-  }
-
-  substituirTarefa(tarefaSalva: Tarefa): void {
-    this.tarefas.update((lista) => lista.map((t) => (t.id === tarefaSalva.id ? tarefaSalva : t)));
   }
 }

@@ -64,7 +64,6 @@
 }
 
 .search-input-box {
-    background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
     color: var(--text-primary);
     padding: 0.5rem 0.75rem 0.5rem 2.25rem;
@@ -80,8 +79,7 @@
 }
 
 .search-input-box input:focus {
-    border-color: var(--border-focus);
-    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.2);
+    box-shadow: 0 0 0 0.5px rgba(44, 58, 64, 0.2);
 }
 
 #filter-navbar {
@@ -502,29 +500,4 @@
     .form-row {
         grid-template-columns: 1fr;
     }
-}
-
-/* --- Mensagens de carregamento/erro e coluna vazia --- */
-.status-msg {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--text-secondary);
-    background-color: var(--bg-secondary);
-    border: 1px dashed var(--border-color);
-    border-radius: var(--radius-lg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
-
-.status-msg.erro {
-    color: var(--priority-high-text);
-}
-
-.coluna-vazia {
-    font-size: 0.825rem;
-    color: var(--text-muted);
-    text-align: center;
-    padding: 1rem 0;
 }

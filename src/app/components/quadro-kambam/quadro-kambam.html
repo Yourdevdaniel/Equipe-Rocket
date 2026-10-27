@@ -1,53 +1,121 @@
 <div class="app-container">
-  <header class="app-header">
+  <!-- Cabeçalho Principal -->
+  <header class="app-header active">
     <div class="header-top">
       <div class="header-title">
-        <h1>Quadro Kanban</h1>
-        <p class="subtitle">
-          @if (id) {
-            Tarefas do projeto #{{ id }}
-          } @else {
-            Todas as tarefas cadastradas na aplicação
-          }
-        </p>
+        <h1><span id="icon-Equipe"></span>Quadro Kanban</h1>
+        <p class="subtitle">Gerenciamento de Tarefas e Projetos</p>
       </div>
       <div class="header-actions">
         <a routerLink="/projetos" class="btn btn-secondary">← Voltar</a>
-        <a routerLink="/tarefas/nova" class="btn btn-primary">+ Nova Tarefa</a>
+        <a routerLink="/tarefas" class="btn btn-secondary">Ver lista</a>
+        <a routerLink="/tarefas/nova" class="btn btn-primary">
+          <span>+</span> Nova Tarefa
+        </a>
       </div>
     </div>
 
-    <app-barra-filtros />
+    <!-- Barra de Filtros -->
+    <div id="filter-navbar">
+      <div class="filter-group search-group">
+        <div class="search-input-box">
+          <label class="filter-label" for="pesquisa">Título: ff</label>
+          <input
+            type="text"
+            id="pesquisa"
+            [value]="termoBusca()"
+            (input)="atualizarBusca($event)"
+            placeholder="Buscar por título..."
+          />
+        </div>
+      </div>
+      @if (temFiltrosAtivos()) {
+        <button type="button" class="btn btn-secondary" (click)="limparFiltros()">Limpar filtros</button>
+      }
+    </div>
   </header>
 
+  <!-- Estado de Carregamento ou Erro -->
   @if (carregando()) {
-    <p class="status-msg">Carregando tarefas...</p>
+    <div class="feedback-msg">Carregando tarefas do servidor...</div>
   } @else if (erro()) {
-    <div class="status-msg erro">
-      <p>{{ erro() }}</p>
-      <button type="button" (click)="carregarTarefas()" class="btn btn-secondary">Tentar novamente</button>
-    </div>
+    <div class="feedback-msg error">{{ erro() }}</div>
   } @else {
+    <!-- Quadro Kanban -->
     <main class="kanban-board">
-      @for (coluna of colunas; track coluna.status) {
-        <section class="kanban-column" [attr.aria-labelledby]="'coluna-' + coluna.status">
-          <div class="column-header">
-            <div class="column-title">
-              <span class="status-indicator" [class]="coluna.classe"></span>
-              <h2 [id]="'coluna-' + coluna.status">{{ coluna.titulo }}</h2>
-            </div>
-            <span class="task-count">{{ tarefasPorStatus()[coluna.status].length }}</span>
-          </div>
 
-          <div class="task-list">
-            @for (tarefa of tarefasPorStatus()[coluna.status]; track tarefa.id) {
-              <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" />
-            } @empty {
-              <p class="coluna-vazia">Nenhuma tarefa.</p>
-            }
+      <!-- Coluna: A Fazer -->
+      <div class="kanban-column" id="col-todo" data-status="a-fazer">
+        <div class="column-header">
+          <div class="column-title">
+            <span class="status-indicator status-todo"></span>
+            <h2>A Fazer</h2>
+            <span class="task-count">{{ tarefasAFazer().length }}</span>
           </div>
-        </section>
-      }
+        </div>
+        <div class="task-list">
+          @for (tarefa of tarefasAFazer(); track tarefa.id) {
+            <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" />
+          } @empty {
+            <p class="empty-col">Nenhuma tarefa</p>
+          }
+        </div>
+      </div>
+
+      <!-- Coluna: Em Andamento -->
+      <div class="kanban-column" id="col-in-progress" data-status="em-andamento">
+        <div class="column-header">
+          <div class="column-title">
+            <span class="status-indicator status-in-progress"></span>
+            <h2>Em Andamento</h2>
+            <span class="task-count">{{ tarefasEmAndamento().length }}</span>
+          </div>
+        </div>
+        <div class="task-list">
+          @for (tarefa of tarefasEmAndamento(); track tarefa.id) {
+            <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" />
+          } @empty {
+            <p class="empty-col">Nenhuma tarefa</p>
+          }
+        </div>
+      </div>
+
+      <!-- Coluna: Em Revisão -->
+      <div class="kanban-column" id="col-review" data-status="em-revisao">
+        <div class="column-header">
+          <div class="column-title">
+            <span class="status-indicator status-review"></span>
+            <h2>Em Revisão</h2>
+            <span class="task-count">{{ tarefasEmRevisao().length }}</span>
+          </div>
+        </div>
+        <div class="task-list">
+          @for (tarefa of tarefasEmRevisao(); track tarefa.id) {
+            <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" />
+          } @empty {
+            <p class="empty-col">Nenhuma tarefa</p>
+          }
+        </div>
+      </div>
+
+      <!-- Coluna: Concluído -->
+      <div class="kanban-column" id="col-done" data-status="concluida">
+        <div class="column-header">
+          <div class="column-title">
+            <span class="status-indicator status-done"></span>
+            <h2>Concluído</h2>
+            <span class="task-count">{{ tarefasConcluidas().length }}</span>
+          </div>
+        </div>
+        <div class="task-list">
+          @for (tarefa of tarefasConcluidas(); track tarefa.id) {
+            <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" />
+          } @empty {
+            <p class="empty-col">Nenhuma tarefa</p>
+          }
+        </div>
+      </div>
+
     </main>
   }
 </div>
