@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { Projeto, Tarefa } from '../../models'; // Importação ajustada para ../../models
 import { focarPrimeiroInvalido } from '../../utils/form';
+import { HistoricoDeNavegacao } from '../../services/historico-de-navegacao';
 
 @Component({
   selector: 'app-criar-tarefa',
@@ -17,6 +18,7 @@ export class CriarTarefa implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly projetosService = inject(ProjetosService);
+  private readonly historicoDeNavegacao = inject(HistoricoDeNavegacao);
 
   readonly projetos = signal<Projeto[]>([]);
   readonly carregando = signal(true);
@@ -91,7 +93,7 @@ export class CriarTarefa implements OnInit {
     this.projetosService.criarTarefaComIdSequencial(payload).subscribe({
       next: () => {
         this.enviando.set(false);
-        this.router.navigate(['/tarefas']);
+        this.historicoDeNavegacao.voltar('/tarefas');
       },
       error: (err: unknown) => {
         console.error('Erro ao salvar tarefa:', err);
@@ -102,6 +104,7 @@ export class CriarTarefa implements OnInit {
   }
 
   cancelar(): void {
-    this.router.navigate(['/tarefas']);
+    this.historicoDeNavegacao.voltar('/tarefas');
   }
+
 }
