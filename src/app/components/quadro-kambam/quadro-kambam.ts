@@ -4,6 +4,7 @@ import { ProjetosService } from '../../services/projetos';
 import { FiltrosService } from '../../services/filtros';
 import { Tarefa } from '../../models';
 import { TarefaCard } from '../tarefa-card/tarefa-card';
+import { HistoricoDeNavegacao } from '../../services/historico-de-navegacao';
 
 
 
@@ -19,6 +20,7 @@ export class QuadroKambam implements OnInit{
   private readonly route = inject(ActivatedRoute);
   private readonly projetosService = inject(ProjetosService);
   private readonly filtros = inject(FiltrosService);
+  private readonly historicoDeNavegacao = inject(HistoricoDeNavegacao);
 
   readonly projetoId = signal<string | null>(null);
 
@@ -91,6 +93,10 @@ export class QuadroKambam implements OnInit{
         this.carregando.set(false);
       },
     });
+  }
+
+  voltar() : void{
+    this.historicoDeNavegacao.voltar("/projetos");
   }
 
 
