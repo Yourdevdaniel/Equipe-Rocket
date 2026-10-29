@@ -34,7 +34,7 @@
       "projetoId": "1",
       "titulo": "Montar o quadro no GitHub Projects",
       "descricao": "Colunas por status e uma tarefa por marco",
-      "status": "em-revisao",
+      "status": "em-andamento",
       "prioridade": "media",
       "responsavel": "Carla",
       "prazo": "2026-10-07"
@@ -44,7 +44,7 @@
       "projetoId": "1",
       "titulo": "Listar as tarefas na tela",
       "descricao": "Primeira entrega do Marco 2",
-      "status": "a-fazer",
+      "status": "em-andamento",
       "prioridade": "media",
       "responsavel": "AAAA",
       "prazo": "2026-10-14"
@@ -54,7 +54,7 @@
       "projetoId": "1",
       "titulo": "Oi eu sou",
       "descricao": "o goku",
-      "status": "em-andamento",
+      "status": "a-fazer",
       "prioridade": "baixa",
       "responsavel": "goku",
       "prazo": "2026-10-28"
@@ -67,6 +67,16 @@
       "status": "concluida",
       "prioridade": "alta",
       "responsavel": "Gohan",
+      "prazo": "2026-10-30"
+    },
+    {
+      "id": "7",
+      "projetoId": "1",
+      "titulo": "sfhafhf",
+      "descricao": "",
+      "status": "a-fazer",
+      "prioridade": "media",
+      "responsavel": "gfdshsdfh",
       "prazo": "2026-10-30"
     }
   ],

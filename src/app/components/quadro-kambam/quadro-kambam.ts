@@ -2,21 +2,18 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { FiltrosService } from '../../services/filtros';
+import { HistoricoDeNavegacao } from '../../services/historico-de-navegacao';
 import { Tarefa } from '../../models';
 import { TarefaCard } from '../tarefa-card/tarefa-card';
-import { HistoricoDeNavegacao } from '../../services/historico-de-navegacao';
-
-
 
 @Component({
   imports: [TarefaCard, RouterLink],
   standalone: true,
   selector: 'app-quadro-kambam',
-  styleUrl:'./quadro-kambam.css',
-  templateUrl: './quadro-kambam.html'
+  styleUrl: './quadro-kambam.css',
+  templateUrl: './quadro-kambam.html',
 })
-
-export class QuadroKambam implements OnInit{
+export class QuadroKambam implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly projetosService = inject(ProjetosService);
   private readonly filtros = inject(FiltrosService);
@@ -27,26 +24,42 @@ export class QuadroKambam implements OnInit{
   readonly tarefas = signal<Tarefa[]>([]);
   readonly carregando = signal(true);
   readonly erro = signal<string | null>(null);
+
   // Busca e filtros vêm do FiltrosService, compartilhado com a lista.
   readonly termoBusca = this.filtros.busca;
+  readonly filtroStatus = this.filtros.status;
+  readonly filtroPrioridade = this.filtros.prioridade;
   readonly temFiltrosAtivos = this.filtros.temFiltrosAtivos;
 
+  readonly opcoesStatus: { value: Tarefa['status']; label: string }[] = [
+    { value: 'a-fazer', label: 'A Fazer' },
+    { value: 'em-andamento', label: 'Em Andamento' },
+    { value: 'em-revisao', label: 'Em Revisão' },
+    { value: 'concluida', label: 'Concluída' },
+  ];
+
+  readonly opcoesPrioridade: { value: Tarefa['prioridade']; label: string }[] = [
+    { value: 'alta', label: 'Alta' },
+    { value: 'media', label: 'Média' },
+    { value: 'baixa', label: 'Baixa' },
+  ];
+
   ngOnInit(): void {
-      // 4. Captura o parâmetro da URL assim que o componente carrega
-      const id = this.route.snapshot.paramMap.get('id');
-      this.projetoId.set(id);
+    // Captura o parâmetro da URL assim que o componente carrega
+    const id = this.route.snapshot.paramMap.get('id');
+    this.projetoId.set(id);
 
-      // 5. Carrega as tarefas filtrando por esse ID
-      this.carregarTarefas(id);
-    }
+    // Carrega as tarefas filtrando por esse ID
+    this.carregarTarefas(id);
+  }
 
-  // Lista geral de tarefas filtradas pelo campo de pesquisa
+  // Lista geral de tarefas filtradas pelo campo de pesquisa e filtros
   readonly tarefasFiltradas = computed(() => this.filtros.filtrar(this.tarefas()));
 
   // Computados individuais para alimentar cada coluna do Kanban
   readonly tarefasAFazer = computed(() =>
     this.tarefasFiltradas().filter((t) => t.status === 'a-fazer')
-);
+  );
 
   readonly tarefasEmAndamento = computed(() =>
     this.tarefasFiltradas().filter((t) => t.status === 'em-andamento')
@@ -65,6 +78,20 @@ export class QuadroKambam implements OnInit{
     this.termoBusca.set(input.value);
   }
 
+  atualizarFiltroStatus(evento: Event): void {
+    const select = evento.target as HTMLSelectElement;
+    this.filtroStatus.set(select.value as Tarefa['status'] | '');
+  }
+
+  atualizarFiltroPrioridade(evento: Event): void {
+    const select = evento.target as HTMLSelectElement;
+    this.filtroPrioridade.set(select.value as Tarefa['prioridade'] | '');
+  }
+
+  limparBusca(): void {
+    this.termoBusca.set('');
+  }
+
   limparFiltros(): void {
     this.filtros.limpar();
   }
@@ -73,7 +100,7 @@ export class QuadroKambam implements OnInit{
     this.tarefas.update((lista) => lista.map((t) => (t.id === tarefaSalva.id ? tarefaSalva : t)));
   }
 
- carregarTarefas(idProjeto?: string | null): void {
+  carregarTarefas(idProjeto?: string | null): void {
     this.carregando.set(true);
     this.erro.set(null);
 
@@ -95,9 +122,7 @@ export class QuadroKambam implements OnInit{
     });
   }
 
-  voltar() : void{
-    this.historicoDeNavegacao.voltar("/projetos");
+  voltar(): void {
+    this.historicoDeNavegacao.voltar('/projetos');
   }
-
-
 }
