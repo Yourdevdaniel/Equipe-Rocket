@@ -54,9 +54,9 @@
             [value]="filtroStatus()"
             (change)="atualizarFiltroStatus($event)"
           >
-            <option value="">Todos os status</option>
+            <option value="" [selected]="filtroStatus() === ''">Todos os status</option>
             @for (item of opcoesStatus; track item.value) {
-              <option [value]="item.value">{{ item.label }}</option>
+              <option [value]="item.value" [selected]="filtroStatus() === item.value">{{ item.label }}</option>
             }
           </select>
         </div>
@@ -69,9 +69,9 @@
             [value]="filtroPrioridade()"
             (change)="atualizarFiltroPrioridade($event)"
           >
-            <option value="">Todas as prioridades</option>
+            <option value="" [selected]="filtroPrioridade() === ''">Todas as prioridades</option>
             @for (item of opcoesPrioridade; track item.value) {
-              <option [value]="item.value">{{ item.label }}</option>
+              <option [value]="item.value" [selected]="filtroPrioridade() === item.value">{{ item.label }}</option>
             }
           </select>
         </div>

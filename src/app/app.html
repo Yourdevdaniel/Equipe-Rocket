@@ -1,2 +1,13 @@
-<router-outlet></router-outlet>
+<nav>
+  <a id="logo-Navbar-main" routerLink="/projetos" aria-label="Ir para a tela inicial de projetos">
+    <img src="equipe-rocket-logo.jpg" alt="Logo Equipe Rocket" class="nav-brand-logo" />
+    <span class="nav-brand-text"><span class="rocket-r">R</span>ocket</span>
+  </a>
 
+  <div id="menu">
+    <a routerLink="/projetos" routerLinkActive="active">Projetos</a>
+    <a routerLink="/tarefas" routerLinkActive="active">Tarefas</a>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>

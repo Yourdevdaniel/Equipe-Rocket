@@ -3,11 +3,13 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { ListaTarefas } from './lista-tarefas';
+import { FiltrosService } from '../../services/filtros';
 import { Tarefa } from '../../models';
 
 describe('ListaTarefas', () => {
   let component: ListaTarefas;
   let fixture: ComponentFixture<ListaTarefas>;
+  let filtrosService: FiltrosService;
 
   const tarefasMock: Tarefa[] = [
     {
@@ -52,9 +54,16 @@ describe('ListaTarefas', () => {
       ],
     }).compileComponents();
 
+    filtrosService = TestBed.inject(FiltrosService);
+    filtrosService.limpar();
+
     fixture = TestBed.createComponent(ListaTarefas);
     component = fixture.componentInstance;
     await fixture.whenStable();
+  });
+
+  afterEach(() => {
+    filtrosService.limpar();
   });
 
   it('should create', () => {
@@ -94,5 +103,21 @@ describe('ListaTarefas', () => {
     component.limparFiltros();
     expect(component.temFiltrosAtivos()).toBe(false);
     expect(component.tarefasFiltradas().length).toBe(3);
+  });
+
+  it('deve manter o valor visual dos seletores ao criar o componente com filtros já ativos', async () => {
+    filtrosService.status.set('em-andamento');
+    filtrosService.prioridade.set('alta');
+
+    const novaFixture = TestBed.createComponent(ListaTarefas);
+    novaFixture.detectChanges();
+    await novaFixture.whenStable();
+
+    const el = novaFixture.nativeElement as HTMLElement;
+    const selectStatus = el.querySelector('#filtro-status') as HTMLSelectElement;
+    const selectPrioridade = el.querySelector('#filtro-prioridade') as HTMLSelectElement;
+
+    expect(selectStatus.value).toBe('em-andamento');
+    expect(selectPrioridade.value).toBe('alta');
   });
 });
