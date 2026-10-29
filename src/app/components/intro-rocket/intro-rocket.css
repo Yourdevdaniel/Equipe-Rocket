@@ -1,0 +1,138 @@
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
+}
+
+.flash-vermelho {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(225, 29, 72, 0.75) 0%, #000000 75%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.logo-stage {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.25rem;
+}
+
+.logo-pulse-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 220px;
+  height: 220px;
+}
+
+.pulse-ring {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 2px solid var(--rocket-red, #e11d48);
+  pointer-events: none;
+}
+
+.logo-btn {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  padding: 0;
+  border: 3px solid var(--rocket-red, #e11d48);
+  background: #0d0f14;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(225, 29, 72, 0.5);
+}
+
+.intro-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.intro-prompt {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--text-secondary, #94a3b8);
+  cursor: pointer;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.giovanni-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  visibility: hidden;
+  opacity: 0;
+  padding: 1.5rem;
+}
+
+.giovanni-aura {
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(225, 29, 72, 0.35) 0%, rgba(225, 29, 72, 0.08) 45%, transparent 70%);
+  pointer-events: none;
+}
+
+.giovanni-svg {
+  position: relative;
+  z-index: 2;
+  height: min(56vh, 360px);
+  width: auto;
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.95));
+}
+
+.giovanni-dialogo {
+  position: relative;
+  z-index: 2;
+  background-color: rgba(15, 17, 21, 0.92);
+  border: 1px solid var(--rocket-red, #e11d48);
+  border-radius: var(--radius-md, 10px);
+  padding: 1rem 1.75rem;
+  max-width: 520px;
+  text-align: center;
+  box-shadow: 0 0 25px rgba(225, 29, 72, 0.3);
+}
+
+.giovanni-tag {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--rocket-red, #e11d48);
+  margin-bottom: 0.35rem;
+}
+
+.giovanni-frase {
+  font-size: 1rem;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--text-primary, #f8fafc);
+}

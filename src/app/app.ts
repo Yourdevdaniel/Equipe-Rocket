@@ -1,9 +1,10 @@
 import { Component, signal, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { HistoricoDeNavegacao } from './services/historico-de-navegacao';
+import { IntroRocket } from './components/intro-rocket/intro-rocket';
 
 @Component({
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, IntroRocket],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
