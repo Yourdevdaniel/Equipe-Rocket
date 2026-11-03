@@ -22,7 +22,8 @@ export class TarefaCard {
   readonly salvandoStatus = signal(false);
   readonly erroStatus = signal(false);
   readonly confirmarExclusao = signal(false);
-  readonly tarefaExcluida = output<Tarefa>();
+  readonly tarefaExcluida = output<string>();
+  readonly errorExcluir = signal<boolean>(false);
 
 
 
@@ -40,6 +41,7 @@ export class TarefaCard {
   confirmarExclusaoTarefa(): void {
     this.projetosService?.excluirTarefa(this.tarefa().id).subscribe({
       next: () => {
+        this.errorExcluir.set(false);
         console.log('Tarefa excluída:', this.tarefa().id);
 
         this.confirmarExclusao.set(false)
@@ -49,6 +51,7 @@ export class TarefaCard {
       },
 
       error: (err) => {
+        this.errorExcluir.set(true);
         console.log('Erro ao excluir tarefa: ', err);
       }
   })
