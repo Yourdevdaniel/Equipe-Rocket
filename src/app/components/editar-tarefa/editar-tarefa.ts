@@ -42,18 +42,20 @@ export class EditarTarefa implements OnInit {
     this.carregando.set(true);
     this.naoEncontrado.set(false);
 
+    let projetosFinalizados = false;
+    let tarefaFinalizada = !id;
+    const atualizarCarregamento = () => this.carregando.set(!(projetosFinalizados && tarefaFinalizada));
+
     this.projetosService.listarProjetos().subscribe({
       next: (listaProjetos) => {
         this.projetos.set(listaProjetos);
-        if (!id) {
-          this.carregando.set(false);
-        }
+        projetosFinalizados = true;
+        atualizarCarregamento();
       },
       error: (err: unknown) => {
         this.erro.set(mensagemDeErro(err, 'a lista de projetos'));
-        if (!id) {
-          this.carregando.set(false);
-        }
+        projetosFinalizados = true;
+        atualizarCarregamento();
       },
     });
 
@@ -69,7 +71,8 @@ export class EditarTarefa implements OnInit {
           this.tarefa.set(tarefaQueChegou);
           this.form.patchValue(tarefaQueChegou);
         }
-        this.carregando.set(false);
+        tarefaFinalizada = true;
+        atualizarCarregamento();
       },
       error: (err: unknown) => {
         if (err instanceof HttpErrorResponse && err.status === 404) {
@@ -77,7 +80,8 @@ export class EditarTarefa implements OnInit {
         } else {
           this.erro.set(mensagemDeErro(err, 'a tarefa'));
         }
-        this.carregando.set(false);
+        tarefaFinalizada = true;
+        atualizarCarregamento();
       },
     });
   }

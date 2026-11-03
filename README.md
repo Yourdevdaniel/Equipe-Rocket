@@ -205,7 +205,7 @@ O modelo de dados segue estritamente o contrato da disciplina:
 
 ### Marco 5 - Exclusão, erros e estados da tela *(Próximo)*
 - [ ] 31. Excluir tarefa com confirmação
-- [ ] 32. Mostrar o estado de carregando
+- [x] 32. Mostrar o estado de carregando
 - [ ] 33. Mostrar o estado de erro
 - [ ] 34. Mostrar o estado vazio
 - [ ] 35. Tratar tarefa ou projeto inexistente

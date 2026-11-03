@@ -62,3 +62,36 @@ describe('EditarTarefa com a API fora do ar', () => {
     expect(aviso?.textContent).toContain('json-server');
   });
 });
+
+describe('EditarTarefa durante carregamento', () => {
+  it('mantém o indicador até carregar a tarefa e a lista de projetos', async () => {
+    await TestBed.configureTestingModule({
+      imports: [EditarTarefa],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ id: '7' }) } } },
+      ],
+    }).compileComponents();
+
+    const http = TestBed.inject(HttpTestingController);
+    const fixture = TestBed.createComponent(EditarTarefa);
+    fixture.detectChanges();
+
+    const projetos = http.expectOne('http://localhost:3000/projetos');
+    const tarefa = http.expectOne('http://localhost:3000/tarefas/7');
+    tarefa.flush({ id: '7', titulo: 'Tarefa de teste', projetoId: '2' });
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.carregando()).toBe(true);
+    expect((fixture.nativeElement as HTMLElement).querySelector('.estado-carregando')).toBeTruthy();
+
+    projetos.flush([{ id: '2', nome: 'Projeto de teste' }]);
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.carregando()).toBe(false);
+    expect((fixture.nativeElement as HTMLElement).querySelector('.estado-carregando')).toBeNull();
+    http.verify();
+  });
+});
