@@ -5,11 +5,12 @@ import { FiltrosService } from '../../services/filtros';
 import { Tarefa } from '../../models';
 import { TarefaCard } from '../tarefa-card/tarefa-card';
 import { mensagemDeErro } from '../../utils/erro-api';
+import { EstadoVazio } from '../estado-vazio/estado-vazio';
 
 @Component({
   selector: 'app-lista-tarefas',
   standalone: true,
-  imports: [TarefaCard, RouterLink],
+  imports: [TarefaCard, RouterLink, EstadoVazio],
   templateUrl: './lista-tarefas.html',
   styleUrl: './lista-tarefas.css',
 })
@@ -92,7 +93,9 @@ export class ListaTarefas implements OnInit {
           this.projetosService.listarTarefas().subscribe({
             next: (dados) => {
               const porProjeto = dados.filter((t) => t.projetoId === id);
-              this.tarefas.set(porProjeto.length > 0 ? porProjeto : dados);
+              // Projeto sem tarefas fica vazio de verdade. Antes caía em "todas as
+              // tarefas", escondendo o estado vazio e mostrando tarefa de outro projeto.
+              this.tarefas.set(porProjeto);
               this.carregando.set(false);
             },
             error: (err: unknown) => {

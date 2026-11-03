@@ -109,14 +109,28 @@
       @for (tarefa of tarefasFiltradas(); track tarefa.id) {
         <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" />
       } @empty {
-        <div class="status-msg">
-          @if (temFiltrosAtivos()) {
-            <p>Nenhuma tarefa encontrada com os filtros selecionados.</p>
+        @if (temFiltrosAtivos()) {
+          <app-estado-vazio
+            titulo="Nenhuma tarefa encontrada"
+            descricao="Nenhuma tarefa corresponde à busca ou aos filtros selecionados."
+          >
             <button type="button" (click)="limparFiltros()" class="btn btn-secondary">Limpar filtros</button>
-          } @else {
-            <p>Nenhuma tarefa encontrada.</p>
-          }
-        </div>
+          </app-estado-vazio>
+        } @else if (idParam()) {
+          <app-estado-vazio
+            titulo="Este projeto ainda não tem tarefas"
+            descricao="Adicione uma tarefa para ela aparecer aqui e no quadro."
+          >
+            <a routerLink="/tarefas/nova" class="btn btn-secondary">+ Adicionar tarefa</a>
+          </app-estado-vazio>
+        } @else {
+          <app-estado-vazio
+            titulo="Nenhuma tarefa cadastrada ainda"
+            descricao="Crie a primeira tarefa para começar a organizar o trabalho da equipe."
+          >
+            <a routerLink="/tarefas/nova" class="btn btn-secondary">+ Criar primeira tarefa</a>
+          </app-estado-vazio>
+        }
       }
     </main>
   }

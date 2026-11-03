@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideRouter } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { ListaTarefas } from './lista-tarefas';
 import { FiltrosService } from '../../services/filtros';
 import { Tarefa } from '../../models';
@@ -136,5 +136,71 @@ describe('ListaTarefas', () => {
     fixture.detectChanges();
 
     expect(el.querySelector('.status-msg.erro')).toBeNull();
+  });
+
+  describe('estado vazio', () => {
+    let http: HttpTestingController;
+    let el: HTMLElement;
+
+    beforeEach(() => {
+      http = TestBed.inject(HttpTestingController);
+      el = fixture.nativeElement;
+      fixture.detectChanges();
+    });
+
+    it('sem nenhuma tarefa cadastrada convida a criar a primeira', () => {
+      http.expectOne('http://localhost:3000/tarefas').flush([]);
+      fixture.detectChanges();
+
+      const aviso = el.querySelector('app-estado-vazio');
+      expect(aviso?.textContent).toContain('Nenhuma tarefa cadastrada ainda');
+      expect(aviso?.querySelector('a')?.getAttribute('href')).toBe('/tarefas/nova');
+      expect(el.querySelector('app-tarefa-card')).toBeNull();
+    });
+
+    it('busca ou filtro sem resultado avisa e o botão limpa os filtros', () => {
+      http.expectOne('http://localhost:3000/tarefas').flush(tarefasMock);
+      component.termoBusca.set('zzz-nao-existe');
+      fixture.detectChanges();
+
+      const aviso = el.querySelector('app-estado-vazio');
+      expect(aviso?.textContent).toContain('Nenhuma tarefa encontrada');
+      expect(aviso?.textContent).toContain('filtros selecionados');
+      expect(el.querySelector('app-tarefa-card')).toBeNull();
+
+      (aviso!.querySelector('button') as HTMLButtonElement).click();
+      fixture.detectChanges();
+
+      expect(el.querySelector('app-estado-vazio')).toBeNull();
+      expect(el.querySelectorAll('app-tarefa-card').length).toBe(3);
+    });
+  });
+});
+
+describe('ListaTarefas de um projeto sem tarefas', () => {
+  it('mostra o estado vazio do projeto em vez de listar as tarefas dos outros', async () => {
+    await TestBed.configureTestingModule({
+      imports: [ListaTarefas],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ id: '9' }) } } },
+      ],
+    }).compileComponents();
+
+    const http = TestBed.inject(HttpTestingController);
+    const fixture = TestBed.createComponent(ListaTarefas);
+    fixture.detectChanges();
+    // O id da URL é tentado primeiro como tarefa; sem tarefa 9, vira filtro por projeto.
+    http.expectOne('http://localhost:3000/tarefas/9').flush(null, { status: 404, statusText: 'Not Found' });
+    http.expectOne('http://localhost:3000/tarefas').flush([
+      { id: '1', projetoId: '1', titulo: 'De outro projeto', descricao: '', status: 'a-fazer', prioridade: 'alta', responsavel: 'A', prazo: '2026-11-01' },
+    ]);
+    fixture.detectChanges();
+
+    const el: HTMLElement = fixture.nativeElement;
+    expect(el.querySelector('app-estado-vazio')?.textContent).toContain('Este projeto ainda não tem tarefas');
+    expect(el.querySelector('app-tarefa-card')).toBeNull();
   });
 });
