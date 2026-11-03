@@ -2,11 +2,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
+import { of } from 'rxjs';
 import { DetalheProjeto } from './detalhe-projeto';
 
 describe('DetalheProjeto', () => {
   let component: DetalheProjeto;
   let fixture: ComponentFixture<DetalheProjeto>;
+  let httpMock: HttpTestingController;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -18,6 +20,7 @@ describe('DetalheProjeto', () => {
       ],
     }).compileComponents();
 
+    httpMock = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(DetalheProjeto);
     component = fixture.componentInstance;
     await fixture.whenStable();
@@ -26,9 +29,25 @@ describe('DetalheProjeto', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('deve exibir "não encontrado" e encerrar o carregamento ao buscar projeto inexistente (/projetos/999)', () => {
+    component.idParam.set('999');
+    component.carregarProjeto('999');
+
+    const req = httpMock.expectOne('http://localhost:3000/projetos/999?_embed=tarefas');
+    req.flush('Not Found', { status: 404, statusText: 'Not Found' });
+
+    fixture.detectChanges();
+
+    expect(component.carregando()).toBe(false);
+    expect(component.naoEncontrado()).toBe(true);
+
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.textContent).toContain('não encontrado');
+  });
 });
 
-describe('DetalheProjeto com a API fora do ar', () => {
+describe('DetalheProjeto com a API fora do ar ou sem tarefas', () => {
   let fixture: ComponentFixture<DetalheProjeto>;
   let http: HttpTestingController;
   const urlProjeto = 'http://localhost:3000/projetos/1?_embed=tarefas';
@@ -43,7 +62,10 @@ describe('DetalheProjeto com a API fora do ar', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
-        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ id: '1' }) } } },
+        {
+          provide: ActivatedRoute,
+          useValue: { paramMap: of(convertToParamMap({ id: '1' })), snapshot: { paramMap: convertToParamMap({ id: '1' }) } },
+        },
       ],
     }).compileComponents();
 
@@ -70,35 +92,18 @@ describe('DetalheProjeto com a API fora do ar', () => {
     expect(el.textContent).toContain('Quadro');
   });
 
-  it('falha ao buscar as tarefas não vira "Nenhuma tarefa cadastrada"', () => {
+  it('falha ao buscar as tarefas não vira "Este projeto ainda não tem tarefas"', () => {
     http.expectOne(urlProjeto).flush(projetoSemTarefas);
     http.expectOne('http://localhost:3000/tarefas').error(new ProgressEvent('error'), { status: 0 });
     fixture.detectChanges();
 
     const el: HTMLElement = fixture.nativeElement;
     expect(el.querySelector('.status-msg.erro')?.textContent).toContain('as tarefas do projeto');
-    expect(el.textContent).not.toContain('Nenhuma tarefa cadastrada');
+    expect(el.querySelector('app-estado-vazio')).toBeNull();
   });
-});
 
-describe('DetalheProjeto sem tarefas', () => {
-  it('mostra o estado vazio com o atalho para adicionar uma tarefa', async () => {
-    await TestBed.configureTestingModule({
-      imports: [DetalheProjeto],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([]),
-        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ id: '1' }) } } },
-      ],
-    }).compileComponents();
-
-    const http = TestBed.inject(HttpTestingController);
-    const fixture = TestBed.createComponent(DetalheProjeto);
-    fixture.detectChanges();
-    http.expectOne('http://localhost:3000/projetos/1?_embed=tarefas').flush({
-      id: '1', nome: 'Quadro', descricao: '', disciplina: 'Frontend', criadoEm: '2026-10-01', tarefas: [],
-    });
+  it('projeto sem tarefas mostra o estado vazio com o atalho para adicionar uma tarefa', () => {
+    http.expectOne(urlProjeto).flush(projetoSemTarefas);
     http.expectOne('http://localhost:3000/tarefas').flush([]);
     fixture.detectChanges();
 

@@ -87,7 +87,7 @@
       }
     </div>
 
-    @if (!carregando() && !erro() && temFiltrosAtivos()) {
+    @if (!carregando() && !erro() && !naoEncontrado() && temFiltrosAtivos()) {
       <p class="contador-resultados" role="status" aria-live="polite">
         {{ tarefasFiltradas().length }}
         {{ tarefasFiltradas().length === 1 ? 'tarefa encontrada' : 'tarefas encontradas' }}
@@ -96,8 +96,14 @@
   </section>
 
   @if (carregando()) {
-    <div class="status-msg">
+    <div class="status-msg estado-carregando" role="status" aria-live="polite">
+      <span class="spinner-carregando" aria-hidden="true"></span>
       <p>Carregando tarefas...</p>
+    </div>
+  } @else if (naoEncontrado()) {
+    <div class="status-msg erro" role="alert">
+      <p>Tarefa #{{ idParam() }} não encontrada (registro não encontrado).</p>
+      <a routerLink="/tarefas" class="btn btn-secondary">Ver todas as tarefas</a>
     </div>
   } @else if (erro()) {
     <div class="status-msg erro" role="alert">
@@ -115,13 +121,6 @@
             descricao="Nenhuma tarefa corresponde à busca ou aos filtros selecionados."
           >
             <button type="button" (click)="limparFiltros()" class="btn btn-secondary">Limpar filtros</button>
-          </app-estado-vazio>
-        } @else if (idParam()) {
-          <app-estado-vazio
-            titulo="Este projeto ainda não tem tarefas"
-            descricao="Adicione uma tarefa para ela aparecer aqui e no quadro."
-          >
-            <a routerLink="/tarefas/nova" class="btn btn-secondary">+ Adicionar tarefa</a>
           </app-estado-vazio>
         } @else {
           <app-estado-vazio

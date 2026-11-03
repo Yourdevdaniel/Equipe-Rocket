@@ -30,14 +30,22 @@ export class IntroRocket implements AfterViewInit, OnDestroy {
   @ViewChild('giovanniSvg') giovanniSvgRef?: ElementRef<SVGSVGElement>;
   @ViewChild('dialogoBox') dialogoBoxRef?: ElementRef<HTMLElement>;
 
-  readonly visivel = signal(true);
+  readonly visivel = signal(this.deveExibirIntro());
   readonly clicado = signal(false);
 
   private pulsoTweens: gsap.core.Tween[] = [];
   private masterTimeline?: gsap.core.Timeline;
 
+  private deveExibirIntro(): boolean {
+    if (typeof window === 'undefined') return true;
+    const path = window.location.pathname.replace(/\/+$/, '') || '/';
+    return path === '/' || path === '/projetos';
+  }
+
   ngAfterViewInit(): void {
-    this.iniciarPulsoLogo();
+    if (this.visivel()) {
+      this.iniciarPulsoLogo();
+    }
   }
 
   private iniciarPulsoLogo(): void {
@@ -264,7 +272,10 @@ export class IntroRocket implements AfterViewInit, OnDestroy {
 
   private finalizarIntro(): void {
     this.visivel.set(false);
-    this.router.navigate(['/projetos']);
+    const urlAtual = this.router.url.split('?')[0].replace(/\/+$/, '') || '/';
+    if (urlAtual === '/') {
+      this.router.navigate(['/projetos']);
+    }
   }
 
   ngOnDestroy(): void {

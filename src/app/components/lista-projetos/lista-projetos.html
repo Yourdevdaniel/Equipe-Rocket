@@ -21,18 +21,19 @@
       <a routerLink="/projetos/novo" class="btn btn-secondary">+ Novo Projeto</a>
     </div>
 
-    <!-- Container dos Cards -->
-    <div class="cards-wrapper">
-      @if (carregando()) {
-        <div class="status-msg">
-          <p>Carregando projetos...</p>
-        </div>
-      } @else if (erro()) {
-        <div class="status-msg erro" role="alert">
-          <p>{{ erro() }}</p>
-          <button type="button" (click)="carregarProjetos()" class="btn btn-secondary">Tentar novamente</button>
-        </div>
-      } @else {
+    <!-- Container dos Cards / Estado de Carregamento -->
+    @if (carregando()) {
+      <div class="status-msg estado-carregando" role="status" aria-live="polite">
+        <span class="spinner-carregando" aria-hidden="true"></span>
+        <p>Carregando projetos...</p>
+      </div>
+    } @else if (erro()) {
+      <div class="status-msg erro" role="alert">
+        <p>{{ erro() }}</p>
+        <button type="button" (click)="carregarProjetos()" class="btn btn-secondary">Tentar novamente</button>
+      </div>
+    } @else {
+      <div class="cards-wrapper">
         @for (projeto of projetos(); track projeto.id) {
           <article class="project-card">
             <div class="card-banner">
@@ -65,8 +66,8 @@
             <p>Nenhum projeto cadastrado.</p>
           </div>
         }
-      }
-    </div>
+      </div>
+    }
   </main>
 
 </div>

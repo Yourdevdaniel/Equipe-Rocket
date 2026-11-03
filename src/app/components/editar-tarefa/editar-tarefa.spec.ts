@@ -11,7 +11,11 @@ describe('EditarTarefa', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [EditarTarefa],
-      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(EditarTarefa);
@@ -22,10 +26,20 @@ describe('EditarTarefa', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('deve exibir o estado de carregando enquanto os dados não chegam', () => {
+    component.carregando.set(true);
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    const msgCarregando = el.querySelector('.estado-carregando');
+    expect(msgCarregando).toBeTruthy();
+    expect(msgCarregando?.textContent).toContain('Carregando dados da tarefa');
+  });
 });
 
 describe('EditarTarefa com a API fora do ar', () => {
-  it('falha ao carregar a tarefa avisa o motivo em vez de abrir um formulário vazio sem explicação', async () => {
+  it('falha ao carregar a tarefa avisa a causa em vez de abrir um formulário vazio sem explicação', async () => {
     await TestBed.configureTestingModule({
       imports: [EditarTarefa],
       providers: [

@@ -1,4 +1,5 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { Projeto, Tarefa } from '../../models';
@@ -19,6 +20,9 @@ export class EditarTarefa implements OnInit {
   readonly tarefa = signal<Tarefa | null>(null);
   readonly projetos = signal<Projeto[]>([]);
   readonly idParam = signal<string | null>(null);
+  readonly carregando = signal(true);
+  readonly naoEncontrado = signal(false);
+  readonly salvando = signal(false);
   readonly estaSalvo = signal(false);
   readonly erro = signal<string | null>(null);
 
@@ -33,25 +37,48 @@ export class EditarTarefa implements OnInit {
   });
 
   ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    this.idParam.set(id);
+    this.carregando.set(true);
+    this.naoEncontrado.set(false);
+
     this.projetosService.listarProjetos().subscribe({
       next: (listaProjetos) => {
         this.projetos.set(listaProjetos);
+        if (!id) {
+          this.carregando.set(false);
+        }
       },
-      error: (err: unknown) => this.erro.set(mensagemDeErro(err, 'a lista de projetos')),
+      error: (err: unknown) => {
+        this.erro.set(mensagemDeErro(err, 'a lista de projetos'));
+        if (!id) {
+          this.carregando.set(false);
+        }
+      },
     });
 
-    const id = this.route.snapshot.paramMap.get('id');
-    this.idParam.set(id);
     if (!id) {
       return;
     }
 
     this.projetosService.buscarTarefa(id).subscribe({
       next: (tarefaQueChegou) => {
-        this.tarefa.set(tarefaQueChegou);
-        this.form.patchValue(tarefaQueChegou);
+        if (!tarefaQueChegou || !tarefaQueChegou.id) {
+          this.naoEncontrado.set(true);
+        } else {
+          this.tarefa.set(tarefaQueChegou);
+          this.form.patchValue(tarefaQueChegou);
+        }
+        this.carregando.set(false);
       },
-      error: (err: unknown) => this.erro.set(mensagemDeErro(err, 'a tarefa')),
+      error: (err: unknown) => {
+        if (err instanceof HttpErrorResponse && err.status === 404) {
+          this.naoEncontrado.set(true);
+        } else {
+          this.erro.set(mensagemDeErro(err, 'a tarefa'));
+        }
+        this.carregando.set(false);
+      },
     });
   }
 
@@ -74,15 +101,18 @@ export class EditarTarefa implements OnInit {
       return;
     }
     this.erro.set(null);
+    this.salvando.set(true);
 
     const alteracoes = this.form.getRawValue();
 
     this.projetosService.editarTarefa(id, alteracoes).subscribe({
       next: (tarefaAlterada) => {
         this.tarefa.set(tarefaAlterada);
+        this.salvando.set(false);
         this.estaSalvo.set(true);
       },
       error: () => {
+        this.salvando.set(false);
         this.erro.set('Erro ao salvar no servidor. Tente novamente.');
       },
     });

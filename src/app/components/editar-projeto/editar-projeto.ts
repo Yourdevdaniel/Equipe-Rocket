@@ -1,4 +1,5 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProjetosService } from '../../services/projetos';
@@ -15,6 +16,9 @@ export class EditarProjeto implements OnInit {
   private readonly projetosService = inject(ProjetosService);
 
   readonly idParam = signal<string | null>(null);
+  readonly carregando = signal(true);
+  readonly naoEncontrado = signal(false);
+  readonly salvando = signal(false);
   readonly estaSalvo = signal(false);
   readonly erro = signal<string | null>(null);
 
@@ -28,12 +32,29 @@ export class EditarProjeto implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     this.idParam.set(id);
     if (!id) {
+      this.carregando.set(false);
       return;
     }
 
+    this.carregando.set(true);
+    this.naoEncontrado.set(false);
     this.projetosService.buscarProjeto(id).subscribe({
-      next: (projeto) => this.form.patchValue(projeto),
-      error: () => this.erro.set('Não foi possível carregar os dados do projeto.'),
+      next: (projeto) => {
+        if (!projeto || !projeto.id) {
+          this.naoEncontrado.set(true);
+        } else {
+          this.form.patchValue(projeto);
+        }
+        this.carregando.set(false);
+      },
+      error: (err: unknown) => {
+        if (err instanceof HttpErrorResponse && err.status === 404) {
+          this.naoEncontrado.set(true);
+        } else {
+          this.erro.set('Não foi possível carregar os dados do projeto.');
+        }
+        this.carregando.set(false);
+      },
     });
   }
 
@@ -56,10 +77,17 @@ export class EditarProjeto implements OnInit {
       return;
     }
     this.erro.set(null);
+    this.salvando.set(true);
 
     this.projetosService.editarProjeto(id, this.form.getRawValue()).subscribe({
-      next: () => this.estaSalvo.set(true),
-      error: () => this.erro.set('Erro ao salvar no servidor. Tente novamente.'),
+      next: () => {
+        this.salvando.set(false);
+        this.estaSalvo.set(true);
+      },
+      error: () => {
+        this.salvando.set(false);
+        this.erro.set('Erro ao salvar no servidor. Tente novamente.');
+      },
     });
   }
 }

@@ -2,8 +2,8 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { Projeto } from '../../models';
-import { mensagemDeErro } from '../../utils/erro-api';
 import { gerarSlug } from '../../utils/slug';
+import { mensagemDeErro } from '../../utils/erro-api';
 
 @Component({
   imports: [RouterLink],

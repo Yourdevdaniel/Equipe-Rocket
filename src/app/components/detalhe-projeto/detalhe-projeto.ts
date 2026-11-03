@@ -1,11 +1,12 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { ProjetoComTarefas, Tarefa } from '../../models';
 import { TarefaCard } from '../tarefa-card/tarefa-card';
-import { EstadoVazio } from '../estado-vazio/estado-vazio';
 import { gerarSlug } from '../../utils/slug';
+import { EstadoVazio } from '../estado-vazio/estado-vazio';
 import { mensagemDeErro } from '../../utils/erro-api';
 
 @Component({
@@ -20,29 +21,40 @@ export class DetalheProjeto implements OnInit {
   private readonly projetosService = inject(ProjetosService);
 
   readonly gerarSlug = gerarSlug;
+  readonly idParam = signal<string | null>(null);
   readonly projeto = signal<ProjetoComTarefas | null>(null);
   readonly tarefas = signal<Tarefa[]>([]);
   readonly carregando = signal(true);
+  readonly naoEncontrado = signal(false);
   readonly erro = signal<string | null>(null);
-  readonly idParam = signal<string | null>(null);
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.idParam.set(id);
-    if (id) {
-      this.carregarProjeto(id);
-    } else {
-      this.erro.set('ID do projeto não informado.');
-      this.carregando.set(false);
-    }
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      this.idParam.set(id);
+      if (id) {
+        this.carregarProjeto(id);
+      } else {
+        this.naoEncontrado.set(true);
+        this.carregando.set(false);
+      }
+    });
   }
 
   carregarProjeto(id: string): void {
     this.carregando.set(true);
     this.erro.set(null);
+    this.naoEncontrado.set(false);
 
     this.projetosService.buscarProjeto(id).subscribe({
       next: (dadosProjeto) => {
+        if (!dadosProjeto || !dadosProjeto.id) {
+          this.projeto.set(null);
+          this.naoEncontrado.set(true);
+          this.carregando.set(false);
+          return;
+        }
+
         this.projeto.set(dadosProjeto);
 
         if (dadosProjeto.tarefas && dadosProjeto.tarefas.length > 0) {
@@ -55,7 +67,7 @@ export class DetalheProjeto implements OnInit {
               this.tarefas.set(todasTarefas.filter((t) => String(t.projetoId) === String(id)));
               this.carregando.set(false);
             },
-            // Sem isto a falha viraria "Nenhuma tarefa cadastrada", que é mentira:
+            // Sem isto a falha viraria "Este projeto ainda não tem tarefas", que é mentira:
             // as tarefas existem, só não deu para buscá-las.
             error: (err: unknown) => {
               console.error('Erro ao buscar tarefas do projeto:', err);
@@ -66,8 +78,13 @@ export class DetalheProjeto implements OnInit {
         }
       },
       error: (err: unknown) => {
-        console.error('Erro ao buscar projeto:', err);
-        this.erro.set(mensagemDeErro(err, 'os dados do projeto'));
+        if (err instanceof HttpErrorResponse && err.status === 404) {
+          this.projeto.set(null);
+          this.naoEncontrado.set(true);
+        } else {
+          console.error('Erro ao buscar projeto:', err);
+          this.erro.set(mensagemDeErro(err, 'os dados do projeto'));
+        }
         this.carregando.set(false);
       },
     });

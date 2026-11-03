@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { ListaProjetos } from './lista-projetos';
-import { HttpTestingController } from '@angular/common/http/testing';
 
 describe('ListaProjetos', () => {
   let component: ListaProjetos;
@@ -28,7 +27,17 @@ describe('ListaProjetos', () => {
     expect(component).toBeTruthy();
   });
 
-  it('mostra o erro com "Tentar novamente" quando a API está fora e recarrega ao clicar', () => {
+  it('deve exibir o estado de carregando enquanto os projetos não chegam', () => {
+    component.carregando.set(true);
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    const msgCarregando = el.querySelector('.estado-carregando');
+    expect(msgCarregando).toBeTruthy();
+    expect(msgCarregando?.textContent).toContain('Carregando projetos');
+  });
+
+  it('API fora do ar mostra a causa (json-server) e o botão recarrega a lista', () => {
     const http = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
     http.expectOne('http://localhost:3000/projetos').error(new ProgressEvent('error'), { status: 0 });

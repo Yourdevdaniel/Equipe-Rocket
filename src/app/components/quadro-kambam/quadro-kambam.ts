@@ -1,12 +1,13 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { FiltrosService } from '../../services/filtros';
 import { HistoricoDeNavegacao } from '../../services/historico-de-navegacao';
 import { Tarefa } from '../../models';
 import { TarefaCard } from '../tarefa-card/tarefa-card';
-import { mensagemDeErro } from '../../utils/erro-api';
 import { EstadoVazio } from '../estado-vazio/estado-vazio';
+import { mensagemDeErro } from '../../utils/erro-api';
 
 @Component({
   imports: [TarefaCard, RouterLink, EstadoVazio],
@@ -25,6 +26,7 @@ export class QuadroKambam implements OnInit {
 
   readonly tarefas = signal<Tarefa[]>([]);
   readonly carregando = signal(true);
+  readonly naoEncontrado = signal(false);
   readonly erro = signal<string | null>(null);
 
   // Busca e filtros vêm do FiltrosService, compartilhado com a lista.
@@ -105,23 +107,58 @@ export class QuadroKambam implements OnInit {
   carregarTarefas(idProjeto?: string | null): void {
     this.carregando.set(true);
     this.erro.set(null);
+    this.naoEncontrado.set(false);
 
-    this.projetosService.listarTarefas().subscribe({
-      next: (dados) => {
-        // Filtra para manter no Kanban apenas as tarefas vinculadas a este projeto
-        const tarefasDoProjeto = idProjeto
-          ? dados.filter((t) => t.projetoId === idProjeto)
-          : dados;
-
-        this.tarefas.set(tarefasDoProjeto);
-        this.carregando.set(false);
-      },
-      error: (err: unknown) => {
-        console.error('Erro ao carregar quadro Kanban:', err);
-        this.erro.set(mensagemDeErro(err, 'as tarefas do quadro'));
-        this.carregando.set(false);
-      },
-    });
+    if (idProjeto) {
+      this.projetosService.buscarProjeto(idProjeto).subscribe({
+        next: (projeto) => {
+          if (!projeto || !projeto.id) {
+            this.tarefas.set([]);
+            this.naoEncontrado.set(true);
+            this.carregando.set(false);
+            return;
+          }
+          if (projeto.tarefas && projeto.tarefas.length > 0) {
+            this.tarefas.set(projeto.tarefas);
+            this.carregando.set(false);
+          } else {
+            this.projetosService.listarTarefas().subscribe({
+              next: (dados) => {
+                this.tarefas.set(dados.filter((t) => String(t.projetoId) === String(idProjeto)));
+                this.carregando.set(false);
+              },
+              error: (err: unknown) => {
+                console.error('Erro ao carregar tarefas do projeto:', err);
+                this.erro.set(mensagemDeErro(err, 'as tarefas do projeto'));
+                this.carregando.set(false);
+              },
+            });
+          }
+        },
+        error: (err: unknown) => {
+          if (err instanceof HttpErrorResponse && err.status === 404) {
+            this.tarefas.set([]);
+            this.naoEncontrado.set(true);
+          } else {
+            console.error('Erro ao carregar quadro Kanban:', err);
+            this.erro.set(mensagemDeErro(err, 'as tarefas do quadro'));
+          }
+          this.carregando.set(false);
+        },
+      });
+    } else {
+      this.projetosService.listarTarefas().subscribe({
+        next: (dados) => {
+          this.tarefas.set(dados);
+          this.carregando.set(false);
+        },
+        error: (err: unknown) => {
+          console.error('Erro ao carregar quadro Kanban:', err);
+          this.erro.set(mensagemDeErro(err, 'as tarefas do quadro'));
+          this.carregando.set(false);
+        },
+      });
+    }
   }
 
   voltar(): void {

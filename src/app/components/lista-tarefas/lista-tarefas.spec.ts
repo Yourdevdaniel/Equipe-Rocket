@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 import { ListaTarefas } from './lista-tarefas';
 import { FiltrosService } from '../../services/filtros';
 import { Tarefa } from '../../models';
-import { HttpTestingController } from '@angular/common/http/testing';
 
 describe('ListaTarefas', () => {
   let component: ListaTarefas;
   let fixture: ComponentFixture<ListaTarefas>;
   let filtrosService: FiltrosService;
+  let httpMock: HttpTestingController;
 
   const tarefasMock: Tarefa[] = [
     {
@@ -56,6 +56,7 @@ describe('ListaTarefas', () => {
     }).compileComponents();
 
     filtrosService = TestBed.inject(FiltrosService);
+    httpMock = TestBed.inject(HttpTestingController);
     filtrosService.limpar();
 
     fixture = TestBed.createComponent(ListaTarefas);
@@ -122,34 +123,45 @@ describe('ListaTarefas', () => {
     expect(selectPrioridade.value).toBe('alta');
   });
 
-  it('erro 500 da API mostra a causa e o botão de tentar de novo', () => {
-    const http = TestBed.inject(HttpTestingController);
-    fixture.detectChanges();
-    http.expectOne('http://localhost:3000/tarefas').flush(null, { status: 500, statusText: 'Server Error' });
-    fixture.detectChanges();
+  it('deve exibir "não encontrado" e encerrar o carregamento ao buscar tarefa inexistente (/tarefas/999)', () => {
+    component.idParam.set('999');
+    component.carregarTarefas('999');
 
-    const el: HTMLElement = fixture.nativeElement;
-    expect(el.querySelector('.status-msg.erro')?.textContent).toContain('erro interno (500)');
+    const req = httpMock.expectOne('http://localhost:3000/tarefas/999');
+    req.flush('Not Found', { status: 404, statusText: 'Not Found' });
 
-    (el.querySelector('.status-msg.erro button') as HTMLButtonElement).click();
-    http.expectOne('http://localhost:3000/tarefas').flush([]);
     fixture.detectChanges();
 
-    expect(el.querySelector('.status-msg.erro')).toBeNull();
+    expect(component.carregando()).toBe(false);
+    expect(component.naoEncontrado()).toBe(true);
+
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.textContent).toContain('não encontrado');
   });
 
-  describe('estado vazio', () => {
-    let http: HttpTestingController;
+  describe('erro de API e estado vazio', () => {
     let el: HTMLElement;
 
     beforeEach(() => {
-      http = TestBed.inject(HttpTestingController);
       el = fixture.nativeElement;
       fixture.detectChanges();
     });
 
+    it('erro 500 mostra a causa e o botão de tentar de novo', () => {
+      httpMock.expectOne('http://localhost:3000/tarefas').flush(null, { status: 500, statusText: 'Server Error' });
+      fixture.detectChanges();
+
+      expect(el.querySelector('.status-msg.erro')?.textContent).toContain('erro interno (500)');
+
+      (el.querySelector('.status-msg.erro button') as HTMLButtonElement).click();
+      httpMock.expectOne('http://localhost:3000/tarefas').flush([]);
+      fixture.detectChanges();
+
+      expect(el.querySelector('.status-msg.erro')).toBeNull();
+    });
+
     it('sem nenhuma tarefa cadastrada convida a criar a primeira', () => {
-      http.expectOne('http://localhost:3000/tarefas').flush([]);
+      httpMock.expectOne('http://localhost:3000/tarefas').flush([]);
       fixture.detectChanges();
 
       const aviso = el.querySelector('app-estado-vazio');
@@ -159,7 +171,7 @@ describe('ListaTarefas', () => {
     });
 
     it('busca ou filtro sem resultado avisa e o botão limpa os filtros', () => {
-      http.expectOne('http://localhost:3000/tarefas').flush(tarefasMock);
+      httpMock.expectOne('http://localhost:3000/tarefas').flush(tarefasMock);
       component.termoBusca.set('zzz-nao-existe');
       fixture.detectChanges();
 
@@ -174,33 +186,5 @@ describe('ListaTarefas', () => {
       expect(el.querySelector('app-estado-vazio')).toBeNull();
       expect(el.querySelectorAll('app-tarefa-card').length).toBe(3);
     });
-  });
-});
-
-describe('ListaTarefas de um projeto sem tarefas', () => {
-  it('mostra o estado vazio do projeto em vez de listar as tarefas dos outros', async () => {
-    await TestBed.configureTestingModule({
-      imports: [ListaTarefas],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([]),
-        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ id: '9' }) } } },
-      ],
-    }).compileComponents();
-
-    const http = TestBed.inject(HttpTestingController);
-    const fixture = TestBed.createComponent(ListaTarefas);
-    fixture.detectChanges();
-    // O id da URL é tentado primeiro como tarefa; sem tarefa 9, vira filtro por projeto.
-    http.expectOne('http://localhost:3000/tarefas/9').flush(null, { status: 404, statusText: 'Not Found' });
-    http.expectOne('http://localhost:3000/tarefas').flush([
-      { id: '1', projetoId: '1', titulo: 'De outro projeto', descricao: '', status: 'a-fazer', prioridade: 'alta', responsavel: 'A', prazo: '2026-11-01' },
-    ]);
-    fixture.detectChanges();
-
-    const el: HTMLElement = fixture.nativeElement;
-    expect(el.querySelector('app-estado-vazio')?.textContent).toContain('Este projeto ainda não tem tarefas');
-    expect(el.querySelector('app-tarefa-card')).toBeNull();
   });
 });
