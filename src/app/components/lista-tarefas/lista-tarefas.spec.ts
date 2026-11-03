@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { ListaTarefas } from './lista-tarefas';
 import { FiltrosService } from '../../services/filtros';
@@ -10,6 +10,7 @@ describe('ListaTarefas', () => {
   let component: ListaTarefas;
   let fixture: ComponentFixture<ListaTarefas>;
   let filtrosService: FiltrosService;
+  let httpMock: HttpTestingController;
 
   const tarefasMock: Tarefa[] = [
     {
@@ -55,6 +56,7 @@ describe('ListaTarefas', () => {
     }).compileComponents();
 
     filtrosService = TestBed.inject(FiltrosService);
+    httpMock = TestBed.inject(HttpTestingController);
     filtrosService.limpar();
 
     fixture = TestBed.createComponent(ListaTarefas);
@@ -119,5 +121,21 @@ describe('ListaTarefas', () => {
 
     expect(selectStatus.value).toBe('em-andamento');
     expect(selectPrioridade.value).toBe('alta');
+  });
+
+  it('deve exibir "não encontrado" e encerrar o carregamento ao buscar tarefa inexistente (/tarefas/999)', () => {
+    component.idParam.set('999');
+    component.carregarTarefas('999');
+
+    const req = httpMock.expectOne('http://localhost:3000/tarefas/999');
+    req.flush('Not Found', { status: 404, statusText: 'Not Found' });
+
+    fixture.detectChanges();
+
+    expect(component.carregando()).toBe(false);
+    expect(component.naoEncontrado()).toBe(true);
+
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.textContent).toContain('não encontrado');
   });
 });

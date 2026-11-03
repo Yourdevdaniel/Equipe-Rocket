@@ -1,4 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { FiltrosService } from '../../services/filtros';
@@ -20,6 +21,7 @@ export class ListaTarefas implements OnInit {
   readonly tarefas = signal<Tarefa[]>([]);
   readonly carregando = signal(true);
   readonly erro = signal<string | null>(null);
+  readonly naoEncontrado = signal(false);
   readonly idParam = signal<string | null>(null);
   // Busca e filtros vêm do FiltrosService, compartilhado com o quadro.
   readonly termoBusca = this.filtros.busca;
@@ -44,9 +46,11 @@ export class ListaTarefas implements OnInit {
   readonly tarefasFiltradas = computed(() => this.filtros.filtrar(this.tarefas()));
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.idParam.set(id);
-    this.carregarTarefas(id);
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      this.idParam.set(id);
+      this.carregarTarefas(id);
+    });
   }
 
   atualizarBusca(evento: Event): void {
@@ -79,27 +83,29 @@ export class ListaTarefas implements OnInit {
   carregarTarefas(id?: string | null): void {
     this.carregando.set(true);
     this.erro.set(null);
+    this.naoEncontrado.set(false);
 
     if (id) {
       this.projetosService.buscarTarefa(id).subscribe({
         next: (tarefa) => {
-          this.tarefas.set(tarefa ? [tarefa] : []);
+          if (tarefa && tarefa.id) {
+            this.tarefas.set([tarefa]);
+            this.naoEncontrado.set(false);
+          } else {
+            this.tarefas.set([]);
+            this.naoEncontrado.set(true);
+          }
           this.carregando.set(false);
         },
-        error: () => {
-          // Caso o id informado na URL seja um projetoId, busca as tarefas correspondentes
-          this.projetosService.listarTarefas().subscribe({
-            next: (dados) => {
-              const porProjeto = dados.filter((t) => t.projetoId === id);
-              this.tarefas.set(porProjeto.length > 0 ? porProjeto : dados);
-              this.carregando.set(false);
-            },
-            error: (err) => {
-              console.error('Erro ao carregar tarefas:', err);
-              this.erro.set('Não foi possível carregar as tarefas da API.');
-              this.carregando.set(false);
-            },
-          });
+        error: (err: unknown) => {
+          if (err instanceof HttpErrorResponse && err.status === 404) {
+            this.tarefas.set([]);
+            this.naoEncontrado.set(true);
+          } else {
+            console.error('Erro ao carregar tarefa:', err);
+            this.erro.set('Não foi possível carregar as tarefas da API.');
+          }
+          this.carregando.set(false);
         },
       });
     } else {

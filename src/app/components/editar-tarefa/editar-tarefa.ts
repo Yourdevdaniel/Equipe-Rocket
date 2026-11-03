@@ -1,4 +1,5 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { Projeto, Tarefa } from '../../models';
@@ -19,6 +20,7 @@ export class EditarTarefa implements OnInit {
   readonly projetos = signal<Projeto[]>([]);
   readonly idParam = signal<string | null>(null);
   readonly carregando = signal(true);
+  readonly naoEncontrado = signal(false);
   readonly salvando = signal(false);
   readonly estaSalvo = signal(false);
   readonly erro = signal<string | null>(null);
@@ -37,6 +39,7 @@ export class EditarTarefa implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     this.idParam.set(id);
     this.carregando.set(true);
+    this.naoEncontrado.set(false);
 
     this.projetosService.listarProjetos().subscribe({
       next: (listaProjetos) => {
@@ -58,12 +61,20 @@ export class EditarTarefa implements OnInit {
 
     this.projetosService.buscarTarefa(id).subscribe({
       next: (tarefaQueChegou) => {
-        this.tarefa.set(tarefaQueChegou);
-        this.form.patchValue(tarefaQueChegou);
+        if (!tarefaQueChegou || !tarefaQueChegou.id) {
+          this.naoEncontrado.set(true);
+        } else {
+          this.tarefa.set(tarefaQueChegou);
+          this.form.patchValue(tarefaQueChegou);
+        }
         this.carregando.set(false);
       },
-      error: () => {
-        this.erro.set('Não foi possível carregar os dados da tarefa.');
+      error: (err: unknown) => {
+        if (err instanceof HttpErrorResponse && err.status === 404) {
+          this.naoEncontrado.set(true);
+        } else {
+          this.erro.set('Não foi possível carregar os dados da tarefa.');
+        }
         this.carregando.set(false);
       },
     });

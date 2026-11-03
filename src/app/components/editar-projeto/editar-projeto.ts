@@ -1,4 +1,5 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProjetosService } from '../../services/projetos';
@@ -16,6 +17,7 @@ export class EditarProjeto implements OnInit {
 
   readonly idParam = signal<string | null>(null);
   readonly carregando = signal(true);
+  readonly naoEncontrado = signal(false);
   readonly salvando = signal(false);
   readonly estaSalvo = signal(false);
   readonly erro = signal<string | null>(null);
@@ -35,13 +37,22 @@ export class EditarProjeto implements OnInit {
     }
 
     this.carregando.set(true);
+    this.naoEncontrado.set(false);
     this.projetosService.buscarProjeto(id).subscribe({
       next: (projeto) => {
-        this.form.patchValue(projeto);
+        if (!projeto || !projeto.id) {
+          this.naoEncontrado.set(true);
+        } else {
+          this.form.patchValue(projeto);
+        }
         this.carregando.set(false);
       },
-      error: () => {
-        this.erro.set('Não foi possível carregar os dados do projeto.');
+      error: (err: unknown) => {
+        if (err instanceof HttpErrorResponse && err.status === 404) {
+          this.naoEncontrado.set(true);
+        } else {
+          this.erro.set('Não foi possível carregar os dados do projeto.');
+        }
         this.carregando.set(false);
       },
     });

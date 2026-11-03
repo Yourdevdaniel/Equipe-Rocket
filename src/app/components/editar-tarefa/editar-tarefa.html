@@ -21,6 +21,11 @@
       <span class="spinner-carregando" aria-hidden="true"></span>
       <p>Carregando dados da tarefa...</p>
     </div>
+  } @else if (naoEncontrado()) {
+    <div class="estado-carregando-box estado-carregando" role="alert">
+      <p class="mensagem-erro">Tarefa #{{ idParam() }} não encontrada (registro não encontrado).</p>
+      <a routerLink="/tarefas" class="btn btn-secundario">Voltar para Tarefas</a>
+    </div>
   } @else {
     <form class="formulario" [formGroup]="form" (ngSubmit)="salvar()" novalidate>
       <div class="campo campo-largo">

@@ -5,7 +5,7 @@
       <p class="subtitulo">Altere os dados e clique em salvar</p>
       <p class="subtitulo">Campos marcados com <span class="obrigatorio" aria-hidden="true">*</span> são obrigatórios.</p>
     </div>
-    <a [routerLink]="['/projetos', idParam()]" class="btn btn-secundario">Voltar</a>
+    <a [routerLink]="naoEncontrado() ? ['/projetos'] : ['/projetos', idParam()]" class="btn btn-secundario">Voltar</a>
   </header>
 
   @if (estaSalvo()) {
@@ -20,6 +20,11 @@
     <div class="estado-carregando-box estado-carregando" role="status" aria-live="polite">
       <span class="spinner-carregando" aria-hidden="true"></span>
       <p>Carregando dados do projeto...</p>
+    </div>
+  } @else if (naoEncontrado()) {
+    <div class="estado-carregando-box estado-carregando" role="alert">
+      <p class="mensagem-erro">Projeto #{{ idParam() }} não encontrado.</p>
+      <a routerLink="/projetos" class="btn btn-secundario">Voltar para Projetos</a>
     </div>
   } @else {
     <form class="formulario" [formGroup]="form" (ngSubmit)="salvar()" novalidate>

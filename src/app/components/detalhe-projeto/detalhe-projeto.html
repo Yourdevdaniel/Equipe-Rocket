@@ -4,8 +4,13 @@
       <span class="spinner-carregando" aria-hidden="true"></span>
       <p>Carregando dados do projeto...</p>
     </div>
+  } @else if (naoEncontrado()) {
+    <div class="status-msg erro" role="alert">
+      <p>Projeto #{{ idParam() }} não encontrado.</p>
+      <a routerLink="/projetos" class="btn btn-secondary">Voltar para Projetos</a>
+    </div>
   } @else if (erro() || !projeto()) {
-    <div class="status-msg erro">
+    <div class="status-msg erro" role="alert">
       <p>{{ erro() || 'Projeto não encontrado.' }}</p>
       <a routerLink="/projetos" class="btn btn-secondary">Voltar para Projetos</a>
     </div>
