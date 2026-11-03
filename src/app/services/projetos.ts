@@ -1,7 +1,8 @@
+import { Tarefa } from './../../tipos';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, switchMap  } from 'rxjs';
-import { Projeto, ProjetoComTarefas, Tarefa } from '../models'
+import { Projeto, ProjetoComTarefas} from '../models'
 
 @Injectable({ providedIn: 'root' })
 export class ProjetosService {
@@ -47,10 +48,15 @@ export class ProjetosService {
     editarProjeto(id: string, alteracoes: Partial<Projeto>): Observable<Projeto> {
         return this.http.patch<Projeto>(`${this.api}/projetos/${id}`, alteracoes);
     }
-}
 
-// Próximo id numérico em texto ("1", "2"...), igual ao que já existe no db.json.
-function proximoId(lista: { id: string }[]): string {
+    //exclusão de tarefas
+    excluirTarefa(id: string): Observable<Tarefa> {
+      return this.http.delete<Tarefa>(`${this.api}/tarefas/${id}`);
+    }
+
+}
+    // Próximo id numérico em texto ("1", "2"...), igual ao que já existe no db.json.
+    function proximoId(lista: { id: string }[]): string {
     const maiorId = lista.reduce((max, item) => {
         const num = Number(item.id);
         return !isNaN(num) && num > max ? num : max;
