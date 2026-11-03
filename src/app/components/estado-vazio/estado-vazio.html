@@ -1,0 +1,10 @@
+<div class="estado-vazio" role="status">
+  <span class="icone" aria-hidden="true">📭</span>
+  <h3 class="titulo">{{ titulo() }}</h3>
+  @if (descricao()) {
+    <p class="descricao">{{ descricao() }}</p>
+  }
+  <div class="acao">
+    <ng-content />
+  </div>
+</div>
