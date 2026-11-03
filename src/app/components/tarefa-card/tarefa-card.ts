@@ -20,6 +20,39 @@ export class TarefaCard {
   readonly nomeProjeto = signal<string | null>(null);
   readonly salvandoStatus = signal(false);
   readonly erroStatus = signal(false);
+  readonly confirmarExclusao = signal(false);
+  readonly tarefaAlterada = output<string>();
+
+
+
+  //controle de confirmação de exclusão
+  abrirConfirmacaoExclusao(): void {
+    this.confirmarExclusao.set(true);
+
+
+  }
+
+  cancelarExclusao(): void {
+    this.confirmarExclusao.set(false);
+  }
+
+  confirmarExclusaoTarefa(): void {
+    this.projetosService?.excluirTarefa(this.tarefa().id).subscribe({
+      next: () => {
+        console.log('Tarefa excluída:', this.tarefa().id);
+
+        this.confirmarExclusao.set(false)
+        this.expandido.set(false)
+
+        this.tarefaAlterada.emit(this.tarefa().id);
+      },
+
+      error: (err) => {
+        console.log('Erro ao excluir tarefa: ', err);
+      }
+  })
+}
+
 
   readonly rotuloStatus: Record<Tarefa['status'], string> = {
     'a-fazer': 'A Fazer',
@@ -80,3 +113,4 @@ export class TarefaCard {
     }
   }
 }
+
