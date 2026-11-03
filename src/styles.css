@@ -145,3 +145,39 @@ nav {
   border-color: var(--rocket-red);
   box-shadow: 0 0 12px var(--rocket-red-glow);
 }
+
+/* --- Estado Global de Carregamento (Issue #32) --- */
+.estado-carregando {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.estado-carregando-box {
+  width: 100%;
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  background-color: var(--bg-secondary);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+}
+
+.spinner-carregando {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(225, 29, 72, 0.2);
+  border-top-color: var(--rocket-red);
+  border-radius: 50%;
+  animation: girar-spinner 0.8s linear infinite;
+  box-shadow: 0 0 12px var(--rocket-red-glow);
+}
+
+@keyframes girar-spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}

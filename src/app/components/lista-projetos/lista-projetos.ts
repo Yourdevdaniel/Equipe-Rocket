@@ -16,11 +16,27 @@ export class ListaProjetos implements OnInit {
 
   readonly gerarSlug = gerarSlug;
   readonly projetos = signal<Projeto[]>([]);
+  readonly carregando = signal(true);
+  readonly erro = signal<string | null>(null);
 
   ngOnInit(): void {
+    this.carregarProjetos();
+  }
+
+  carregarProjetos(): void {
+    this.carregando.set(true);
+    this.erro.set(null);
+
     this.projetosService.listarProjetos().subscribe({
-      next: (dados) => this.projetos.set(dados),
-      error: (err) => console.error('Erro ao carregar projetos:', err),
+      next: (dados) => {
+        this.projetos.set(dados);
+        this.carregando.set(false);
+      },
+      error: (err) => {
+        console.error('Erro ao carregar projetos:', err);
+        this.erro.set('Não foi possível carregar os projetos da API.');
+        this.carregando.set(false);
+      },
     });
   }
 }

@@ -96,7 +96,8 @@
   </section>
 
   @if (carregando()) {
-    <div class="status-msg">
+    <div class="status-msg estado-carregando" role="status" aria-live="polite">
+      <span class="spinner-carregando" aria-hidden="true"></span>
       <p>Carregando tarefas...</p>
     </div>
   } @else if (erro()) {

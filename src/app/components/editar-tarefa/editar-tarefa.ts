@@ -18,6 +18,8 @@ export class EditarTarefa implements OnInit {
   readonly tarefa = signal<Tarefa | null>(null);
   readonly projetos = signal<Projeto[]>([]);
   readonly idParam = signal<string | null>(null);
+  readonly carregando = signal(true);
+  readonly salvando = signal(false);
   readonly estaSalvo = signal(false);
   readonly erro = signal<string | null>(null);
 
@@ -32,14 +34,24 @@ export class EditarTarefa implements OnInit {
   });
 
   ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    this.idParam.set(id);
+    this.carregando.set(true);
+
     this.projetosService.listarProjetos().subscribe({
       next: (listaProjetos) => {
         this.projetos.set(listaProjetos);
+        if (!id) {
+          this.carregando.set(false);
+        }
+      },
+      error: () => {
+        if (!id) {
+          this.carregando.set(false);
+        }
       },
     });
 
-    const id = this.route.snapshot.paramMap.get('id');
-    this.idParam.set(id);
     if (!id) {
       return;
     }
@@ -48,6 +60,11 @@ export class EditarTarefa implements OnInit {
       next: (tarefaQueChegou) => {
         this.tarefa.set(tarefaQueChegou);
         this.form.patchValue(tarefaQueChegou);
+        this.carregando.set(false);
+      },
+      error: () => {
+        this.erro.set('Não foi possível carregar os dados da tarefa.');
+        this.carregando.set(false);
       },
     });
   }
@@ -71,15 +88,18 @@ export class EditarTarefa implements OnInit {
       return;
     }
     this.erro.set(null);
+    this.salvando.set(true);
 
     const alteracoes = this.form.getRawValue();
 
     this.projetosService.editarTarefa(id, alteracoes).subscribe({
       next: (tarefaAlterada) => {
         this.tarefa.set(tarefaAlterada);
+        this.salvando.set(false);
         this.estaSalvo.set(true);
       },
       error: () => {
+        this.salvando.set(false);
         this.erro.set('Erro ao salvar no servidor. Tente novamente.');
       },
     });

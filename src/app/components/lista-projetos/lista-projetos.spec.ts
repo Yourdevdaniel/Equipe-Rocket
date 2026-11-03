@@ -26,4 +26,14 @@ describe('ListaProjetos', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('deve exibir o estado de carregando enquanto os projetos não chegam', () => {
+    component.carregando.set(true);
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    const msgCarregando = el.querySelector('.estado-carregando');
+    expect(msgCarregando).toBeTruthy();
+    expect(msgCarregando?.textContent).toContain('Carregando projetos');
+  });
 });

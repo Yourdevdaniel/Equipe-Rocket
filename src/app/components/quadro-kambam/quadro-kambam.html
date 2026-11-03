@@ -98,7 +98,10 @@
 
   <!-- Estado de Carregamento ou Erro -->
   @if (carregando()) {
-    <div class="feedback-msg">Carregando tarefas do servidor...</div>
+    <div class="feedback-msg estado-carregando" role="status" aria-live="polite">
+      <span class="spinner-carregando" aria-hidden="true"></span>
+      <p>Carregando tarefas do servidor...</p>
+    </div>
   } @else if (erro()) {
     <div class="feedback-msg error">{{ erro() }}</div>
   } @else {
