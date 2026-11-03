@@ -325,6 +325,15 @@
   border-radius: var(--radius-md);
 }
 
+.status-msg.erro {
+  color: #fda4af;
+  border-color: #fb7185;
+}
+
+.status-msg .btn {
+  margin-top: 1rem;
+}
+
 @media (max-width: 640px) {
   .rocket-title {
     font-size: 2rem;

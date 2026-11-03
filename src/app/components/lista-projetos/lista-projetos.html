@@ -23,37 +23,48 @@
 
     <!-- Container dos Cards -->
     <div class="cards-wrapper">
-      @for (projeto of projetos(); track projeto.id) {
-        <article class="project-card">
-          <div class="card-banner">
-            <div class="banner-badge">{{ projeto.disciplina }}</div>
-            <span class="banner-r">R</span>
-          </div>
-
-          <div class="card-body">
-            <div class="card-header">
-              <h3 class="card-title">{{ projeto.nome }}</h3>
-              <span class="status-badge">Ativo</span>
-            </div>
-            <p class="card-description">
-              {{ projeto.descricao }}
-            </p>
-
-            <div class="card-actions">
-              <a [routerLink]="['/projetos', projeto.id]" class="btn btn-secondary">
-                <span>Detalhes</span>
-              </a>
-              <a [routerLink]="['/projetos', projeto.id, gerarSlug(projeto.nome)]" class="btn btn-primary">
-                <span>Visualizar projeto</span>
-                <span class="btn-arrow">→</span>
-              </a>
-            </div>
-          </div>
-        </article>
-      } @empty {
+      @if (carregando()) {
         <div class="status-msg">
-          <p>Nenhum projeto cadastrado.</p>
+          <p>Carregando projetos...</p>
         </div>
+      } @else if (erro()) {
+        <div class="status-msg erro" role="alert">
+          <p>{{ erro() }}</p>
+          <button type="button" (click)="carregarProjetos()" class="btn btn-secondary">Tentar novamente</button>
+        </div>
+      } @else {
+        @for (projeto of projetos(); track projeto.id) {
+          <article class="project-card">
+            <div class="card-banner">
+              <div class="banner-badge">{{ projeto.disciplina }}</div>
+              <span class="banner-r">R</span>
+            </div>
+
+            <div class="card-body">
+              <div class="card-header">
+                <h3 class="card-title">{{ projeto.nome }}</h3>
+                <span class="status-badge">Ativo</span>
+              </div>
+              <p class="card-description">
+                {{ projeto.descricao }}
+              </p>
+
+              <div class="card-actions">
+                <a [routerLink]="['/projetos', projeto.id]" class="btn btn-secondary">
+                  <span>Detalhes</span>
+                </a>
+                <a [routerLink]="['/projetos', projeto.id, gerarSlug(projeto.nome)]" class="btn btn-primary">
+                  <span>Visualizar projeto</span>
+                  <span class="btn-arrow">→</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        } @empty {
+          <div class="status-msg">
+            <p>Nenhum projeto cadastrado.</p>
+          </div>
+        }
       }
     </div>
   </main>
