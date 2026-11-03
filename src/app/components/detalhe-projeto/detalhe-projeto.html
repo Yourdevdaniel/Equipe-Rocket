@@ -41,9 +41,12 @@
         @for (tarefa of tarefas(); track tarefa.id) {
           <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" />
         } @empty {
-          <div class="status-msg">
-            <p>Nenhuma tarefa cadastrada para este projeto.</p>
-          </div>
+          <app-estado-vazio
+            titulo="Este projeto ainda não tem tarefas"
+            descricao="Adicione uma tarefa para ela aparecer aqui e no quadro."
+          >
+            <a routerLink="/tarefas/nova" class="btn btn-secondary">+ Adicionar tarefa</a>
+          </app-estado-vazio>
         }
       </div>
     </section>

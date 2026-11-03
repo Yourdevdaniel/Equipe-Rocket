@@ -6,9 +6,10 @@ import { HistoricoDeNavegacao } from '../../services/historico-de-navegacao';
 import { Tarefa } from '../../models';
 import { TarefaCard } from '../tarefa-card/tarefa-card';
 import { mensagemDeErro } from '../../utils/erro-api';
+import { EstadoVazio } from '../estado-vazio/estado-vazio';
 
 @Component({
-  imports: [TarefaCard, RouterLink],
+  imports: [TarefaCard, RouterLink, EstadoVazio],
   standalone: true,
   selector: 'app-quadro-kambam',
   styleUrl: './quadro-kambam.css',

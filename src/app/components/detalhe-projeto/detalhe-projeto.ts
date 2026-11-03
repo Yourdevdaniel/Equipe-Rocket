@@ -4,13 +4,14 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { ProjetoComTarefas, Tarefa } from '../../models';
 import { TarefaCard } from '../tarefa-card/tarefa-card';
+import { EstadoVazio } from '../estado-vazio/estado-vazio';
 import { gerarSlug } from '../../utils/slug';
 import { mensagemDeErro } from '../../utils/erro-api';
 
 @Component({
   selector: 'app-detalhe-projeto',
   standalone: true,
-  imports: [TarefaCard, RouterLink, DatePipe],
+  imports: [TarefaCard, RouterLink, DatePipe, EstadoVazio],
   templateUrl: './detalhe-projeto.html',
   styleUrl: './detalhe-projeto.css',
 })

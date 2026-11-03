@@ -93,4 +93,39 @@ describe('QuadroKambam', () => {
     expect(el.querySelector('.feedback-msg.error')).toBeNull();
     expect(el.querySelector('.kanban-board')).not.toBeNull();
   });
+
+  describe('estado vazio', () => {
+    let http: HttpTestingController;
+    let el: HTMLElement;
+
+    beforeEach(() => {
+      http = TestBed.inject(HttpTestingController);
+      el = fixture.nativeElement;
+      fixture.detectChanges();
+    });
+
+    it('quadro sem tarefas mostra um aviso único no lugar das colunas vazias', () => {
+      http.expectOne('http://localhost:3000/tarefas').flush([]);
+      fixture.detectChanges();
+
+      expect(el.querySelector('app-estado-vazio')?.textContent).toContain('Nenhuma tarefa cadastrada ainda');
+      expect(el.querySelector('.kanban-board')).toBeNull();
+    });
+
+    it('busca sem resultado avisa e o botão traz o quadro de volta', () => {
+      http.expectOne('http://localhost:3000/tarefas').flush(tarefasMock);
+      filtrosService.busca.set('zzz-nao-existe');
+      fixture.detectChanges();
+
+      const aviso = el.querySelector('app-estado-vazio');
+      expect(aviso?.textContent).toContain('filtros selecionados');
+      expect(el.querySelector('.kanban-board')).toBeNull();
+
+      (aviso!.querySelector('button') as HTMLButtonElement).click();
+      fixture.detectChanges();
+
+      expect(el.querySelector('app-estado-vazio')).toBeNull();
+      expect(el.querySelector('.kanban-board')).not.toBeNull();
+    });
+  });
 });

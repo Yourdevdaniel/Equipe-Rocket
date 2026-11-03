@@ -80,3 +80,30 @@ describe('DetalheProjeto com a API fora do ar', () => {
     expect(el.textContent).not.toContain('Nenhuma tarefa cadastrada');
   });
 });
+
+describe('DetalheProjeto sem tarefas', () => {
+  it('mostra o estado vazio com o atalho para adicionar uma tarefa', async () => {
+    await TestBed.configureTestingModule({
+      imports: [DetalheProjeto],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ id: '1' }) } } },
+      ],
+    }).compileComponents();
+
+    const http = TestBed.inject(HttpTestingController);
+    const fixture = TestBed.createComponent(DetalheProjeto);
+    fixture.detectChanges();
+    http.expectOne('http://localhost:3000/projetos/1?_embed=tarefas').flush({
+      id: '1', nome: 'Quadro', descricao: '', disciplina: 'Frontend', criadoEm: '2026-10-01', tarefas: [],
+    });
+    http.expectOne('http://localhost:3000/tarefas').flush([]);
+    fixture.detectChanges();
+
+    const aviso = (fixture.nativeElement as HTMLElement).querySelector('app-estado-vazio');
+    expect(aviso?.textContent).toContain('Este projeto ainda não tem tarefas');
+    expect(aviso?.querySelector('a')?.getAttribute('href')).toBe('/tarefas/nova');
+  });
+});

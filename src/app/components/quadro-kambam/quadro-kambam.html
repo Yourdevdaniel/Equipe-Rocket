@@ -104,6 +104,23 @@
       <p>{{ erro() }}</p>
       <button type="button" (click)="carregarTarefas(projetoId())" class="btn btn-secondary">Tentar novamente</button>
     </div>
+  } @else if (tarefasFiltradas().length === 0) {
+    <!-- Sem nenhum cartão para mostrar: um aviso único no lugar de quatro colunas vazias -->
+    @if (temFiltrosAtivos()) {
+      <app-estado-vazio
+        titulo="Nenhuma tarefa encontrada"
+        descricao="Nenhuma tarefa corresponde à busca ou aos filtros selecionados."
+      >
+        <button type="button" (click)="limparFiltros()" class="btn btn-secondary">Limpar filtros</button>
+      </app-estado-vazio>
+    } @else {
+      <app-estado-vazio
+        [titulo]="projetoId() ? 'Este projeto ainda não tem tarefas' : 'Nenhuma tarefa cadastrada ainda'"
+        descricao="Crie uma tarefa para ela aparecer no quadro."
+      >
+        <a routerLink="/tarefas/nova" class="btn btn-primary">+ Nova Tarefa</a>
+      </app-estado-vazio>
+    }
   } @else {
     <!-- Quadro Kanban -->
     <main class="kanban-board">
