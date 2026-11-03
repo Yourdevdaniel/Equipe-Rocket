@@ -3,6 +3,7 @@ import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Tarefa } from '../../models';
 import { ProjetosService } from '../../services/projetos';
+import { HistoricoDeNavegacao } from '../../services/historico-de-navegacao';
 
 @Component({
   selector: 'app-tarefa-card',
@@ -21,7 +22,7 @@ export class TarefaCard {
   readonly salvandoStatus = signal(false);
   readonly erroStatus = signal(false);
   readonly confirmarExclusao = signal(false);
-  readonly tarefaAlterada = output<string>();
+  readonly tarefaExcluida = output<Tarefa>();
 
 
 
@@ -44,7 +45,7 @@ export class TarefaCard {
         this.confirmarExclusao.set(false)
         this.expandido.set(false)
 
-        this.tarefaAlterada.emit(this.tarefa().id);
+        this.tarefaExcluida.emit(this.tarefa().id);
       },
 
       error: (err) => {

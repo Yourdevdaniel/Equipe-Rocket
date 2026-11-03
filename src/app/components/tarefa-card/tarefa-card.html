@@ -200,6 +200,12 @@
 
       </div>
 
+      @if(errorExcluir()) {
+        <p class="erro-status" role="alert">
+          Não foi possível excluir a tarefa. Tente novamente.
+        </p>
+      }
+
       <div class="confirmacao-acoes">
 
         <button
