@@ -4,6 +4,7 @@ import { ProjetosService } from '../../services/projetos';
 import { Projeto, Tarefa } from '../../models';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { focarPrimeiroInvalido } from '../../utils/form';
+import { mensagemDeErro } from '../../utils/erro-api';
 
 @Component({
   imports: [RouterLink, ReactiveFormsModule],
@@ -36,6 +37,7 @@ export class EditarTarefa implements OnInit {
       next: (listaProjetos) => {
         this.projetos.set(listaProjetos);
       },
+      error: (err: unknown) => this.erro.set(mensagemDeErro(err, 'a lista de projetos')),
     });
 
     const id = this.route.snapshot.paramMap.get('id');
@@ -49,6 +51,7 @@ export class EditarTarefa implements OnInit {
         this.tarefa.set(tarefaQueChegou);
         this.form.patchValue(tarefaQueChegou);
       },
+      error: (err: unknown) => this.erro.set(mensagemDeErro(err, 'a tarefa')),
     });
   }
 
