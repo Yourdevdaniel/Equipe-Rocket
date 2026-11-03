@@ -114,6 +114,28 @@
   border-color: var(--accent-primary, #e11d48);
 }
 
+.btn-excluir {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  color: #cbd5e1;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid #334155;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-excluir:hover {
+  background-color: var(--accent-primary, #e11d48);
+  color: #ffffff;
+  border-color: var(--accent-primary, #e11d48);
+}
+
 .prazo { color: #94a3b8; }
 
 /* --- Modal / Card Expandido Centralizado --- */
@@ -343,5 +365,254 @@
 @media (max-width: 560px) {
   .expandido-meta-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+
+/* --- Modal de Confirmação de Exclusão --- */
+
+/* BOTÃO DE EXCLUSÃO NOS DETALHES DA TAREFA*/
+
+.btn-excluir {
+  background: rgba(225, 29, 72, 0.08);
+  border: 1px solid rgba(225, 29, 72, 0.35);
+  color: #fb7185;
+  cursor: pointer;
+}
+
+.btn-excluir:hover {
+  background: rgba(225, 29, 72, 0.2);
+  border-color: #e11d48;
+  color: #fff;
+}
+
+
+/*OVERLAY DE CONFIRMAÇÃO*/
+
+.confirmacao-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(5, 7, 12, 0.82);
+  backdrop-filter: blur(8px);
+
+  animation: fadeIn 0.2s ease-out;
+}
+
+
+/*MODAL*/
+
+.confirmacao-modal {
+  width: 100%;
+  max-width: 430px;
+
+  padding: 30px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+
+  background: linear-gradient(
+    155deg,
+    #202634 0%,
+    #151a24 100%
+  );
+
+  border: 1px solid #354052;
+  border-radius: 18px;
+
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.65),
+    0 0 25px rgba(225, 29, 72, 0.08);
+
+  color: #f8fafc;
+
+  animation: scaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+/*ÍCONE DE EXCLUSÃO*/
+
+.confirmacao-icone {
+  width: 64px;
+  height: 64px;
+
+  display: grid;
+  place-items: center;
+
+  color: #fb7185;
+
+  background: rgba(225, 29, 72, 0.13);
+
+  border: 1px solid rgba(225, 29, 72, 0.3);
+  border-radius: 50%;
+}
+
+
+/*CONTEÚDO*/
+
+.confirmacao-conteudo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.confirmacao-label {
+  color: #fb7185;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.confirmacao-conteudo h2 {
+  margin: 0;
+
+  color: #ffffff;
+  font-size: 23px;
+  font-weight: 700;
+}
+
+.confirmacao-conteudo p {
+  max-width: 320px;
+  margin: 0;
+
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+/*IDENTIFICAÇÃO DA TAREFA */
+
+.tarefa-exclusao {
+  width: 100%;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  margin-top: 8px;
+  padding: 14px;
+
+  background: rgba(15, 17, 21, 0.55);
+
+  border: 1px solid #334155;
+  border-radius: 10px;
+
+  text-align: left;
+}
+
+.tarefa-exclusao-label {
+  color: #64748b;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.tarefa-exclusao strong {
+  color: #f1f5f9;
+  font-size: 14px;
+  font-weight: 600;
+
+  overflow-wrap: anywhere;
+}
+
+.tarefa-exclusao-id {
+  color: #64748b;
+  font-size: 11px;
+}
+
+
+/*BOTÕES DE AÇÃO */
+
+.confirmacao-acoes {
+  width: 100%;
+
+  display: flex;
+  gap: 10px;
+}
+
+.confirmacao-acoes button {
+  flex: 1;
+
+  min-height: 43px;
+  padding: 10px 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+
+/* Cancelar */
+
+.btn-cancelar-exclusao {
+  color: #cbd5e1;
+  background: #252e3d;
+  border: 1px solid #3b4759;
+}
+
+.btn-cancelar-exclusao:hover {
+  background: #334155;
+  border-color: #64748b;
+}
+
+
+/* Confirmar exclusão */
+
+.btn-confirmar-exclusao {
+  color: #ffffff;
+  background: #e11d48;
+  border: 1px solid #e11d48;
+}
+
+.btn-confirmar-exclusao:hover {
+  background: #be123c;
+  border-color: #be123c;
+
+  box-shadow: 0 4px 15px rgba(225, 29, 72, 0.25);
+}
+
+
+/* RESPONSIVIDADE*/
+
+@media (max-width: 480px) {
+  .confirmacao-modal {
+    padding: 23px 18px;
+    gap: 18px;
+  }
+
+  .confirmacao-conteudo h2 {
+    font-size: 20px;
+  }
+
+  .confirmacao-acoes {
+    flex-direction: column-reverse;
+  }
+
+  .confirmacao-acoes button {
+    width: 100%;
   }
 }
