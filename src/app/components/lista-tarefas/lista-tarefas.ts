@@ -4,6 +4,7 @@ import { ProjetosService } from '../../services/projetos';
 import { FiltrosService } from '../../services/filtros';
 import { Tarefa } from '../../models';
 import { TarefaCard } from '../tarefa-card/tarefa-card';
+import { mensagemDeErro } from '../../utils/erro-api';
 
 @Component({
   selector: 'app-lista-tarefas',
@@ -94,9 +95,9 @@ export class ListaTarefas implements OnInit {
               this.tarefas.set(porProjeto.length > 0 ? porProjeto : dados);
               this.carregando.set(false);
             },
-            error: (err) => {
+            error: (err: unknown) => {
               console.error('Erro ao carregar tarefas:', err);
-              this.erro.set('Não foi possível carregar as tarefas da API.');
+              this.erro.set(mensagemDeErro(err, 'as tarefas'));
               this.carregando.set(false);
             },
           });
@@ -108,9 +109,9 @@ export class ListaTarefas implements OnInit {
           this.tarefas.set(dados);
           this.carregando.set(false);
         },
-        error: (err) => {
+        error: (err: unknown) => {
           console.error('Erro ao carregar tarefas:', err);
-          this.erro.set('Não foi possível carregar as tarefas da API.');
+          this.erro.set(mensagemDeErro(err, 'as tarefas'));
           this.carregando.set(false);
         },
       });

@@ -100,7 +100,10 @@
   @if (carregando()) {
     <div class="feedback-msg">Carregando tarefas do servidor...</div>
   } @else if (erro()) {
-    <div class="feedback-msg error">{{ erro() }}</div>
+    <div class="feedback-msg error" role="alert">
+      <p>{{ erro() }}</p>
+      <button type="button" (click)="carregarTarefas(projetoId())" class="btn btn-secondary">Tentar novamente</button>
+    </div>
   } @else {
     <!-- Quadro Kanban -->
     <main class="kanban-board">

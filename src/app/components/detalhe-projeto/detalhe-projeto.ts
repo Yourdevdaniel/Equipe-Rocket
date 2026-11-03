@@ -5,6 +5,7 @@ import { ProjetosService } from '../../services/projetos';
 import { ProjetoComTarefas, Tarefa } from '../../models';
 import { TarefaCard } from '../tarefa-card/tarefa-card';
 import { gerarSlug } from '../../utils/slug';
+import { mensagemDeErro } from '../../utils/erro-api';
 
 @Component({
   selector: 'app-detalhe-projeto',
@@ -22,9 +23,11 @@ export class DetalheProjeto implements OnInit {
   readonly tarefas = signal<Tarefa[]>([]);
   readonly carregando = signal(true);
   readonly erro = signal<string | null>(null);
+  readonly idParam = signal<string | null>(null);
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
+    this.idParam.set(id);
     if (id) {
       this.carregarProjeto(id);
     } else {
@@ -51,16 +54,19 @@ export class DetalheProjeto implements OnInit {
               this.tarefas.set(todasTarefas.filter((t) => String(t.projetoId) === String(id)));
               this.carregando.set(false);
             },
-            error: () => {
-              this.tarefas.set([]);
+            // Sem isto a falha viraria "Nenhuma tarefa cadastrada", que é mentira:
+            // as tarefas existem, só não deu para buscá-las.
+            error: (err: unknown) => {
+              console.error('Erro ao buscar tarefas do projeto:', err);
+              this.erro.set(mensagemDeErro(err, 'as tarefas do projeto'));
               this.carregando.set(false);
             },
           });
         }
       },
-      error: (err) => {
+      error: (err: unknown) => {
         console.error('Erro ao buscar projeto:', err);
-        this.erro.set('Não foi possível carregar os dados do projeto.');
+        this.erro.set(mensagemDeErro(err, 'os dados do projeto'));
         this.carregando.set(false);
       },
     });

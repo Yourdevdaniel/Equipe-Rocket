@@ -5,6 +5,7 @@ import { provideRouter } from '@angular/router';
 import { ListaTarefas } from './lista-tarefas';
 import { FiltrosService } from '../../services/filtros';
 import { Tarefa } from '../../models';
+import { HttpTestingController } from '@angular/common/http/testing';
 
 describe('ListaTarefas', () => {
   let component: ListaTarefas;
@@ -119,5 +120,21 @@ describe('ListaTarefas', () => {
 
     expect(selectStatus.value).toBe('em-andamento');
     expect(selectPrioridade.value).toBe('alta');
+  });
+
+  it('erro 500 da API mostra a causa e o botão de tentar de novo', () => {
+    const http = TestBed.inject(HttpTestingController);
+    fixture.detectChanges();
+    http.expectOne('http://localhost:3000/tarefas').flush(null, { status: 500, statusText: 'Server Error' });
+    fixture.detectChanges();
+
+    const el: HTMLElement = fixture.nativeElement;
+    expect(el.querySelector('.status-msg.erro')?.textContent).toContain('erro interno (500)');
+
+    (el.querySelector('.status-msg.erro button') as HTMLButtonElement).click();
+    http.expectOne('http://localhost:3000/tarefas').flush([]);
+    fixture.detectChanges();
+
+    expect(el.querySelector('.status-msg.erro')).toBeNull();
   });
 });

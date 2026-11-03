@@ -5,6 +5,7 @@ import { FiltrosService } from '../../services/filtros';
 import { HistoricoDeNavegacao } from '../../services/historico-de-navegacao';
 import { Tarefa } from '../../models';
 import { TarefaCard } from '../tarefa-card/tarefa-card';
+import { mensagemDeErro } from '../../utils/erro-api';
 
 @Component({
   imports: [TarefaCard, RouterLink],
@@ -116,7 +117,7 @@ export class QuadroKambam implements OnInit {
       },
       error: (err: unknown) => {
         console.error('Erro ao carregar quadro Kanban:', err);
-        this.erro.set('Não foi possível carregar as tarefas do projeto.');
+        this.erro.set(mensagemDeErro(err, 'as tarefas do quadro'));
         this.carregando.set(false);
       },
     });

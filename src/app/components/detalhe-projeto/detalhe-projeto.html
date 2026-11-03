@@ -4,8 +4,11 @@
       <p>Carregando dados do projeto...</p>
     </div>
   } @else if (erro() || !projeto()) {
-    <div class="status-msg erro">
+    <div class="status-msg erro" role="alert">
       <p>{{ erro() || 'Projeto não encontrado.' }}</p>
+      @if (erro() && idParam()) {
+        <button type="button" (click)="carregarProjeto(idParam()!)" class="btn btn-secondary">Tentar novamente</button>
+      }
       <a routerLink="/projetos" class="btn btn-secondary">Voltar para Projetos</a>
     </div>
   } @else {

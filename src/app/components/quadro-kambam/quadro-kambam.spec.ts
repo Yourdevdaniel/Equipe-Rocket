@@ -5,6 +5,7 @@ import { provideRouter } from '@angular/router';
 import { QuadroKambam } from './quadro-kambam';
 import { FiltrosService } from '../../services/filtros';
 import { Tarefa } from '../../models';
+import { HttpTestingController } from '@angular/common/http/testing';
 
 describe('QuadroKambam', () => {
   let component: QuadroKambam;
@@ -72,5 +73,24 @@ describe('QuadroKambam', () => {
     component.limparFiltros();
     expect(component.tarefasAFazer().length).toBe(1);
     expect(component.tarefasEmAndamento().length).toBe(1);
+  });
+
+  it('API fora do ar mostra o aviso com "Tentar novamente" e o botão recarrega o quadro', () => {
+    const http = TestBed.inject(HttpTestingController);
+    fixture.detectChanges();
+    http.expectOne('http://localhost:3000/tarefas').error(new ProgressEvent('error'), { status: 0 });
+    fixture.detectChanges();
+
+    const el: HTMLElement = fixture.nativeElement;
+    const caixa = el.querySelector('.feedback-msg.error');
+    expect(caixa?.textContent).toContain('json-server');
+    expect(el.querySelector('.kanban-board')).toBeNull();
+
+    (caixa!.querySelector('button') as HTMLButtonElement).click();
+    http.expectOne('http://localhost:3000/tarefas').flush(tarefasMock);
+    fixture.detectChanges();
+
+    expect(el.querySelector('.feedback-msg.error')).toBeNull();
+    expect(el.querySelector('.kanban-board')).not.toBeNull();
   });
 });

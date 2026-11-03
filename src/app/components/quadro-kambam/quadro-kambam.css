@@ -319,6 +319,10 @@
     color: var(--priority-high-text, #f87171);
 }
 
+.feedback-msg .btn {
+    margin-top: 1rem;
+}
+
 .empty-col {
     text-align: center;
     padding: 2rem 1rem;

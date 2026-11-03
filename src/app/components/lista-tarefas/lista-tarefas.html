@@ -100,7 +100,7 @@
       <p>Carregando tarefas...</p>
     </div>
   } @else if (erro()) {
-    <div class="status-msg erro">
+    <div class="status-msg erro" role="alert">
       <p>{{ erro() }}</p>
       <button type="button" (click)="carregarTarefas(idParam())" class="btn btn-secondary">Tentar novamente</button>
     </div>
