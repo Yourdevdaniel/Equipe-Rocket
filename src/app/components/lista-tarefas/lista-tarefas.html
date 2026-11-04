@@ -113,7 +113,7 @@
   } @else {
     <main class="grid-tarefas">
       @for (tarefa of tarefasFiltradas(); track tarefa.id) {
-        <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" />
+        <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" (tarefaExcluida)="removerTarefaDaLista($event)" />
       } @empty {
         @if (temFiltrosAtivos()) {
           <app-estado-vazio

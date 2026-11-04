@@ -144,7 +144,7 @@
         </div>
         <div class="task-list">
           @for (tarefa of tarefasAFazer(); track tarefa.id) {
-            <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" />
+            <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" (tarefaExcluida)="removerTarefaDaLista($event)" />
           } @empty {
             <p class="empty-col">Nenhuma tarefa</p>
           }
@@ -162,7 +162,7 @@
         </div>
         <div class="task-list">
           @for (tarefa of tarefasEmAndamento(); track tarefa.id) {
-            <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" />
+            <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" (tarefaExcluida)="removerTarefaDaLista($event)" />
           } @empty {
             <p class="empty-col">Nenhuma tarefa</p>
           }
@@ -180,7 +180,7 @@
         </div>
         <div class="task-list">
           @for (tarefa of tarefasEmRevisao(); track tarefa.id) {
-            <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" />
+            <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" (tarefaExcluida)="removerTarefaDaLista($event)" />
           } @empty {
             <p class="empty-col">Nenhuma tarefa</p>
           }
@@ -198,7 +198,7 @@
         </div>
         <div class="task-list">
           @for (tarefa of tarefasConcluidas(); track tarefa.id) {
-            <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" />
+            <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" (tarefaExcluida)="removerTarefaDaLista($event)" />
           } @empty {
             <p class="empty-col">Nenhuma tarefa</p>
           }

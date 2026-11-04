@@ -82,6 +82,10 @@ export class ListaTarefas implements OnInit {
     this.tarefas.update((lista) => lista.map((t) => (t.id === tarefaSalva.id ? tarefaSalva : t)));
   }
 
+  removerTarefaDaLista(idTarefa: string): void {
+    this.tarefas.update((l) => l.filter((t) => t.id !== idTarefa))
+  }
+
   carregarTarefas(id?: string | null): void {
     this.carregando.set(true);
     this.erro.set(null);
