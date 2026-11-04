@@ -202,10 +202,8 @@
 
       </div>
 
-      @if(errorExcluir()) {
-        <p class="erro-status" role="alert">
-          Não foi possível excluir a tarefa. Tente novamente.
-        </p>
+      @if (erroExcluir()) {
+        <p class="erro-status" role="alert">{{ erroExcluir() }}</p>
       }
 
       <div class="confirmacao-acoes">
@@ -221,6 +219,7 @@
         <button
           type="button"
           class="btn-confirmar-exclusao"
+          [disabled]="excluindo()"
           (click)="confirmarExclusaoTarefa()"
         >
           <svg xmlns="http://www.w3.org/2000/svg"
@@ -235,7 +234,7 @@
             <path d="M8 6V4h8v2"/>
             <path d="m19 6-1 14H6L5 6"/>
           </svg>
-          Sim, excluir
+          {{ excluindo() ? 'Excluindo...' : 'Sim, excluir' }}
         </button>
 
       </div>

@@ -5,7 +5,7 @@ import { ProjetosService } from '../../services/projetos';
 import { Projeto, Tarefa } from '../../models';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { focarPrimeiroInvalido } from '../../utils/form';
-import { mensagemDeErro } from '../../utils/erro-api';
+import { mensagemDeErro, mensagemDeFalhaAoGravar } from '../../utils/erro-api';
 
 @Component({
   imports: [RouterLink, ReactiveFormsModule],
@@ -115,9 +115,9 @@ export class EditarTarefa implements OnInit {
         this.salvando.set(false);
         this.estaSalvo.set(true);
       },
-      error: () => {
+      error: (err: unknown) => {
         this.salvando.set(false);
-        this.erro.set('Erro ao salvar no servidor. Tente novamente.');
+        this.erro.set(mensagemDeFalhaAoGravar(err, 'salvar a tarefa'));
       },
     });
   }

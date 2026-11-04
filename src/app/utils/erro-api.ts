@@ -22,3 +22,25 @@ export function mensagemDeErro(erro: unknown, oQueFalhou: string): string {
   }
   return `${prefixo} A API recusou o pedido (erro ${status}).`;
 }
+
+/**
+ * Mesma ideia de `mensagemDeErro`, para gravações (salvar, excluir). Diz que
+ * nada foi gravado e, quando há formulário, que o que a pessoa digitou continua
+ * na tela. `acao` completa a frase: "Não foi possível {acao}".
+ */
+export function mensagemDeFalhaAoGravar(erro: unknown, acao: string, temFormulario = true): string {
+  const prefixo = `Não foi possível ${acao}.`;
+  const preservado = temFormulario ? ' O que você digitou continua na tela.' : '';
+  const status = erro instanceof HttpErrorResponse ? erro.status : 0;
+
+  if (status === 0) {
+    return `${prefixo} Não há conexão com a API. Confira se o json-server está rodando (npm run api) e tente de novo.${preservado}`;
+  }
+  if (status === 404) {
+    return `${prefixo} O registro não existe mais na API.`;
+  }
+  if (status >= 500) {
+    return `${prefixo} A API respondeu com um erro interno (${status}); tente de novo em instantes.${preservado}`;
+  }
+  return `${prefixo} A API recusou o pedido (erro ${status}).${preservado}`;
+}

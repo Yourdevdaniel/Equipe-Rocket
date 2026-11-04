@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { focarPrimeiroInvalido } from '../../utils/form';
+import { mensagemDeFalhaAoGravar } from '../../utils/erro-api';
 
 @Component({
   selector: 'app-criar-projeto',
@@ -53,7 +54,7 @@ export class CriarProjeto {
       },
       error: (err: unknown) => {
         console.error('Erro ao salvar projeto:', err);
-        this.erro.set('Erro ao salvar no servidor. Tente novamente.');
+        this.erro.set(mensagemDeFalhaAoGravar(err, 'salvar o projeto'));
         this.enviando.set(false);
       },
     });

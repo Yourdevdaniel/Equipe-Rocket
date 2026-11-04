@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProjetosService } from '../../services/projetos';
 import { focarPrimeiroInvalido } from '../../utils/form';
+import { mensagemDeFalhaAoGravar } from '../../utils/erro-api';
 
 @Component({
   imports: [RouterLink, ReactiveFormsModule],
@@ -84,9 +85,9 @@ export class EditarProjeto implements OnInit {
         this.salvando.set(false);
         this.estaSalvo.set(true);
       },
-      error: () => {
+      error: (err: unknown) => {
         this.salvando.set(false);
-        this.erro.set('Erro ao salvar no servidor. Tente novamente.');
+        this.erro.set(mensagemDeFalhaAoGravar(err, 'salvar o projeto'));
       },
     });
   }

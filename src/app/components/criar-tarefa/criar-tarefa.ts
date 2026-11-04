@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { Projeto, Tarefa } from '../../models'; // Importação ajustada para ../../models
 import { focarPrimeiroInvalido } from '../../utils/form';
+import { mensagemDeFalhaAoGravar } from '../../utils/erro-api';
 import { HistoricoDeNavegacao } from '../../services/historico-de-navegacao';
 
 @Component({
@@ -97,7 +98,7 @@ export class CriarTarefa implements OnInit {
       },
       error: (err: unknown) => {
         console.error('Erro ao salvar tarefa:', err);
-        this.erro.set('Erro ao salvar no servidor. Tente novamente.');
+        this.erro.set(mensagemDeFalhaAoGravar(err, 'salvar a tarefa'));
         this.enviando.set(false);
       },
     });

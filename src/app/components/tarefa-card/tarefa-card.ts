@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { Tarefa } from '../../models';
 import { ProjetosService } from '../../services/projetos';
 import { HistoricoDeNavegacao } from '../../services/historico-de-navegacao';
+import { mensagemDeFalhaAoGravar } from '../../utils/erro-api';
 
 @Component({
   selector: 'app-tarefa-card',
@@ -23,7 +24,8 @@ export class TarefaCard {
   readonly erroStatus = signal(false);
   readonly confirmarExclusao = signal(false);
   readonly tarefaExcluida = output<string>();
-  readonly errorExcluir = signal<boolean>(false);
+  readonly excluindo = signal(false);
+  readonly erroExcluir = signal<string | null>(null);
 
 
 
@@ -36,23 +38,26 @@ export class TarefaCard {
 
   cancelarExclusao(): void {
     this.confirmarExclusao.set(false);
+    this.erroExcluir.set(null);
   }
 
   confirmarExclusaoTarefa(): void {
+    if (this.excluindo()) return;
+    this.excluindo.set(true);
+    this.erroExcluir.set(null);
     this.projetosService?.excluirTarefa(this.tarefa().id).subscribe({
       next: () => {
-        this.errorExcluir.set(false);
-        console.log('Tarefa excluída:', this.tarefa().id);
-
+        this.excluindo.set(false);
         this.confirmarExclusao.set(false)
         this.expandido.set(false)
 
         this.tarefaExcluida.emit(this.tarefa().id);
       },
 
-      error: (err) => {
-        this.errorExcluir.set(true);
-        console.log('Erro ao excluir tarefa: ', err);
+      error: (err: unknown) => {
+        this.excluindo.set(false);
+        this.erroExcluir.set(mensagemDeFalhaAoGravar(err, 'excluir a tarefa', false));
+        console.error('Erro ao excluir tarefa:', err);
       }
   })
 }
