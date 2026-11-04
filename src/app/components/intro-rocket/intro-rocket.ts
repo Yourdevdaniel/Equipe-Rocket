@@ -149,9 +149,6 @@ export class IntroRocket implements AfterViewInit, OnDestroy {
     const mewtwoRightArm = mewtwoSvg.querySelector('.mewtwo-right-arm');
     const mewtwoLeftArm = mewtwoSvg.querySelector('.mewtwo-left-arm');
     const mewtwoHead = mewtwoSvg.querySelector('.mewtwo-head');
-    const mewtwoEyeGlow = mewtwoSvg.querySelector('.mewtwo-eye-glow');
-    const mewtwoOrbe = mewtwoSvg.querySelector('.mewtwo-orbe');
-    const mewtwoOrbeCore = mewtwoSvg.querySelector('.mewtwo-orbe-core');
 
     // Estados iniciais
     gsap.set(giovanniStage, { autoAlpha: 0 });
@@ -159,7 +156,7 @@ export class IntroRocket implements AfterViewInit, OnDestroy {
     gsap.set(dialogo, { y: 20, autoAlpha: 0 });
     if (hatGroup) gsap.set(hatGroup, { y: 2.3, rotation: -4, svgOrigin: '10 22' });
     if (strapGroup) gsap.set(strapGroup, { rotation: 0, svgOrigin: '34 43' });
-    if (eyeGlint) gsap.set(eyeGlint, { scale: 0, opacity: 0, svgOrigin: '26.5 11.5' });
+    if (eyeGlint) gsap.set(eyeGlint, { scale: 0, opacity: 0, rotation: 0, svgOrigin: '26.5 11.5' });
 
     gsap.set(masterballStage, { autoAlpha: 0, x: -55, y: -25 });
     gsap.set(masterballSvg, { scale: 0.35, rotation: -40, transformOrigin: '50% 50%' });
@@ -177,9 +174,6 @@ export class IntroRocket implements AfterViewInit, OnDestroy {
     if (mewtwoRightArm) gsap.set(mewtwoRightArm, { rotation: 0, svgOrigin: '22 26' });
     if (mewtwoLeftArm) gsap.set(mewtwoLeftArm, { rotation: 0, svgOrigin: '37 26' });
     if (mewtwoHead) gsap.set(mewtwoHead, { rotation: 0, y: 0, svgOrigin: '30 20' });
-    if (mewtwoEyeGlow) gsap.set(mewtwoEyeGlow, { scale: 0, opacity: 0, svgOrigin: '29.5 14.5' });
-    if (mewtwoOrbe) gsap.set(mewtwoOrbe, { scale: 0, opacity: 0, svgOrigin: '3 33' });
-    if (mewtwoOrbeCore) gsap.set(mewtwoOrbeCore, { scale: 0, opacity: 0, svgOrigin: '3 33' });
 
     this.masterTimeline = gsap.timeline({
       onComplete: () => this.finalizarIntro(),
@@ -275,30 +269,7 @@ export class IntroRocket implements AfterViewInit, OnDestroy {
     }
 
     if (eyeGlint) {
-      this.masterTimeline
-        .to(
-          eyeGlint,
-          {
-            scale: 2.1,
-            opacity: 1,
-            rotation: 90,
-            duration: 0.28,
-            ease: 'back.out(2)',
-          },
-          'giovanniVisivel+=1.2'
-        )
-        .to(
-          eyeGlint,
-          {
-            scale: 1.15,
-            opacity: 0.85,
-            duration: 0.6,
-            repeat: 5,
-            yoyo: true,
-            ease: 'sine.inOut',
-          },
-          'giovanniVisivel+=1.48'
-        );
+      this.animarEstrelaBrilho(eyeGlint, 'giovanniVisivel+=1.2', 0.68, 0.45);
     }
 
     this.masterTimeline
@@ -469,8 +440,8 @@ export class IntroRocket implements AfterViewInit, OnDestroy {
           scale: 1,
           y: 0,
           opacity: 1,
-          duration: 0.55,
-          ease: 'back.out(1.4)',
+          duration: 0.85,
+          ease: 'back.out(1.2)',
         },
         'mewtwoEntrada'
       )
@@ -478,69 +449,69 @@ export class IntroRocket implements AfterViewInit, OnDestroy {
         mewtwoSvg,
         {
           filter: 'brightness(1) saturate(1) drop-shadow(0 0 22px rgba(192, 38, 211, 0.85))',
-          duration: 0.45,
+          duration: 0.7,
           ease: 'power2.out',
         },
-        'mewtwoEntrada+=0.35'
+        'mewtwoEntrada+=0.45'
       );
 
-    // Movimento 1: Mewtwo encolhe/concentra energia psíquica (pose de preparação dos jogos)
+    // Movimento 1: Mewtwo encolhe/concentra energia psíquica mais suavemente
     if (mewtwoRightArm) {
       this.masterTimeline.to(
         mewtwoRightArm,
         {
-          rotation: -18,
+          rotation: -14,
           x: 1,
-          duration: 0.32,
-          ease: 'power2.inOut',
+          duration: 0.65,
+          ease: 'sine.inOut',
         },
-        'mewtwoEntrada+=0.5'
+        'mewtwoEntrada+=0.75'
       );
     }
     if (mewtwoLeftArm) {
       this.masterTimeline.to(
         mewtwoLeftArm,
         {
-          rotation: 15,
-          duration: 0.32,
-          ease: 'power2.inOut',
+          rotation: 12,
+          duration: 0.65,
+          ease: 'sine.inOut',
         },
-        'mewtwoEntrada+=0.5'
+        'mewtwoEntrada+=0.75'
       );
     }
     if (mewtwoHead) {
       this.masterTimeline.to(
         mewtwoHead,
         {
-          rotation: -8,
-          y: 1.5,
-          duration: 0.32,
-          ease: 'power2.inOut',
+          rotation: -6,
+          y: 1.2,
+          duration: 0.65,
+          ease: 'sine.inOut',
         },
-        'mewtwoEntrada+=0.5'
+        'mewtwoEntrada+=0.75'
       );
     }
     this.masterTimeline.to(
       mewtwoSvg,
       {
-        y: 8,
-        scale: 0.96,
-        duration: 0.32,
-        ease: 'power2.inOut',
+        y: 6,
+        scale: 0.97,
+        duration: 0.65,
+        ease: 'sine.inOut',
       },
-      'mewtwoEntrada+=0.5'
+      'mewtwoEntrada+=0.75'
     );
 
-    // Movimento 2: Explosão Psíquica / Grito de Batalha do Mewtwo!
-    this.masterTimeline.addLabel('gritoMewtwo', 'mewtwoEntrada+=0.85');
+    // Movimento 2: Expansão Psíquica / Pose de Batalha do Mewtwo em ritmo mais cadenciado
+    this.masterTimeline.addLabel('gritoMewtwo', 'mewtwoEntrada+=1.45');
 
     this.masterTimeline.to(
       mewtwoSvg,
       {
-        y: -14,
-        scale: 1.08,
-        duration: 0.38,
-        ease: 'back.out(2)',
+        y: -10,
+        scale: 1.05,
+        duration: 0.7,
+        ease: 'back.out(1.5)',
       },
       'gritoMewtwo'
     );
@@ -550,24 +521,24 @@ export class IntroRocket implements AfterViewInit, OnDestroy {
         .to(
           mewtwoRightArm,
           {
-            rotation: 22,
+            rotation: 16,
             x: -1,
             y: -1,
-            duration: 0.35,
-            ease: 'back.out(2.2)',
+            duration: 0.65,
+            ease: 'back.out(1.6)',
           },
           'gritoMewtwo'
         )
         .to(
           mewtwoRightArm,
           {
-            rotation: 6,
-            duration: 0.55,
-            repeat: 4,
+            rotation: 4,
+            duration: 1.15,
+            repeat: 2,
             yoyo: true,
             ease: 'sine.inOut',
           },
-          'gritoMewtwo+=0.4'
+          'gritoMewtwo+=0.7'
         );
     }
 
@@ -576,22 +547,22 @@ export class IntroRocket implements AfterViewInit, OnDestroy {
         .to(
           mewtwoLeftArm,
           {
-            rotation: -18,
-            duration: 0.35,
-            ease: 'back.out(2)',
+            rotation: -14,
+            duration: 0.65,
+            ease: 'back.out(1.6)',
           },
           'gritoMewtwo'
         )
         .to(
           mewtwoLeftArm,
           {
-            rotation: -4,
-            duration: 0.55,
-            repeat: 4,
+            rotation: -3,
+            duration: 1.15,
+            repeat: 2,
             yoyo: true,
             ease: 'sine.inOut',
           },
-          'gritoMewtwo+=0.4'
+          'gritoMewtwo+=0.7'
         );
     }
 
@@ -600,10 +571,10 @@ export class IntroRocket implements AfterViewInit, OnDestroy {
         .to(
           mewtwoHead,
           {
-            rotation: 5,
+            rotation: 4,
             y: -1,
-            duration: 0.35,
-            ease: 'back.out(1.8)',
+            duration: 0.65,
+            ease: 'back.out(1.5)',
           },
           'gritoMewtwo'
         )
@@ -612,96 +583,44 @@ export class IntroRocket implements AfterViewInit, OnDestroy {
           {
             rotation: 0,
             y: 0,
-            duration: 0.6,
-            repeat: 3,
+            duration: 1.2,
+            repeat: 2,
             yoyo: true,
             ease: 'sine.inOut',
           },
-          'gritoMewtwo+=0.45'
+          'gritoMewtwo+=0.7'
         );
     }
 
     if (mewtwoTail) {
       this.masterTimeline.fromTo(
         mewtwoTail,
-        { rotation: -10 },
+        { rotation: -7 },
         {
-          rotation: 12,
-          duration: 0.42,
-          repeat: 7,
+          rotation: 9,
+          duration: 1.05,
+          repeat: 3,
           yoyo: true,
           ease: 'sine.inOut',
         },
-        'mewtwoEntrada+=0.3'
+        'mewtwoEntrada+=0.4'
       );
     }
 
-    if (mewtwoEyeGlow) {
-      this.masterTimeline
-        .to(
-          mewtwoEyeGlow,
-          {
-            scale: 2.3,
-            opacity: 1,
-            duration: 0.25,
-            ease: 'back.out(2)',
-          },
-          'gritoMewtwo'
-        )
-        .to(
-          mewtwoEyeGlow,
-          {
-            scale: 1.15,
-            opacity: 0.75,
-            duration: 0.45,
-            repeat: 5,
-            yoyo: true,
-            ease: 'sine.inOut',
-          },
-          'gritoMewtwo+=0.25'
-        );
-    }
-
-    if (mewtwoOrbe && mewtwoOrbeCore) {
-      this.masterTimeline
-        .to(
-          [mewtwoOrbe, mewtwoOrbeCore],
-          {
-            scale: 1.4,
-            opacity: 1,
-            duration: 0.3,
-            ease: 'back.out(2)',
-          },
-          'gritoMewtwo+=0.05'
-        )
-        .to(
-          mewtwoOrbe,
-          {
-            scale: 2.1,
-            opacity: 0.35,
-            duration: 0.45,
-            repeat: 5,
-            yoyo: true,
-            ease: 'sine.inOut',
-          },
-          'gritoMewtwo+=0.35'
-        );
-    }
-
-    // Ondas de choque psíquicas + vibração de poder e levitação contínua do Mewtwo
+    // Ondas de choque psíquicas + levitação suave do Mewtwo
     if (onda1 && onda2) {
       this.masterTimeline
         .fromTo(
           onda1,
-          { scale: 0.5, opacity: 0.9 },
-          { scale: 2.2, opacity: 0, duration: 1.1, repeat: 2, ease: 'power2.out' },
+          { scale: 0.5, opacity: 0.85 },
+          { scale: 2.2, opacity: 0, duration: 1.5, repeat: 1, ease: 'power2.out' },
           'gritoMewtwo'
         )
         .fromTo(
           onda2,
-          { scale: 0.5, opacity: 0.7 },
-          { scale: 2.4, opacity: 0, duration: 1.1, repeat: 2, ease: 'power2.out' },
-          'gritoMewtwo+=0.35'
+          { scale: 0.5, opacity: 0.65 },
+          { scale: 2.4, opacity: 0, duration: 1.5, repeat: 1, ease: 'power2.out' },
+          'gritoMewtwo+=0.5'
         );
     }
 
@@ -709,24 +628,24 @@ export class IntroRocket implements AfterViewInit, OnDestroy {
       this.masterTimeline.fromTo(
         mewtwoAura,
         { scale: 0.85, opacity: 0.4 },
-        { scale: 1.25, opacity: 0.95, duration: 0.7, repeat: 4, yoyo: true, ease: 'sine.inOut' },
-        'mewtwoEntrada+=0.2'
+        { scale: 1.2, opacity: 0.9, duration: 1.1, repeat: 3, yoyo: true, ease: 'sine.inOut' },
+        'mewtwoEntrada+=0.3'
       );
     }
 
-    // Levitação psíquica do Mewtwo em campo
+    // Levitação psíquica cadenciada do Mewtwo em campo
     this.masterTimeline
       .to(
         mewtwoSvg,
         {
-          y: 5,
+          y: 4,
           scale: 1,
-          duration: 0.65,
-          repeat: 3,
+          duration: 1.15,
+          repeat: 2,
           yoyo: true,
           ease: 'sine.inOut',
         },
-        'gritoMewtwo+=0.4'
+        'gritoMewtwo+=0.7'
       )
       // 7. Encerramento suave para a tela inicial após a animação do Mewtwo
       .to(
@@ -734,10 +653,52 @@ export class IntroRocket implements AfterViewInit, OnDestroy {
         {
           autoAlpha: 0,
           scale: 1.04,
-          duration: 0.65,
+          duration: 0.7,
           ease: 'power2.inOut',
         },
-        'gritoMewtwo+=3.1'
+        'gritoMewtwo+=3.8'
+      );
+  }
+
+  private animarEstrelaBrilho(
+    alvo: Element,
+    inicio: string,
+    escalaPico: number,
+    escalaBase: number
+  ): void {
+    if (!this.masterTimeline) return;
+
+    this.masterTimeline
+      .to(
+        alvo,
+        {
+          scale: escalaPico,
+          opacity: 1,
+          duration: 0.28,
+          ease: 'back.out(2)',
+        },
+        inicio
+      )
+      .to(
+        alvo,
+        {
+          scale: escalaBase,
+          opacity: 0.92,
+          duration: 0.5,
+          repeat: 5,
+          yoyo: true,
+          ease: 'sine.inOut',
+        },
+        `${inicio}+=0.28`
+      )
+      .to(
+        alvo,
+        {
+          rotation: 360,
+          duration: 2.8,
+          ease: 'none',
+        },
+        inicio
       );
   }
 

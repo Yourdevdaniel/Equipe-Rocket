@@ -3,6 +3,27 @@
     <div #flashVermelho class="flash-vermelho" aria-hidden="true"></div>
     <div #flashPsiquico class="flash-psiquico" aria-hidden="true"></div>
 
+    <!-- Definição reutilizável da estrela de 8 pontas (duas gemas estelares de 4 pontas cruzadas) -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <g id="estrela-genshin">
+          <!-- Estrela 1 (45° diagonal, atrás): colorida e mais grossa, com opacidade normal (100%) -->
+          <path
+            fill="currentColor"
+            fill-opacity="1"
+            transform="rotate(45)"
+            d="M 0 -4.8 Q 1.35 -1.35 4.8 0 Q 1.35 1.35 0 4.8 Q -1.35 1.35 -4.8 0 Q -1.35 -1.35 0 -4.8 Z"
+          />
+          <!-- Estrela 2 (0° principal, na frente): branca e mais fina, com opacidade levemente menor -->
+          <path
+            fill="#ffffff"
+            fill-opacity="0.78"
+            d="M 0 -4.6 Q 0.42 -0.42 4.6 0 Q 0.42 0.42 0 4.6 Q -0.42 0.42 -4.6 0 Q -0.42 -0.42 0 -4.6 Z"
+          />
+        </g>
+      </defs>
+    </svg>
+
     <!-- Etapa 1: Logo da Equipe Rocket Pulsando -->
     <div #logoStage class="logo-stage">
       <div class="logo-pulse-wrapper">
@@ -74,11 +95,9 @@
           <path fill="#606070" d="M25 5h3v1h-3zM18 6h10v1h-10zM17 7h11v1h-11zM17 8h8v1h-8z"/>
         </g>
 
-        <!-- Brilho no olho (animado com GSAP quando o chapéu levanta) -->
-        <g class="giovanni-eye-glint" shape-rendering="geometricPrecision">
-          <line x1="23.5" y1="11.5" x2="29.5" y2="11.5" stroke="#e11d48" stroke-width="0.45" />
-          <line x1="26.5" y1="8.5" x2="26.5" y2="14.5" stroke="#e11d48" stroke-width="0.45" />
-          <circle cx="26.5" cy="11.5" r="0.8" fill="#ffffff" />
+        <!-- Brilho no olho (duas estrelas cruzadas: vermelha + branca) -->
+        <g class="giovanni-eye-glint" style="color: #e11d48">
+          <use href="#estrela-genshin" x="26.5" y="11.5" />
         </g>
       </svg>
 
@@ -152,8 +171,6 @@
           <path fill="#b5adce" d="M20 26h2v1h-2zM20 27h1v1h-1zM19 28h1v1h-1zM5 29h3v1h-3zM15 30h1v1h-1zM3 31h1v1h-1zM12 31h1v1h-1zM1 32h1v1h-1zM1 33h3v1h-3zM10 33h1v1h-1zM8 34h2v1h-2zM7 35h1v1h-1zM5 37h2v1h-2z" />
           <path fill="#ded6ef" d="M18 27h2v1h-2zM16 28h3v1h-3zM12 29h6v1h-6zM6 30h9v1h-9zM1 31h2v1h-2zM4 31h8v1h-8zM2 32h2v1h-2zM6 32h6v1h-6zM8 33h2v1h-2zM7 34h1v1h-1zM5 35h2v1h-2zM5 36h2v1h-2z" />
           <path fill="#393952" d="M6 28h2v1h-2zM14 28h2v1h-2zM9 29h3v1h-3zM18 29h2v1h-2zM2 30h3v1h-3zM17 30h2v1h-2zM14 31h1v1h-1zM0 32h1v1h-1zM5 32h1v1h-1zM0 33h1v1h-1zM4 33h1v1h-1zM6 33h1v1h-1zM1 34h3v1h-3zM5 34h2v1h-2zM4 35h1v1h-1zM9 35h2v1h-2z" />
-          <circle class="mewtwo-orbe" cx="3" cy="33" r="3.5" fill="rgba(217, 70, 239, 0.45)" />
-          <circle class="mewtwo-orbe-core" cx="3" cy="33" r="1.6" fill="#ffffff" />
         </g>
 
         <g class="mewtwo-body">
@@ -185,10 +202,6 @@
           <path fill="#f7eff7" d="M27 5h1v1h-1zM25 6h4v1h-4zM24 7h5v1h-5zM23 8h6v1h-6zM23 9h5v1h-5zM22 10h1v1h-1zM21 11h2v1h-2zM28 11h2v1h-2zM21 12h2v1h-2zM27 12h3v1h-3zM21 13h1v1h-1zM26 13h2v1h-2z" />
           <path fill="#000000" d="M37 6h1v1h-1zM37 7h1v1h-1zM37 8h1v1h-1zM37 9h1v1h-1zM38 10h1v1h-1zM38 11h1v1h-1zM38 12h1v1h-1zM28 14h1v1h-1zM28 15h1v1h-1zM38 15h1v1h-1zM39 16h1v1h-1zM22 17h1v1h-1zM39 17h1v1h-1zM42 17h1v1h-1zM22 18h1v1h-1zM35 18h1v1h-1zM38 18h1v1h-1zM41 18h1v1h-1zM23 19h1v1h-1zM27 19h1v1h-1zM34 19h1v1h-1zM37 19h1v1h-1zM41 19h1v1h-1zM24 20h2v1h-2zM27 20h1v1h-2zM34 20h1v1h-1zM36 20h3v1h-3zM40 20h1v1h-1z" />
           <path fill="#9442bd" d="M30 14h1v1h-1zM29 15h1v1h-1z" />
-          <g class="mewtwo-eye-glow">
-            <path fill="#e879f9" d="M28 14h4v1h-4zM29 13h2v3h-2z" />
-            <path fill="#ffffff" d="M29 14h2v1h-2z" />
-          </g>
         </g>
       </svg>
     </div>
