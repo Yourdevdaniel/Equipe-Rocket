@@ -4,7 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProjetosService } from '../../services/projetos';
 import { FiltrosService } from '../../services/filtros';
 import { HistoricoDeNavegacao } from '../../services/historico-de-navegacao';
-import { Tarefa } from '../../models';
+import { Projeto, Tarefa } from '../../models';
 import { TarefaCard } from '../tarefa-card/tarefa-card';
 import { EstadoVazio } from '../estado-vazio/estado-vazio';
 import { mensagemDeErro } from '../../utils/erro-api';
@@ -23,6 +23,7 @@ export class QuadroKambam implements OnInit {
   private readonly historicoDeNavegacao = inject(HistoricoDeNavegacao);
 
   readonly projetoId = signal<string | null>(null);
+  readonly projeto = signal<Projeto | null>(null);
 
   readonly tarefas = signal<Tarefa[]>([]);
   readonly carregando = signal(true);
@@ -105,7 +106,7 @@ export class QuadroKambam implements OnInit {
   }
 
   removerTarefaDaLista(idTarefa: string): void {
-    this.tarefas.update((l) => l.filter((t) => t.id !== idTarefa))
+    this.tarefas.update((l) => l.filter((t) => t.id !== idTarefa));
   }
 
   carregarTarefas(idProjeto?: string | null): void {
@@ -117,11 +118,13 @@ export class QuadroKambam implements OnInit {
       this.projetosService.buscarProjeto(idProjeto).subscribe({
         next: (projeto) => {
           if (!projeto || !projeto.id) {
+            this.projeto.set(null);
             this.tarefas.set([]);
             this.naoEncontrado.set(true);
             this.carregando.set(false);
             return;
           }
+          this.projeto.set(projeto);
           if (projeto.tarefas && projeto.tarefas.length > 0) {
             this.tarefas.set(projeto.tarefas);
             this.carregando.set(false);
@@ -141,6 +144,7 @@ export class QuadroKambam implements OnInit {
         },
         error: (err: unknown) => {
           if (err instanceof HttpErrorResponse && err.status === 404) {
+            this.projeto.set(null);
             this.tarefas.set([]);
             this.naoEncontrado.set(true);
           } else {
@@ -151,6 +155,7 @@ export class QuadroKambam implements OnInit {
         },
       });
     } else {
+      this.projeto.set(null);
       this.projetosService.listarTarefas().subscribe({
         next: (dados) => {
           this.tarefas.set(dados);
