@@ -27,7 +27,8 @@
 
 
     <!-- Botão de editar -->
-    <a
+    <button
+      type="button" 
       [routerLink]="['/tarefas', tarefa().id, 'editar']"
       class="btn-editar"
       title="Editar tarefa"
@@ -39,7 +40,7 @@
         <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
         <path d="m15 5 4 4"/>
       </svg>
-    </a>
+    </button>
   </div>
 
   @if (tarefa().descricao) {
@@ -117,7 +118,8 @@
       <footer class="expandido-rodape">
 
         <!-- Botão de excluir -->
-        <a
+        <button
+          type="button"
           class="btn-modal btn-primario"
           (click)="abrirConfirmacaoExclusao()"
         >
@@ -129,10 +131,10 @@
             <path d="M14 11v6"/>
           </svg>
           Excluir Tarefa
-        </a>
+        </button>
 
-        <a
-          [routerLink]="['/tarefas', tarefa().id, 'editar']"
+        <button
+          type="button"
           class="btn-modal btn-primario"
           (click)="fecharDetalhes()"
         >
@@ -141,7 +143,7 @@
             <path d="m15 5 4 4"/>
           </svg>
           Editar Tarefa
-        </a>
+        </button>
       </footer>
     </article>
   </div>
