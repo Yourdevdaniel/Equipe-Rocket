@@ -10,13 +10,22 @@
   user-select: none;
 }
 
-.flash-vermelho {
+.flash-vermelho,
+.flash-psiquico {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle, rgba(225, 29, 72, 0.75) 0%, #000000 75%);
   opacity: 0;
   pointer-events: none;
   z-index: 2;
+}
+
+.flash-vermelho {
+  background: radial-gradient(circle, rgba(225, 29, 72, 0.75) 0%, #000000 75%);
+}
+
+.flash-psiquico {
+  background: radial-gradient(circle, #ffffff 0%, #e879f9 45%, #581c87 80%, #000000 100%);
+  z-index: 5;
 }
 
 .logo-stage {
@@ -135,4 +144,67 @@
   font-weight: 500;
   font-style: italic;
   color: var(--text-primary, #f8fafc);
+}
+
+.masterball-stage,
+.mewtwo-stage {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.masterball-svg {
+  position: relative;
+  z-index: 2;
+  width: 96px;
+  height: 102px;
+  filter: drop-shadow(0 0 18px rgba(192, 38, 211, 0.85));
+  overflow: visible;
+}
+
+.feixe-psiquico {
+  position: absolute;
+  bottom: 45px;
+  width: 24px;
+  height: 320px;
+  border-radius: 999px;
+  background: linear-gradient(to top, #ffffff 0%, #e879f9 45%, rgba(147, 51, 234, 0) 100%);
+  box-shadow: 0 0 45px #e879f9, 0 0 90px #a855f7;
+  transform-origin: bottom center;
+  opacity: 0;
+  z-index: 1;
+}
+
+.mewtwo-aura {
+  position: absolute;
+  width: 390px;
+  height: 390px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(192, 38, 211, 0.45) 0%, rgba(126, 34, 206, 0.18) 48%, transparent 72%);
+  z-index: 0;
+}
+
+.onda-psiquica {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 2px solid rgba(232, 121, 249, 0.75);
+  box-shadow: 0 0 28px rgba(192, 38, 211, 0.65);
+  opacity: 0;
+  z-index: 0;
+}
+
+.mewtwo-svg {
+  position: relative;
+  z-index: 2;
+  width: 295px;
+  height: 282px;
+  overflow: visible;
 }
