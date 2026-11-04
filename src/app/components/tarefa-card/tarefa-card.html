@@ -22,7 +22,9 @@
   }
 
   <div class="titulo-linha">
-    <h3 class="titulo">{{ tarefa().titulo }}</h3>
+    <h3 class="titulo">
+      <button type="button" class="botao-texto" (click)="abrirDetalhes(); $event.stopPropagation()">{{ tarefa().titulo }}</button>
+    </h3>
 
 
 
@@ -62,6 +64,9 @@
   <div class="modal-backdrop" (click)="fecharDetalhes($event)">
     <article
       class="card-expandido"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="titulo-detalhes"
       [class]="'status-' + tarefa().status"
       (click)="$event.stopPropagation()"
     >
@@ -77,12 +82,12 @@
           </span>
         </div>
 
-        <button type="button" class="btn-fechar" (click)="fecharDetalhes($event)" title="Fechar" aria-label="Fechar">
+        <button #botaoFechar type="button" class="btn-fechar" (click)="fecharDetalhes($event)" title="Fechar" aria-label="Fechar">
           ✕
         </button>
       </header>
 
-      <h2 class="expandido-titulo">{{ tarefa().titulo }}</h2>
+      <h2 id="titulo-detalhes" class="expandido-titulo">{{ tarefa().titulo }}</h2>
 
       <div class="expandido-secao">
         <span class="secao-label">Descrição da Tarefa</span>
@@ -209,6 +214,7 @@
       <div class="confirmacao-acoes">
 
         <button
+          #botaoCancelar
           type="button"
           class="btn-cancelar-exclusao"
           (click)="cancelarExclusao()"

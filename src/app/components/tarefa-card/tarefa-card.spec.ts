@@ -56,4 +56,16 @@ describe('TarefaCard', () => {
 
     expect(component.erroExcluir()).toBeNull();
   });
+
+  it('abre os detalhes pelo teclado: o título é um botão e o diálogo recebe o foco', async () => {
+    const el = fixture.nativeElement as HTMLElement;
+    el.querySelector<HTMLButtonElement>('h3 button')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const dialogo = el.querySelector('[role="dialog"]');
+    expect(dialogo).toBeTruthy();
+    expect(dialogo!.getAttribute('aria-labelledby')).toBe('titulo-detalhes');
+    expect(document.activeElement?.className).toContain('btn-fechar');
+  });
 });

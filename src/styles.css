@@ -20,7 +20,7 @@
     /* Textos (Brancos e Cinzas Neutros) */
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
-    --text-muted: #64748b;
+    --text-muted: #8494a9;
 
     /* Bordas */
     --border-color: #272f3d;
@@ -180,4 +180,14 @@ nav {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Botão que parece texto: permite abrir um cartão pelo teclado sem mudar o visual. */
+.botao-texto {
+  all: unset;
+  cursor: pointer;
+}
+.botao-texto:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 2px;
 }

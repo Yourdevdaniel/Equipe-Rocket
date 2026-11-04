@@ -112,6 +112,7 @@
     </div>
   } @else {
     <main class="grid-tarefas">
+      <h2 class="sr-only">Tarefas</h2>
       @for (tarefa of tarefasFiltradas(); track tarefa.id) {
         <app-tarefa-card [tarefa]="tarefa" (statusAlterado)="substituirTarefa($event)" (tarefaExcluida)="removerTarefaDaLista($event)" />
       } @empty {

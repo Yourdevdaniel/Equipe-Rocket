@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, input, output, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, effect, inject, input, output, signal, viewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Tarefa } from '../../models';
@@ -25,6 +25,12 @@ export class TarefaCard {
   readonly confirmarExclusao = signal(false);
   readonly tarefaExcluida = output<string>();
   readonly excluindo = signal(false);
+  // Leva o foco do teclado para dentro do diálogo assim que ele abre.
+  private readonly botaoFechar = viewChild<ElementRef<HTMLElement>>('botaoFechar');
+  private readonly botaoCancelar = viewChild<ElementRef<HTMLElement>>('botaoCancelar');
+  private readonly focarNoDialogo = effect(() => {
+    (this.botaoCancelar() ?? this.botaoFechar())?.nativeElement.focus();
+  });
   readonly erroExcluir = signal<string | null>(null);
 
 

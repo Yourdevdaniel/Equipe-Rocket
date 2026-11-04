@@ -49,7 +49,7 @@
   padding: 0.25rem 0.65rem;
   border-radius: 999px;
   background-color: rgba(225, 29, 72, 0.15);
-  color: var(--rocket-red, #e11d48);
+  color: #fb7185;
   border: 1px solid rgba(225, 29, 72, 0.3);
 }
 

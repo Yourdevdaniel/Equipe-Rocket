@@ -210,5 +210,5 @@ O modelo de dados segue estritamente o contrato da disciplina:
 - [ ] 34. Mostrar o estado vazio
 - [ ] 35. Tratar tarefa ou projeto inexistente
 - [x] 36. Tratar falha ao salvar e ao excluir
-- [ ] 37. Auditar acessibilidade e responsividade
+- [x] 37. Auditar acessibilidade e responsividade
 - [ ] 38. Criar o slide de apresentação do Marco 5

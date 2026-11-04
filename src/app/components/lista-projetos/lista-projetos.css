@@ -75,7 +75,7 @@
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--rocket-red);
+  color: #fb7185;
   background-color: rgba(225, 29, 72, 0.1);
   border: 1px solid rgba(225, 29, 72, 0.25);
   padding: 0.25rem 0.85rem;
