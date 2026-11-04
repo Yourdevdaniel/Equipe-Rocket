@@ -24,7 +24,7 @@
       "projetoId": "1",
       "titulo": "AAAAAAA",
       "descricao": "aaaaaaaaaa",
-      "status": "em-andamento",
+      "status": "em-revisao",
       "prioridade": "alta",
       "responsavel": "Jubileu",
       "prazo": "2026-10-06"
@@ -78,6 +78,16 @@
       "prioridade": "media",
       "responsavel": "gfdshsdfh",
       "prazo": "2026-10-30"
+    },
+    {
+      "id": "8",
+      "projetoId": "1",
+      "titulo": "daniel",
+      "descricao": "eduardo",
+      "status": "em-andamento",
+      "prioridade": "alta",
+      "responsavel": "matheus",
+      "prazo": "2026-11-05"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
