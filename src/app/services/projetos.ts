@@ -1,5 +1,6 @@
 import { Tarefa } from './../../tipos';
 import { Injectable, inject } from '@angular/core';
+import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, switchMap  } from 'rxjs';
 import { Projeto, ProjetoComTarefas} from '../models'
@@ -7,7 +8,7 @@ import { Projeto, ProjetoComTarefas} from '../models'
 @Injectable({ providedIn: 'root' })
 export class ProjetosService {
     private http = inject(HttpClient);
-    private api = 'http://localhost:3000';
+    private api = environment.apiUrl;
 
     listarProjetos(): Observable<Projeto[]>{
         return this.http.get<Projeto[]>(`${this.api}/projetos`);
