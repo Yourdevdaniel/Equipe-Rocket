@@ -1,0 +1,5 @@
+{
+  "buildCommand": "ng build",
+  "outputDirectory": "dist/Equipe-Rocket/browser",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
