@@ -161,6 +161,21 @@ O modelo de dados segue estritamente o contrato da disciplina:
 | `POST` | `/tarefas` | Cria uma nova tarefa vinculada a um projeto |
 | `PATCH`| `/tarefas/:id` | Atualiza campos de uma tarefa (ex: status ou edição completa) |
 
+### API publicada
+
+Em produção a API roda no Render: **https://equipe-rocket.onrender.com** (mesmos endpoints acima).
+
+| Campo no Render | Valor |
+| --- | --- |
+| Tipo | Web Service (Node) |
+| Build Command | `npm install` |
+| Start Command | `npx json-server db.seed.json --host 0.0.0.0` |
+| Variável de ambiente | `NODE_VERSION=24` |
+
+> No plano gratuito o serviço dorme após 15 minutos sem uso (a primeira chamada leva até um minuto) e os dados voltam ao `db.seed.json` a cada reinício ou novo deploy.
+
+O endereço usado pelo frontend fica em `src/environments/`: `environment.development.ts` (`http://localhost:3000`, usado pelo `ng serve`) e `environment.ts` (API do Render, usado pelo `ng build`).
+
 ---
 
 ## Andamento dos Marcos
