@@ -176,6 +176,12 @@ Em produção a API roda no Render: **https://equipe-rocket.onrender.com** (mesm
 
 O endereço usado pelo frontend fica em `src/environments/`: `environment.development.ts` (`http://localhost:3000`, usado pelo `ng serve`) e `environment.ts` (API do Render, usado pelo `ng build`).
 
+
+### Aplicação publicada
+
+Em produção a aplicação web está hospedada na Vercel: **https://equipe-rocket-nine.vercel.app/projetos** (integrada à API publicada no Render).
+
+> Caso a API esteja em modo de suspensão no plano gratuito do Render, o carregamento inicial dos projetos e tarefas pode levar até um minuto na primeira requisição.
 ---
 
 ## Andamento dos Marcos
